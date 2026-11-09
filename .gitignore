@@ -1,0 +1,63 @@
+# ===== Secrets =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ===== Java / Maven (backend) =====
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.properties
+hs_err_pid*
+replay_pid*
+
+# ===== Node / Angular (frontend) =====
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+frontend/.npm
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.nx/cache/
+
+# ===== Playwright =====
+frontend/playwright-report/
+frontend/test-results/
+frontend/blob-report/
+frontend/playwright/.cache/
+
+# ===== Docker =====
+infra/volumes/
+docker-compose.override.yml
+
+# ===== IDEs =====
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+*~
+
+# ===== SO =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Otros =====
+tmp/
+.tmp/
+*.local
