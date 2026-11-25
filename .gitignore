@@ -57,6 +57,10 @@ desktop.ini
 *.log
 logs/
 
+# ===== Harness =====
+.harness/
+.cache/
+
 # ===== Otros =====
 tmp/
 .tmp/

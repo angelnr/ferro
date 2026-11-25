@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Conventional Commits (docs/07-roadmap.md).
+set -euo pipefail
+
+commit_msg_file="$1"
+subject="$(head -n 1 "$commit_msg_file" | sed 's/[[:space:]]*$//')"
+
+# Commits generados por merge/rebase no se validan.
+if [[ "$subject" =~ ^(Merge|Revert\ |fixup!\ |squash!\ ) ]]; then
+  exit 0
+fi
+
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9._/-]+\))?!?: [^[:space:]].{0,99}$'
+if [[ ! "$subject" =~ $pattern ]]; then
+  cat >&2 <<'EOF'
+Mensaje de commit no válido (Conventional Commits).
+
+Formato: tipo(alcance): descripción
+Tipos:   feat fix docs style refactor perf test build ci chore revert
+
+Ejemplos:
+  feat(training): registrar serie con RIR
+  fix(identity): rotar refresh token al reutilizarlo
+  test(progress): cubrir recálculo de PR tras editar sesión
+  docs(adr): añadir ADR de gráficas
+EOF
+  printf '\nTu mensaje: %s\n' "$subject" >&2
+  exit 1
+fi

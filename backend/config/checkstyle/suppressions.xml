@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+  <!-- Los tests pueden tener nombres y fixtures más largos que el código de producción. -->
+  <suppress files="[\\/]src[\\/]test[\\/]" checks="LineLength"/>
+  <!-- Falsos positivos: la clase main de Spring Boot y las clases de test de JUnit 5 no son utilidades. -->
+  <suppress files=".*Application\.java" checks="HideUtilityClassConstructor"/>
+  <suppress files="[\\/]src[\\/]test[\\/]" checks="HideUtilityClassConstructor"/>
+</suppressions>

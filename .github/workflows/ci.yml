@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend · Java 21
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ferro/m2
+          key: m2-${{ hashFiles('backend/pom.xml') }}
+          restore-keys: m2-
+
+      - name: Verificar backend (misma ruta que local)
+        run: ./scripts/verify.sh --backend --ci
+
+      - name: Subir evidencia y cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-evidence
+          if-no-files-found: warn
+          path: |
+            .harness/last-verify.txt
+            .harness/logs/
+            backend/target/surefire-reports/
+            backend/target/site/jacoco/
+
+  frontend:
+    name: Frontend · Node 24
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      FERRO_INSTALL: always
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ferro/npm
+          key: npm-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: npm-
+
+      - name: Verificar frontend (misma ruta que local)
+        run: ./scripts/verify.sh --frontend --ci
+
+      - name: Subir evidencia y cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-evidence
+          if-no-files-found: warn
+          path: |
+            .harness/last-verify.txt
+            .harness/logs/
+            frontend/coverage/
+
+  secrets-and-docs:
+    name: Secretos y documentación
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks (historial completo)
+        run: |
+          docker run --rm -v "$PWD:/repo" \
+            ghcr.io/gitleaks/gitleaks:latest \
+            git /repo --redact --verbose --exit-code=1
+
+      - name: Enlaces relativos de README y docs
+        run: python3 scripts/check-docs.py
+
+      - name: Invariantes del harness
+        run: ./scripts/check-harness.sh

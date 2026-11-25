@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Pre-commit rápido: integridad, whitespace y secretos en lo que se va a commitear.
+# Los tests completos van en pre-push y en `make verify`.
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+source scripts/lib.sh
+
+log_step "Whitespace en el índice"
+git diff --cached --check
+
+log_step "Ficheros grandes"
+large="$(git diff --cached --name-only --diff-filter=ACM | while IFS= read -r file; do
+  [[ -f "$file" ]] || continue
+  size="$(stat -c '%s' "$file")"
+  if [[ "$size" -gt 5000000 ]]; then printf '%s (%s MB)\n' "$file" "$((size / 1000000))"; fi
+done)"
+if [[ -n "$large" ]]; then
+  log_fail "Hay ficheros > 5 MB staged:"
+  printf '%s\n' "$large"
+  exit 1
+fi
+log_ok "sin ficheros > 5 MB"
+
+log_step "Secretos en staged (gitleaks)"
+if ! run_gitleaks git /repo --staged --redact --no-banner --exit-code=1; then
+  log_fail "gitleaks ha detectado un posible secreto. Elimínalo del commit."
+  exit 1
+fi
+log_ok "sin secretos detectados"
+
+HARNESS_FILES='^(AGENTS\.md|Makefile|scripts/|\.githooks/|\.github/workflows/|backend/pom\.xml|backend/config/|frontend/eslint\.config\.js|frontend/angular\.json|docs/harness/)'
+if git diff --cached --name-only | grep -Eq "$HARNESS_FILES"; then
+  printf '\n%sAVISO:%s este commit toca el harness (gates/tests/reglas). Revisa que no debilite ningún gate.\n' \
+    "$C_YELLOW" "$C_RESET"
+  git diff --cached --name-only | grep -E "$HARNESS_FILES" | sed 's/^/  - /'
+  printf 'Documenta el porqué en el mensaje y ejecuta `make verify` antes de push.\n\n'
+fi
+
+log_ok "pre-commit completado"

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Pre-push: la misma verificación que CI. Si esto falla, no se pushea.
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+exec "$ROOT/scripts/verify.sh"

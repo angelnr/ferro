@@ -65,6 +65,8 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 | [07 · Roadmap](./docs/07-roadmap.md) | Milestones M0–M7 (8 semanas) con Definition of Done |
 | [08 · Backlog v2](./docs/08-backlog-v2.md) | Funcionalidad deliberadamente fuera del MVP |
 | [09 · Glosario](./docs/09-glosario.md) | Lenguaje ubicuo ES↔EN del dominio |
+| [AGENTS.md](./AGENTS.md) | Harness: reglas de trabajo, gates y protocolo de evidencia |
+| [Lecciones del harness](./docs/harness/lessons.md) | Errores → artefactos que impiden repetirlos |
 | [ADR-0001…0009](./docs/adr/) | Decisiones de arquitectura justificadas |
 
 ## Estado del proyecto
@@ -74,14 +76,36 @@ milestone **M0** (semana 1) siguiendo [docs/07-roadmap.md](./docs/07-roadmap.md)
 Nada de lo que hay hoy es ambiguo: cada historia tiene criterios de aceptación y cada
 decisión técnica tiene su ADR.
 
-## Desarrollo local (se completará en M0)
+## Desarrollo local y verificación
+
+El harness **no necesita JDK ni Node en el host**: ejecuta versiones fijas en Docker
+(Java 21 + Maven 3.9, Node 24). Primera vez en un clon:
 
 ```bash
-# Previsto: un solo comando levanta Postgres + Mailpit + Prometheus + Grafana
-docker compose -f infra/docker-compose.dev.yml up -d
-# backend  → http://localhost:8080/api/docs  (Swagger UI)
-# frontend → http://localhost:4200           (ng serve)
+make bootstrap   # diagnóstico del entorno + instalación de git hooks
+make verify      # gate completo + bloque de evidencia
 ```
+
+| Comando | Para qué |
+|---|---|
+| `make doctor` | Comprueba Docker, hooks, cachés, red y puertos |
+| `make fmt` | Aplica Spotless (Java) y Prettier (Angular) |
+| `make test` | Tests unitarios rápidos de backend y frontend |
+| `make verify` | **Definition of Done**: backend `mvn clean verify` (tests, Checkstyle, Spotless, ArchUnit, Modulith), frontend (formato, ESLint, Vitest con cobertura, build), gitleaks, enlaces de docs e invariantes del harness |
+| `make verify-backend` / `make verify-frontend` | Verificación de una sola parte |
+
+`make verify` sale 0 **solo** si todos los gates pasan, deja la evidencia en
+`.harness/last-verify.txt` y la imprime. El protocolo completo (reglas anti-victoria
+prematura, lessons learned y cómo añadir gates) está en [AGENTS.md](./AGENTS.md).
+
+```bash
+# Servicios de desarrollo (se añaden en M0; aún no existen)
+docker compose -f infra/docker-compose.dev.yml up -d
+```
+
+Estado actual: documentación v1.0 cerrada y **esqueleto inicial ejecutable** con gates
+desde el día 1. M0 sigue en curso: todavía no hay endpoints de negocio ni persistencia.
+
 
 ## Licencia
 
