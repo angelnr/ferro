@@ -26,6 +26,7 @@ for f in \
   AGENTS.md \
   Makefile \
   backend/pom.xml \
+  backend/src/test/java/com/ferro/infrastructure/Postgres18ContainerTest.java \
   frontend/package.json \
   frontend/angular.json \
   docs/harness/lessons.md \
@@ -48,6 +49,8 @@ need_grep backend/pom.xml 'maven-checkstyle-plugin' 'checkstyle'
 need_grep backend/pom.xml 'spotless-maven-plugin' 'spotless'
 need_grep backend/pom.xml 'jacoco-maven-plugin' 'jacoco'
 need_grep backend/pom.xml 'COVEREDRATIO' 'umbral de cobertura JaCoCo'
+need_grep backend/pom.xml 'testcontainers-postgresql' 'Testcontainers PostgreSQL'
+need_grep backend/src/test/java/com/ferro/infrastructure/Postgres18ContainerTest.java 'postgres:18-alpine' 'PostgreSQL real 18 (no H2)'
 need_grep backend/pom.xml 'maven-enforcer-plugin' 'enforcer'
 need_grep backend/pom.xml '<java.version>21</java.version>' 'Java 21'
 need_grep frontend/package.json '"test:coverage"' 'script test:coverage'

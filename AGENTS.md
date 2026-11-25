@@ -103,6 +103,7 @@ intención. No mezcles refactor, feature y harness en el mismo commit.
   según i18n. Glosario ES↔EN en `docs/09-glosario.md`.
 - No añadas dependencias ni cambies versiones fijadas (Java 21, Spring Boot 4.1.x, Angular 22,
   PostgreSQL 18, Node 24) sin ADR y aprobación explícita.
+- Los tests de integración usan **PostgreSQL real 18 en Testcontainers**, nunca H2 (ADR-0007).
 
 ## 7. Límites de alcance
 
@@ -126,6 +127,7 @@ scripts/backend.sh|frontend.sh   ejecución Docker con versiones fijas
 .github/workflows/ci.yml         misma verificación en CI
 docs/harness/lessons.md          lecciones → reglas/tests/hooks
 docs/harness/test-baseline.json  mínimo de tests exigido
+backend/src/test/.../Postgres18ContainerTest.java  humo de integración con PostgreSQL 18 real
 .opencode/skills/verificar/      protocolo de verificación para agentes
 ```
 

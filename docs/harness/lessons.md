@@ -79,6 +79,15 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
   `run_frontend_tests`, `run_harness_checks`); `scripts/check-harness.sh` (gates no desactivables).
 - **Comprobación:** un `pom.xml` sin formatear hace que `make verify-backend` salga FAIL; antes pasaba.
 
+### L-008 · Testcontainers 2.x renombra sus módulos
+- **Fecha:** 2026-11-25
+- **Síntoma:** con el BOM de Boot 4.1, `org.testcontainers:postgresql` y `:junit-jupiter` daban 404.
+- **Causa raíz:** Testcontainers 2.x cambió los artefactos a `testcontainers-postgresql` y
+  `testcontainers-junit-jupiter` (mismo groupId).
+- **Prevención:** usar las coordenadas de la versión gestionada por el BOM; no copiar snippets de 1.x.
+- **Artefacto:** `backend/pom.xml`; invariante en `scripts/check-harness.sh`.
+- **Comprobación:** `Postgres18ContainerTest` arranca `postgres:18-alpine` y consulta su versión.
+
 ---
 
 ## Revisión por milestone

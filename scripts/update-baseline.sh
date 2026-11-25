@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BASELINE="$ROOT/docs/harness/test-baseline.json"
 
-backend="$(grep -RhE '^[[:space:]]*@(Test|ParameterizedTest|ArchTest)' "$ROOT/backend/src/test" --include='*.java' | wc -l | tr -d ' ')"
+backend="$(grep -RhE '^[[:space:]]*@(Test|ParameterizedTest|ArchTest)[[:space:]]*$' "$ROOT/backend/src/test" --include='*.java' | wc -l | tr -d ' ')"
 frontend="$(grep -RhE '^[[:space:]]*(it|test)\(' "$ROOT/frontend/src" --include='*.spec.ts' | wc -l | tr -d ' ')"
 
 python3 - "$BASELINE" "$backend" "$frontend" <<'PY'

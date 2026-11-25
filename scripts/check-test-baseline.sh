@@ -7,7 +7,7 @@ BASELINE="$ROOT/docs/harness/test-baseline.json"
 
 [[ -f "$BASELINE" ]] || { echo "Falta $BASELINE" >&2; exit 1; }
 
-backend_now="$(grep -RhE '^[[:space:]]*@(Test|ParameterizedTest|ArchTest)' "$ROOT/backend/src/test" --include='*.java' | wc -l | tr -d ' ')"
+backend_now="$(grep -RhE '^[[:space:]]*@(Test|ParameterizedTest|ArchTest)[[:space:]]*$' "$ROOT/backend/src/test" --include='*.java' | wc -l | tr -d ' ')"
 frontend_now="$(grep -RhE '^[[:space:]]*(it|test)\(' "$ROOT/frontend/src" --include='*.spec.ts' | wc -l | tr -d ' ')"
 
 python3 - "$BASELINE" "$backend_now" "$frontend_now" <<'PY'
