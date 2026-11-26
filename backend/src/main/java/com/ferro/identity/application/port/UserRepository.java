@@ -16,4 +16,6 @@ public interface UserRepository {
     boolean existsByEmail(Email email);
 
     User save(User user);
+
+    void delete(User user);
 }

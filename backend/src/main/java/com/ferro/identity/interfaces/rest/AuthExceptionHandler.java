@@ -26,7 +26,9 @@ import com.ferro.identity.domain.InvalidEmailException;
 import com.ferro.identity.domain.InvalidLocaleException;
 import com.ferro.identity.domain.InvalidOriginException;
 import com.ferro.identity.domain.InvalidPasswordException;
+import com.ferro.identity.domain.InvalidProfileException;
 import com.ferro.identity.domain.InvalidUnitSystemException;
+import com.ferro.identity.domain.PasswordResetInvalidException;
 import com.ferro.identity.domain.RefreshInvalidException;
 import com.ferro.identity.domain.VerificationInvalidException;
 import com.ferro.shared.domain.DomainException;
@@ -54,6 +56,7 @@ public class AuthExceptionHandler {
         InvalidDisplayNameException.class,
         InvalidLocaleException.class,
         InvalidUnitSystemException.class,
+        InvalidProfileException.class,
         HealthConsentRequiredException.class
     })
     ResponseEntity<ProblemDetail> invalidInput(DomainException exception) {
@@ -82,6 +85,11 @@ public class AuthExceptionHandler {
     @ExceptionHandler(VerificationInvalidException.class)
     ResponseEntity<ProblemDetail> verificationInvalid(VerificationInvalidException exception) {
         return response(problem(HttpStatus.BAD_REQUEST, "VERIFICATION_INVALID", exception.getMessage()));
+    }
+
+    @ExceptionHandler(PasswordResetInvalidException.class)
+    ResponseEntity<ProblemDetail> passwordResetInvalid(PasswordResetInvalidException exception) {
+        return response(problem(HttpStatus.BAD_REQUEST, "PASSWORD_RESET_INVALID", exception.getMessage()));
     }
 
     @ExceptionHandler(AccountLockedException.class)

@@ -206,6 +206,7 @@ POST …/finish → 200 {
 | `LIMIT_REACHED` | 422 | RN-12/100 custom |
 | `REFRESH_INVALID` | 401 | refresh revocado/expirado |
 | `VERIFICATION_INVALID` | 400 | token de verificación inválido, caducado o usado |
+| `PASSWORD_RESET_INVALID` | 400 | token de recuperación inválido, caducado o usado |
 | `RATE_LIMITED` | 429 | RN-20 |
 | `NOT_FOUND` | 404 | recurso inexistente **o ajeno** (anti-IDOR, RNF-18) |
 | `INTERNAL_ERROR` | 500 | no filtrar detalles |

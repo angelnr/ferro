@@ -14,4 +14,6 @@ public interface RefreshTokenRepository {
     RefreshToken save(RefreshToken token);
 
     void revokeAllForUser(UUID userId, Instant now);
+
+    void revokeAllForUserExcept(UUID userId, String keepTokenHash, Instant now);
 }

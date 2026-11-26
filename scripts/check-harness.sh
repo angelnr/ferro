@@ -38,6 +38,10 @@ for f in \
   backend/src/main/java/com/ferro/identity/application/EmailVerificationService.java \
   backend/src/main/java/com/ferro/identity/infrastructure/mail/MailEmailSender.java \
   backend/src/main/java/com/ferro/platform/security/OpenApiConfig.java \
+  backend/src/main/java/com/ferro/identity/interfaces/rest/UserController.java \
+  backend/src/main/java/com/ferro/identity/interfaces/rest/PasswordResetController.java \
+  backend/src/main/java/com/ferro/identity/application/PasswordResetService.java \
+  backend/src/main/resources/security/common-passwords.txt \
   backend/src/main/resources/db/migration/V1__identity_and_extensions.sql \
   backend/src/main/resources/db/migration/V2__catalog.sql \
   backend/src/main/resources/db/migration/V3__training.sql \
@@ -83,6 +87,9 @@ need_grep backend/pom.xml 'spring-boot-starter-mail' 'envío de emails'
 need_grep backend/src/main/resources/application.yml 'api-docs' 'ruta de OpenAPI'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'email-verification/confirm' 'confirmación pública'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java '/api/api-docs' 'OpenAPI público'
+need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/UserController.java '/api/v1/users/me' 'contrato de perfil'
+need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/PasswordResetController.java '/api/v1/auth/password-reset' 'contrato de recuperación'
+need_grep backend/src/main/resources/security/common-passwords.txt '^# Top 10k' 'lista de contraseñas comunes'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'anyRequest\(\)' 'regla de autenticación global'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'SessionCreationPolicy.STATELESS' 'API stateless'
 need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/AuthController.java '/api/v1/auth' 'contrato de auth'

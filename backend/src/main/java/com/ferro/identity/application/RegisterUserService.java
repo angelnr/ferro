@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ferro.identity.application.port.CommonPasswordChecker;
 import com.ferro.identity.application.port.PasswordHasher;
 import com.ferro.identity.application.port.UserRepository;
 import com.ferro.identity.domain.AppLocale;
@@ -13,6 +14,7 @@ import com.ferro.identity.domain.DisplayName;
 import com.ferro.identity.domain.Email;
 import com.ferro.identity.domain.EmailTakenException;
 import com.ferro.identity.domain.HealthConsentRequiredException;
+import com.ferro.identity.domain.InvalidPasswordException;
 import com.ferro.identity.domain.InvalidUnitSystemException;
 import com.ferro.identity.domain.PasswordPolicy;
 import com.ferro.identity.domain.UnitSystem;
@@ -26,6 +28,7 @@ public class RegisterUserService {
     private final PasswordHasher passwordHasher;
     private final SessionIssuer sessions;
     private final EmailVerificationService emailVerifications;
+    private final CommonPasswordChecker commonPasswords;
     private final Clock clock;
 
     public RegisterUserService(
@@ -33,11 +36,13 @@ public class RegisterUserService {
             PasswordHasher passwordHasher,
             SessionIssuer sessions,
             EmailVerificationService emailVerifications,
+            CommonPasswordChecker commonPasswords,
             Clock clock) {
         this.users = users;
         this.passwordHasher = passwordHasher;
         this.sessions = sessions;
         this.emailVerifications = emailVerifications;
+        this.commonPasswords = commonPasswords;
         this.clock = clock;
     }
 
@@ -49,6 +54,9 @@ public class RegisterUserService {
         Email email = new Email(command.email());
         DisplayName displayName = new DisplayName(command.displayName());
         PasswordPolicy.validate(command.rawPassword());
+        if (commonPasswords.isCommon(command.rawPassword())) {
+            throw new InvalidPasswordException("La contraseña es demasiado común");
+        }
 
         if (users.existsByEmail(email)) {
             throw new EmailTakenException();

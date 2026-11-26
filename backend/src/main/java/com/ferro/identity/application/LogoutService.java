@@ -1,6 +1,7 @@
 package com.ferro.identity.application;
 
 import java.time.Clock;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,10 @@ public class LogoutService {
         }
         token.revoke(clock.instant(), null);
         refreshTokens.save(token);
+    }
+
+    @Transactional
+    public void logoutAll(UUID userId) {
+        refreshTokens.revokeAllForUser(userId, clock.instant());
     }
 }

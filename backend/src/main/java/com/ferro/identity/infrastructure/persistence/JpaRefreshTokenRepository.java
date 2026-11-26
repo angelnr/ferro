@@ -33,4 +33,9 @@ class JpaRefreshTokenRepository implements RefreshTokenRepository {
     public void revokeAllForUser(UUID userId, Instant now) {
         tokens.revokeAllForUser(userId, now);
     }
+
+    @Override
+    public void revokeAllForUserExcept(UUID userId, String keepTokenHash, Instant now) {
+        tokens.revokeAllForUserExcept(userId, keepTokenHash, now);
+    }
 }

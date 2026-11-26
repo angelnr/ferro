@@ -152,6 +152,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `infra/.env.example`; gitleaks en pre-commit/CI.
 - **Comprobación:** `gitleaks git --staged` sin hallazgos y `docker compose config` falla si falta `JWT_SECRET`.
 
+### L-017 · Cambiar contraseña no debe cerrar la sesión actual
+- **Fecha:** 2026-11-26
+- **Síntoma:** al revocar todos los refresh tras un cambio de contraseña, el usuario se quedaba fuera también en el dispositivo desde el que cambiaba.
+- **Causa raíz:** se revocaba la familia completa sin distinguir el token de la sesión actual.
+- **Prevención:** conservar el hash del refresh de la cookie actual y revocar el resto; si no hay cookie, revocar todas.
+- **Artefacto:** `ChangePasswordService`; `revokeAllForUserExcept`; test `changes_password_and_revokes_other_sessions`.
+- **Comprobación:** el refresh de la sesión actual sigue funcionando y el de otro dispositivo devuelve 401.
+
 ---
 
 ## Revisión por milestone

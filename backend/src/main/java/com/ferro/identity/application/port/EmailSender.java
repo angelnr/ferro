@@ -6,4 +6,10 @@ import com.ferro.identity.domain.Email;
 public interface EmailSender {
 
     void sendVerificationEmail(Email recipient, String verificationLink);
+
+    void sendPasswordResetEmail(Email recipient, String resetLink);
+
+    void sendPasswordChangedEmail(Email recipient);
+
+    void sendAccountDeletedEmail(Email recipient);
 }

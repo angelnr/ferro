@@ -38,4 +38,9 @@ class JpaUserRepository implements UserRepository {
         users.save(UserJpaEntity.from(user));
         return user;
     }
+
+    @Override
+    public void delete(User user) {
+        users.deleteById(user.id());
+    }
 }

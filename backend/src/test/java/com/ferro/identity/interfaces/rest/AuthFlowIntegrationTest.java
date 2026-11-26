@@ -2,7 +2,9 @@ package com.ferro.identity.interfaces.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -254,6 +256,166 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
                         .exists());
     }
 
+    @Test
+    void updates_profile_and_preferences() throws Exception {
+        Registered registered = register(uniqueEmail());
+
+        mockMvc.perform(patch("/api/v1/users/me")
+                        .header("Authorization", "Bearer " + registered.accessToken())
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {"displayName":"Nuevo Nombre","locale":"en","unitSystem":"LB",
+                                 "theme":"LIGHT","defaultRestSeconds":120}
+                                """))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + registered.accessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user.displayName").value("Nuevo Nombre"))
+                .andExpect(jsonPath("$.preferences.locale").value("en"))
+                .andExpect(jsonPath("$.preferences.unitSystem").value("LB"))
+                .andExpect(jsonPath("$.preferences.theme").value("LIGHT"))
+                .andExpect(jsonPath("$.preferences.defaultRestSeconds").value(120));
+    }
+
+    @Test
+    void rejects_empty_profile_update() throws Exception {
+        Registered registered = register(uniqueEmail());
+
+        mockMvc.perform(patch("/api/v1/users/me")
+                        .header("Authorization", "Bearer " + registered.accessToken())
+                        .contentType(APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"));
+    }
+
+    @Test
+    void changes_password_and_revokes_other_sessions() throws Exception {
+        String email = uniqueEmail();
+        Registered firstSession = register(email);
+        MvcResult login = mockMvc.perform(
+                        post("/api/v1/auth/login").contentType(APPLICATION_JSON).content(loginBody(email, PASSWORD)))
+                .andExpect(status().isOk())
+                .andReturn();
+        Cookie secondSession = login.getResponse().getCookie("ferro_refresh");
+        assertThat(secondSession).isNotNull();
+
+        mockMvc.perform(patch("/api/v1/users/me/password")
+                        .header("Authorization", "Bearer " + firstSession.accessToken())
+                        .cookie(firstSession.cookie())
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {"current":"%s","next":"NuevaClave123"}
+                                """.formatted(PASSWORD)))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(post("/api/v1/auth/login").contentType(APPLICATION_JSON).content(loginBody(email, PASSWORD)))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/api/v1/auth/refresh").cookie(firstSession.cookie()))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/v1/auth/refresh").cookie(secondSession))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("REFRESH_INVALID"));
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(loginBody(email, "NuevaClave123")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void logout_all_revokes_every_refresh() throws Exception {
+        Registered registered = register(uniqueEmail());
+
+        mockMvc.perform(post("/api/v1/auth/logout-all").header("Authorization", "Bearer " + registered.accessToken()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(post("/api/v1/auth/refresh").cookie(registered.cookie()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void delete_account_requires_reauthentication_and_cascades() throws Exception {
+        String email = uniqueEmail();
+        Registered registered = register(email);
+
+        mockMvc.perform(delete("/api/v1/users/me")
+                        .header("Authorization", "Bearer " + registered.accessToken())
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"confirmPassword\":\"WrongPass123\"}"))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(delete("/api/v1/users/me")
+                        .header("Authorization", "Bearer " + registered.accessToken())
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"confirmPassword\":\"%s\"}".formatted(PASSWORD)))
+                .andExpect(status().isNoContent());
+
+        assertThat(emailSender.accountDeletedEmails()).hasSize(1);
+
+        mockMvc.perform(post("/api/v1/auth/login").contentType(APPLICATION_JSON).content(loginBody(email, PASSWORD)))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(post("/api/v1/auth/refresh").cookie(registered.cookie()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void password_reset_request_never_reveals_existence_and_confirm_changes_password() throws Exception {
+        String email = uniqueEmail();
+        Registered registered = register(email);
+
+        mockMvc.perform(post("/api/v1/auth/password-reset/request")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"email\":\"nadie@ferro.dev\"}"))
+                .andExpect(status().isAccepted());
+        assertThat(emailSender.resetEmails()).isEmpty();
+
+        mockMvc.perform(post("/api/v1/auth/password-reset/request")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"email\":\"%s\"}".formatted(email)))
+                .andExpect(status().isAccepted());
+        assertThat(emailSender.resetEmails()).hasSize(1);
+
+        String token = tokenFrom(emailSender.lastReset().link());
+        mockMvc.perform(post("/api/v1/auth/password-reset/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {"token":"%s","newPassword":"ResetClave123"}
+                                """.formatted(token)))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(post("/api/v1/auth/login").contentType(APPLICATION_JSON).content(loginBody(email, PASSWORD)))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(loginBody(email, "ResetClave123")))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/v1/auth/refresh").cookie(registered.cookie()))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void invalid_password_reset_token_is_rejected() throws Exception {
+        mockMvc.perform(post("/api/v1/auth/password-reset/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"token\":\"nope\",\"newPassword\":\"ResetClave123\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("PASSWORD_RESET_INVALID"));
+    }
+
+    @Test
+    void common_password_is_rejected_at_registration() throws Exception {
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(APPLICATION_JSON)
+                        .content(registerBody(uniqueEmail(), "Groupd2013", true)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"));
+    }
+
     private Registered register(String email) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(APPLICATION_JSON)
@@ -319,22 +481,59 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
     static class CapturingEmailSender implements EmailSender {
 
         private final List<SentEmail> emails = new CopyOnWriteArrayList<>();
+        private final List<SentEmail> resetEmails = new CopyOnWriteArrayList<>();
+        private final List<Email> passwordChangedEmails = new CopyOnWriteArrayList<>();
+        private final List<Email> accountDeletedEmails = new CopyOnWriteArrayList<>();
 
         @Override
         public void sendVerificationEmail(Email recipient, String verificationLink) {
             emails.add(new SentEmail(recipient, verificationLink));
         }
 
+        @Override
+        public void sendPasswordResetEmail(Email recipient, String resetLink) {
+            resetEmails.add(new SentEmail(recipient, resetLink));
+        }
+
+        @Override
+        public void sendPasswordChangedEmail(Email recipient) {
+            passwordChangedEmails.add(recipient);
+        }
+
+        @Override
+        public void sendAccountDeletedEmail(Email recipient) {
+            accountDeletedEmails.add(recipient);
+        }
+
         List<SentEmail> emails() {
             return List.copyOf(emails);
+        }
+
+        List<SentEmail> resetEmails() {
+            return List.copyOf(resetEmails);
+        }
+
+        List<Email> passwordChangedEmails() {
+            return List.copyOf(passwordChangedEmails);
+        }
+
+        List<Email> accountDeletedEmails() {
+            return List.copyOf(accountDeletedEmails);
         }
 
         SentEmail last() {
             return emails.get(emails.size() - 1);
         }
 
+        SentEmail lastReset() {
+            return resetEmails.get(resetEmails.size() - 1);
+        }
+
         void clear() {
             emails.clear();
+            resetEmails.clear();
+            passwordChangedEmails.clear();
+            accountDeletedEmails.clear();
         }
     }
 

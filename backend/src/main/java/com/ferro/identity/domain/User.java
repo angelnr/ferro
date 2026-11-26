@@ -179,6 +179,46 @@ public final class User {
         }
     }
 
+    public void updateProfile(
+            DisplayName newDisplayName,
+            AppLocale newLocale,
+            UnitSystem newUnitSystem,
+            Theme newTheme,
+            Integer newDefaultRestSeconds,
+            Instant now) {
+        if (newDisplayName == null
+                && newLocale == null
+                && newUnitSystem == null
+                && newTheme == null
+                && newDefaultRestSeconds == null) {
+            throw new InvalidProfileException("No hay cambios que aplicar");
+        }
+        if (newDefaultRestSeconds != null && (newDefaultRestSeconds < 15 || newDefaultRestSeconds > 600)) {
+            throw new InvalidProfileException("El descanso por defecto debe estar entre 15 y 600 segundos");
+        }
+        if (newDisplayName != null) {
+            displayName = newDisplayName;
+        }
+        if (newLocale != null) {
+            locale = newLocale;
+        }
+        if (newUnitSystem != null) {
+            unitSystem = newUnitSystem;
+        }
+        if (newTheme != null) {
+            theme = newTheme;
+        }
+        if (newDefaultRestSeconds != null) {
+            defaultRestSeconds = newDefaultRestSeconds;
+        }
+        updatedAt = now;
+    }
+
+    public void changePasswordHash(String newPasswordHash, Instant now) {
+        this.passwordHash = newPasswordHash;
+        this.updatedAt = now;
+    }
+
     public boolean isEmailVerified() {
         return emailVerifiedAt != null;
     }

@@ -131,6 +131,22 @@ public class AuthController {
                 .build();
     }
 
+    @PostMapping("/logout-all")
+    @Operation(summary = "Revoca todos los refresh tokens del usuario")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<Void> logoutAll(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId;
+        try {
+            userId = UUID.fromString(jwt.getSubject());
+        } catch (IllegalArgumentException | NullPointerException exception) {
+            throw new InvalidCredentialsException();
+        }
+        logoutService.logoutAll(userId);
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, clearedRefreshCookie().toString())
+                .build();
+    }
+
     @GetMapping("/me")
     @Operation(summary = "Devuelve el usuario y sus preferencias")
     @SecurityRequirement(name = "bearerAuth")
