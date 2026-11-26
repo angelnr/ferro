@@ -43,9 +43,9 @@ Entregables:
 
 **Objetivo:** entrar, registrarse (email+OAuth), tener sesión segura.
 
-**Estado:** 🚧 en curso · registro, login, refresh con rotación, logout, `/auth/me`,
-verificación de email, Swagger, perfil, contraseñas, borrado de cuenta, rate limiting y CSP
-implementados. Faltan OAuth y la UI/E2E.
+**Estado:** 🚧 en curso · backend de identidad completo (registro, login, refresh, logout,
+verificación, perfil, contraseñas, borrado, rate limiting, CSP) y UI Angular de auth
+(login, registro, verificación y recuperación). Faltan OAuth y E2E Playwright.
 
 Entregables:
 - [ ] RF-001…011 completos (registro, login, refresh+rotación, logout, verificación,

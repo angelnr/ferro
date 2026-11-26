@@ -74,9 +74,9 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 
 **✅ M0 completado (26-nov-2026, tag `v0.1.0`).** Esqueleto backend/frontend, esquema
 Flyway `V1–V5`, infraestructura local, Dockerfile/Compose de producción (borrador), CI y
-harness funcionan. **M1 en curso:** registro, login, refresh con rotación, logout, `/auth/me`,
-verificación de email, Swagger, perfil, contraseñas, borrado de cuenta, rate limiting y CSP
-ya implementados. Faltan OAuth y la UI de autenticación/E2E.
+harness funcionan. **M1 en curso:** backend de identidad completo (registro, login, refresh,
+logout, verificación, perfil, contraseñas, borrado, rate limiting y CSP) y UI Angular de
+login/registro/verificación/recuperación. Faltan OAuth y E2E Playwright.
 
 ## Desarrollo local y verificación
 

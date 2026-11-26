@@ -132,6 +132,9 @@ infra/docker-compose.dev.yml    Postgres 18, Mailpit, Prometheus y Grafana
 infra/docker-compose.prod.yml   API + Postgres + Caddy (borrador M0)
 backend/Dockerfile              imagen multi-stage JRE 21, usuario no root
 backend/src/main/resources/db/migration/  migraciones Flyway (V1–V5, esquema completo)
+frontend/src/app/core/auth/     SessionStore, AuthStore, interceptor y guards
+frontend/src/app/features/auth/ login, registro, verificación y recuperación
+frontend/vercel.json            CSP y cabeceras del frontend
 docs/harness/lessons.md          lecciones → reglas/tests/hooks
 docs/harness/test-baseline.json  mínimo de tests exigido
 backend/src/test/.../Postgres18ContainerTest.java  humo de integración con PostgreSQL 18 real

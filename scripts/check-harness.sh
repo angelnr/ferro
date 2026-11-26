@@ -59,6 +59,15 @@ for f in \
   frontend/package.json \
   frontend/angular.json \
   frontend/src/app/core/store/ui.store.ts \
+  frontend/src/app/core/auth/auth.store.ts \
+  frontend/src/app/core/auth/session.store.ts \
+  frontend/src/app/core/auth/auth.interceptor.ts \
+  frontend/src/app/core/auth/auth.guard.ts \
+  frontend/src/app/features/auth/login/login.page.ts \
+  frontend/src/app/features/auth/register/register.page.ts \
+  frontend/src/app/features/home/home.page.ts \
+  frontend/src/app/features/auth/auth-pages.spec.ts \
+  frontend/vercel.json \
   frontend/src/app/features/README.md \
   frontend/public/assets/i18n/es.json \
   frontend/public/assets/i18n/en.json \
@@ -120,6 +129,9 @@ need_grep frontend/package.json '"lint"' 'script lint'
 need_grep frontend/package.json '@ngrx/signals' 'SignalStore'
 need_grep frontend/package.json '@ngx-translate/core' 'i18n runtime'
 need_grep frontend/src/app/app.config.ts 'provideTranslateService' 'i18n configurado'
+need_grep frontend/src/app/app.config.ts 'provideAppInitializer' 'restore de sesión al arrancar'
+need_grep frontend/src/app/core/auth/auth.store.ts 'signalStore' 'AuthStore con SignalStore'
+need_grep frontend/angular.json '"coverageInclude"' 'cobertura sobre todas las fuentes de la app'
 need_grep frontend/angular.json '"coverageThresholds"' 'umbrales de cobertura'
 
 python3 - "$ROOT/frontend/angular.json" <<'PY'

@@ -62,7 +62,8 @@ public class AuthController {
             GetCurrentUserService getCurrentUserService,
             RefreshProperties refreshProperties,
             RateLimiter rateLimiter,
-            @Value("${ferro.security.cors.allowed-origins:http://localhost:4200}") String allowedOrigins) {
+            @Value("${ferro.security.cors.allowed-origins:http://localhost:4200,http://127.0.0.1:4200}")
+                    String allowedOrigins) {
         this.registerUserService = registerUserService;
         this.loginService = loginService;
         this.refreshService = refreshService;

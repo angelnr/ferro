@@ -176,6 +176,22 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `SecurityHeadersFilter`; `frontend/vercel.json`; test de cabeceras.
 - **Comprobación:** health devuelve las cabeceras y Swagger sigue respondiendo.
 
+### L-020 · `localhost` y `127.0.0.1` son orígenes CORS distintos
+- **Fecha:** 2026-11-26
+- **Síntoma:** el registro desde `http://127.0.0.1:4200` fallaba con «No se pudo completar la operación», mientras `http://localhost:4200` funcionaba.
+- **Causa raíz:** la allowlist CORS solo contenía `http://localhost:4200`; para el navegador son orígenes diferentes.
+- **Prevención:** permitir ambos orígenes en desarrollo y probar el preflight explícitamente.
+- **Artefacto:** `application.yml`; `SecurityConfig`; test `cors_allows_both_local_frontend_origins`.
+- **Comprobación:** `OPTIONS /auth/login` devuelve `Access-Control-Allow-Origin` para los dos.
+
+### L-021 · La cobertura de Angular solo medía los ficheros cargados por los tests
+- **Fecha:** 2026-11-26
+- **Síntoma:** las páginas lazy no aparecían en el informe de cobertura; el 70 % era un falso verde.
+- **Causa raíz:** V8 coverage instrumenta solo módulos importados; las páginas cargadas por router nunca entraban.
+- **Prevención:** `coverageInclude: ["src/app/**/*.ts"]` y tests de páginas/store; el umbral ahora cubre todo.
+- **Artefacto:** `frontend/angular.json`; `auth-pages.spec.ts`; `auth.store.spec.ts`; invariante del harness.
+- **Comprobación:** el informe incluye `features/auth/*` y sigue ≥70 %.
+
 ---
 
 ## Revisión por milestone

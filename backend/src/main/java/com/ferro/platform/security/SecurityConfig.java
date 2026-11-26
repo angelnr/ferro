@@ -110,7 +110,8 @@ public class SecurityConfig {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource(
-            @Value("${ferro.security.cors.allowed-origins:http://localhost:4200}") String allowedOrigins) {
+            @Value("${ferro.security.cors.allowed-origins:http://localhost:4200,http://127.0.0.1:4200}")
+                    String allowedOrigins) {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)

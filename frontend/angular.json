@@ -41,7 +41,13 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -72,7 +78,8 @@
               "branches": 70,
               "functions": 70,
               "lines": 70
-            }
+            },
+            "coverageInclude": ["src/app/**/*.ts"]
           }
         },
         "lint": {

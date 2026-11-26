@@ -1,6 +1,40 @@
-<main class="flex min-h-dvh flex-col items-center justify-center gap-4 p-6">
-  <h1 class="text-5xl font-black tracking-tight">Ferro</h1>
-  <p class="text-zinc-400">{{ 'app.tagline' | translate }}</p>
-  <p class="text-sm text-zinc-500">{{ 'app.subtitle' | translate }}</p>
-  <router-outlet />
-</main>
+<div class="min-h-dvh bg-zinc-950 text-zinc-100">
+  <header class="border-b border-zinc-800 bg-zinc-950/90">
+    <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <a routerLink="/" class="text-xl font-black tracking-tight text-emerald-400">Ferro</a>
+
+      @if (session.isAuthenticated()) {
+        <nav class="flex items-center gap-4 text-sm">
+          <a
+            routerLink="/"
+            routerLinkActive="text-emerald-400"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="text-zinc-400 hover:text-zinc-100"
+          >
+            {{ 'nav.home' | translate }}
+          </a>
+          <span class="hidden text-zinc-500 sm:inline">{{ session.user()?.email }}</span>
+          <button type="button" (click)="logout()" class="text-zinc-400 hover:text-zinc-100">
+            {{ 'nav.logout' | translate }}
+          </button>
+        </nav>
+      } @else {
+        <nav class="flex items-center gap-4 text-sm">
+          <a routerLink="/login" class="text-zinc-400 hover:text-zinc-100">{{
+            'nav.login' | translate
+          }}</a>
+          <a
+            routerLink="/register"
+            class="rounded-lg bg-emerald-600 px-3 py-1.5 font-semibold text-white hover:bg-emerald-500"
+          >
+            {{ 'nav.register' | translate }}
+          </a>
+        </nav>
+      }
+    </div>
+  </header>
+
+  <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+    <router-outlet />
+  </main>
+</div>
