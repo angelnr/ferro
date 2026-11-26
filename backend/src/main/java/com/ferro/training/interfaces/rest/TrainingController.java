@@ -41,8 +41,11 @@ public class TrainingController {
 
     @PostMapping
     @Operation(summary = "Crea una sesión vacía")
-    public ResponseEntity<WorkoutSessionResponse> start(@AuthenticationPrincipal Jwt jwt) {
-        WorkoutSession session = training.start(userId(jwt));
+    public ResponseEntity<WorkoutSessionResponse> start(
+            @AuthenticationPrincipal Jwt jwt, @RequestBody(required = false) StartSessionRequest request) {
+        WorkoutSession session = request != null && request.routineId() != null
+                ? training.startFromRoutine(userId(jwt), request.routineId())
+                : training.start(userId(jwt));
         return ResponseEntity.status(HttpStatus.CREATED).body(WorkoutSessionResponse.from(session));
     }
 
@@ -77,7 +80,15 @@ public class TrainingController {
             @Valid @RequestBody LogSetRequest request) {
         SetType type = parseSetType(request.setType());
         SessionSet set = training.logSet(
-                userId(jwt), id, entryId, type, request.reps(), request.weight(), request.rir(), request.notes());
+                userId(jwt),
+                id,
+                entryId,
+                type,
+                request.reps(),
+                request.weight(),
+                request.rir(),
+                request.notes(),
+                request.targetSetId());
         return ResponseEntity.status(HttpStatus.CREATED).body(WorkoutSessionResponse.SetEntry.from(set));
     }
 

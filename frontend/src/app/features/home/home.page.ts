@@ -1,16 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthStore } from '../../core/auth/auth.store';
 import { SessionStore } from '../../core/auth/session.store';
+import { RoutineApi } from '../training/routine.api';
+import { RoutineSummary } from '../training/routine.models';
 import { TrainingApi } from '../training/training.api';
 import { WorkoutSession } from '../training/training.models';
 
 @Component({
   selector: 'app-home-page',
-  imports: [TranslatePipe],
+  imports: [RouterLink, TranslatePipe],
   template: `
     @if (session.user(); as user) {
       <section class="mx-auto mt-10 w-full max-w-3xl space-y-6">
@@ -50,6 +52,33 @@ import { WorkoutSession } from '../training/training.models';
             <p class="mt-2 text-sm text-red-300">{{ message }}</p>
           }
         </div>
+
+        @if (routines().length) {
+          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-xs uppercase tracking-wider text-zinc-500">
+                {{ 'routines.list' | translate }}
+              </p>
+              <a routerLink="/routines" class="text-sm text-emerald-400">{{
+                'routines.edit' | translate
+              }}</a>
+            </div>
+            <ul class="mt-2 divide-y divide-zinc-800">
+              @for (routine of routines(); track routine.id) {
+                <li class="flex items-center justify-between gap-3 py-2">
+                  <span class="text-sm">{{ routine.name }}</span>
+                  <button
+                    type="button"
+                    (click)="startRoutine(routine)"
+                    class="rounded-lg border border-emerald-800 px-3 py-1 text-sm text-emerald-300"
+                  >
+                    ▶ {{ 'routines.start' | translate }}
+                  </button>
+                </li>
+              }
+            </ul>
+          </div>
+        }
 
         @if (user.status === 'UNVERIFIED') {
           <div class="rounded-xl border border-amber-900 bg-amber-950/40 p-4">
@@ -124,15 +153,40 @@ export class HomePage implements OnInit {
   protected readonly auth = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly trainingApi = inject(TrainingApi);
+  private readonly routineApi = inject(RoutineApi);
   protected readonly resent = signal(false);
   protected readonly startError = signal<string | null>(null);
   protected readonly activeSession = signal<WorkoutSession | null>(null);
+  protected readonly routines = signal<RoutineSummary[]>([]);
 
   async ngOnInit(): Promise<void> {
     try {
       this.activeSession.set(await firstValueFrom(this.trainingApi.active()));
     } catch {
       this.activeSession.set(null);
+    }
+    try {
+      this.routines.set((await firstValueFrom(this.routineApi.list(0, 5))).content);
+    } catch {
+      this.routines.set([]);
+    }
+  }
+
+  protected async startRoutine(routine: RoutineSummary): Promise<void> {
+    this.startError.set(null);
+    try {
+      const session = await firstValueFrom(this.routineApi.start(routine.id));
+      await this.router.navigate(['/training', session.id]);
+    } catch (error) {
+      const activeId =
+        error instanceof HttpErrorResponse
+          ? (error.error as { activeSessionId?: string } | null)?.activeSessionId
+          : undefined;
+      if (activeId) {
+        await this.router.navigate(['/training', activeId]);
+      } else {
+        this.startError.set('No se pudo iniciar la rutina');
+      }
     }
   }
 

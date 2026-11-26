@@ -9,7 +9,8 @@
     "logout": "Sign out",
     "register": "Create account",
     "settings": "Settings",
-    "catalog": "Catalog"
+    "catalog": "Catalog",
+    "routines": "Routines"
   },
   "auth": {
     "loginTitle": "Sign in to Ferro",
@@ -161,6 +162,25 @@
     "volume": "Volume",
     "sets": "Sets",
     "activeBanner": "You have a session in progress",
-    "continue": "Continue"
+    "continue": "Continue",
+    "pendingTargets": "Pending target sets"
+  },
+  "routines": {
+    "title": "Training",
+    "list": "My routines",
+    "new": "New routine",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "start": "Start",
+    "error": "The operation could not be completed",
+    "empty": "No routines yet. Create your first one to train faster.",
+    "emptyBuilder": "Add at least one exercise to the routine.",
+    "exercises": "exercises",
+    "lastUsed": "Last used",
+    "back": "Back to routines",
+    "name": "Routine name",
+    "targetSets": "Target sets",
+    "addSet": "Add target set"
   }
 }

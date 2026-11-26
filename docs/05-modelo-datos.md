@@ -197,6 +197,21 @@ UNIQUE `(routine_exercise_id, position)`.
 | logged_at | timestamptz | NOT NULL default now() |
 | created_at / updated_at | timestamptz | |
 
+### `session_target_sets` (V7, RN-24)
+
+| Columna | Tipo | Restricciones |
+|---|---|---|
+| id | uuid | PK |
+| session_exercise_id | uuid | FK CASCADE |
+| position | smallint | ≥ 0, UNIQUE `(session_exercise_id, position)` |
+| set_type | set_type | NOT NULL default `NORMAL` |
+| target_reps | smallint | NOT NULL 1..1000 |
+| target_weight | numeric(6,2) | NULL (kg sugeridos) |
+| target_rir | smallint | NULL 0..10 |
+
+Se copian de `routine_sets` al iniciar una sesión desde rutina. Al registrar la serie real
+con `targetSetId`, la fila pendiente se elimina; nunca computa volumen ni PR.
+
 ### `personal_records`
 
 | Columna | Tipo | Restricciones |
@@ -268,7 +283,8 @@ de dominio para emails y derivados (outbox de facto — ver ADR-0002 §alternati
 | V4 | tablas `progress` y `body` |
 | V5 | `feature_flags` + seeds de flags |
 | V6 | seed del catálogo (~200 ejercicios, `docs/seed-ejercicios.csv`) |
-| (M7) V7 | datos demo (cuenta demo + 12 semanas sintéticas, solo prod-demo) |
+| V7 | `session_target_sets`: series objetivo pendientes al iniciar desde rutina (RN-24) |
+| (M7) V8 | datos demo (cuenta demo + 12 semanas sintéticas, solo prod-demo) |
 
 ## 5 · Seed del catálogo (~200 ejercicios)
 

@@ -264,6 +264,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `training.page.spec.ts` (`afterEach` con `try/finally`, helper `loadSession` que vacía historial y PR).
 - **Comprobación:** `make verify-frontend` con 60 tests y sin errores de TestBed.
 
+### L-030 · Las series objetivo no caben en `session_sets`
+- **Fecha:** 2026-11-26
+- **Síntoma:** al implementar M4, precargar series objetivo en `session_sets` chocaba con `reps`/`weight NOT NULL` y con todo el cálculo de volumen/PR de M3.
+- **Causa raíz:** una serie pendiente no es una serie real: no tiene reps ni peso registrados y no debe computar.
+- **Prevención:** tabla separada `session_target_sets`, copiada de `routine_sets` al iniciar; al confirmar se borra la pendiente y se inserta la serie real.
+- **Artefacto:** `V7__session_target_sets.sql`; `TrainingService.logSet(..., targetSetId)`; `RoutineFlowIntegrationTest`.
+- **Comprobación:** iniciar rutina deja `targetSets`, registrar con `targetSetId` lo vacía y el volumen/PR siguen saliendo solo de `session_sets`.
+
 ---
 
 ## Revisión por milestone

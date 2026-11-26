@@ -19,13 +19,31 @@ public interface TrainingRepository {
 
     Optional<WorkoutSession> find(UUID userId, UUID sessionId);
 
-    WorkoutSession create(UUID userId, UUID sessionId, String name, Instant now);
+    WorkoutSession create(UUID userId, UUID sessionId, String name, UUID routineId, Instant now);
 
     int exerciseCount(UUID sessionId);
 
     int setCount(UUID sessionExerciseId);
 
-    void addExercise(UUID sessionId, UUID entryId, UUID exerciseId, int position);
+    void addExercise(
+            UUID sessionId,
+            UUID entryId,
+            UUID exerciseId,
+            int position,
+            Integer restSeconds,
+            Integer supersetGroup,
+            String notes);
+
+    void addTargetSet(
+            UUID entryId,
+            UUID targetSetId,
+            SetType setType,
+            int targetReps,
+            java.math.BigDecimal targetWeight,
+            Integer targetRir,
+            int position);
+
+    void deleteTargetSet(UUID targetSetId);
 
     SessionSet addSet(
             UUID entryId,

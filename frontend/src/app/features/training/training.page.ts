@@ -14,6 +14,7 @@ import {
   PreviousSet,
   SessionExercise,
   SessionSet,
+  TargetSet,
   WorkoutSession,
 } from './training.models';
 import { TrainingApi } from './training.api';
@@ -350,6 +351,27 @@ import { TrainingApi } from './training.api';
                   </span>
                 }
               </div>
+              @if (entry.targetSets.length) {
+                <div class="mt-3">
+                  <p class="text-xs uppercase tracking-wider text-sky-400">
+                    {{ 'training.pendingTargets' | translate }}
+                  </p>
+                  <div class="mt-1 flex flex-wrap gap-2">
+                    @for (target of entry.targetSets; track target.id) {
+                      <button
+                        type="button"
+                        (click)="useTarget(entry, target)"
+                        class="rounded-full border border-sky-800 bg-sky-950/60 px-2.5 py-1 text-xs text-sky-200"
+                      >
+                        {{ target.setType }} · {{ target.targetReps }}×{{
+                          target.targetWeight ?? '—'
+                        }}
+                        kg
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
               @if (!entry.sets.length) {
                 <p class="mt-2 text-sm text-zinc-500">{{ 'training.noSets' | translate }}</p>
               } @else {
@@ -550,6 +572,7 @@ export class TrainingPage implements OnDestroy {
     rir: [null as number | null, [Validators.min(0), Validators.max(10)]],
     setType: ['NORMAL', [Validators.required]],
     notes: [''],
+    targetSetId: [''],
   });
 
   protected readonly sessionForm = this.formBuilder.nonNullable.group({
@@ -603,6 +626,7 @@ export class TrainingPage implements OnDestroy {
           rir: value.rir,
           setType: value.setType,
           notes: value.notes,
+          targetSetId: value.targetSetId || null,
         }),
       );
       const updated = await firstValueFrom(this.api.get(session.id));
@@ -613,6 +637,7 @@ export class TrainingPage implements OnDestroy {
         rir: null,
         notes: '',
         setType: 'NORMAL',
+        targetSetId: '',
       });
       const entry = updated.exercises.find((candidate) => candidate.id === value.entryId);
       if (entry) {
@@ -825,6 +850,23 @@ export class TrainingPage implements OnDestroy {
     } catch {
       this.error.set(true);
     }
+  }
+
+  protected useTarget(entry: SessionExercise, target: TargetSet): void {
+    this.setForm.patchValue(
+      {
+        entryId: entry.id,
+        reps: target.targetReps,
+        weight: target.targetWeight ?? 0,
+        rir: target.targetRir,
+        setType: target.setType,
+        notes: '',
+        targetSetId: target.id,
+      },
+      { emitEvent: false },
+    );
+    void this.loadPrevious(entry.exerciseId);
+    void this.loadPersonalRecords(entry.exerciseId);
   }
 
   protected changeRest(entryId: string, event: Event): void {

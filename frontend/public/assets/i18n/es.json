@@ -9,7 +9,8 @@
     "logout": "Salir",
     "register": "Crear cuenta",
     "settings": "Ajustes",
-    "catalog": "Catálogo"
+    "catalog": "Catálogo",
+    "routines": "Rutinas"
   },
   "auth": {
     "loginTitle": "Entra en Ferro",
@@ -161,6 +162,25 @@
     "volume": "Volumen",
     "sets": "Series",
     "activeBanner": "Tienes una sesión en curso",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "pendingTargets": "Series objetivo pendientes"
+  },
+  "routines": {
+    "title": "Entrenamiento",
+    "list": "Mis rutinas",
+    "new": "Nueva rutina",
+    "edit": "Editar",
+    "duplicate": "Duplicar",
+    "delete": "Eliminar",
+    "start": "Empezar",
+    "error": "No se pudo completar la operación",
+    "empty": "Aún no tienes rutinas. Crea la primera para entrenar más rápido.",
+    "emptyBuilder": "Añade al menos un ejercicio a la rutina.",
+    "exercises": "ejercicios",
+    "lastUsed": "Última vez",
+    "back": "Volver a rutinas",
+    "name": "Nombre de la rutina",
+    "targetSets": "Series objetivo",
+    "addSet": "Añadir serie objetivo"
   }
 }

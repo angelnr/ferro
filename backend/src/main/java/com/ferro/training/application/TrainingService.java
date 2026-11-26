@@ -14,11 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ferro.shared.domain.UuidV7;
+import com.ferro.training.application.port.RoutineRepository;
 import com.ferro.training.application.port.TrainingRepository;
 import com.ferro.training.domain.InvalidSessionStateException;
 import com.ferro.training.domain.InvalidTrainingException;
 import com.ferro.training.domain.NewPersonalRecord;
 import com.ferro.training.domain.PreviousSession;
+import com.ferro.training.domain.Routine;
+import com.ferro.training.domain.RoutineExercise;
+import com.ferro.training.domain.RoutineNotFoundException;
+import com.ferro.training.domain.RoutineSet;
 import com.ferro.training.domain.SessionExercise;
 import com.ferro.training.domain.SessionNotFoundException;
 import com.ferro.training.domain.SessionSet;
@@ -35,10 +40,12 @@ public class TrainingService {
     private static final int MAX_SETS = 15;
 
     private final TrainingRepository sessions;
+    private final RoutineRepository routines;
     private final Clock clock;
 
-    public TrainingService(TrainingRepository sessions, Clock clock) {
+    public TrainingService(TrainingRepository sessions, RoutineRepository routines, Clock clock) {
         this.sessions = sessions;
+        this.routines = routines;
         this.clock = clock;
     }
 
@@ -49,7 +56,36 @@ public class TrainingService {
                 + DateTimeFormatter.ofPattern("yyyy-MM-dd")
                         .withZone(ZoneId.of("Europe/Madrid"))
                         .format(now);
-        return sessions.create(userId, UuidV7.generate(), name, now);
+        return sessions.create(userId, UuidV7.generate(), name, null, now);
+    }
+
+    @Transactional
+    public WorkoutSession startFromRoutine(UUID userId, UUID routineId) {
+        Routine routine = routines.find(userId, routineId).orElseThrow(RoutineNotFoundException::new);
+        Instant now = clock.instant();
+        WorkoutSession session = sessions.create(userId, UuidV7.generate(), routine.name(), routine.id(), now);
+        for (RoutineExercise exercise : routine.exercises()) {
+            UUID entryId = UuidV7.generate();
+            sessions.addExercise(
+                    session.id(),
+                    entryId,
+                    exercise.exerciseId(),
+                    exercise.position(),
+                    exercise.restSeconds(),
+                    exercise.supersetGroup(),
+                    exercise.notes());
+            for (RoutineSet target : exercise.sets()) {
+                sessions.addTargetSet(
+                        entryId,
+                        UuidV7.generate(),
+                        target.setType(),
+                        target.targetReps(),
+                        target.targetWeight(),
+                        target.targetRir(),
+                        target.position());
+            }
+        }
+        return get(userId, session.id());
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +110,7 @@ public class TrainingService {
             throw new SessionNotFoundException();
         }
         sessions.addExercise(
-                sessionId, UuidV7.generate(), exerciseId, session.exercises().size());
+                sessionId, UuidV7.generate(), exerciseId, session.exercises().size(), null, null, null);
         return get(userId, sessionId);
     }
 
@@ -87,7 +123,8 @@ public class TrainingService {
             int reps,
             BigDecimal weight,
             Integer rir,
-            String notes) {
+            String notes,
+            UUID targetSetId) {
         WorkoutSession session = activeFor(userId, sessionId);
         SessionExercise entry = session.exercises().stream()
                 .filter(exercise -> exercise.id().equals(entryId))
@@ -95,6 +132,10 @@ public class TrainingService {
                 .orElseThrow(SessionNotFoundException::new);
         if (entry.sets().size() >= MAX_SETS) {
             throw new InvalidTrainingException("Un ejercicio no puede tener más de 15 series");
+        }
+        if (targetSetId != null
+                && entry.targetSets().stream().noneMatch(target -> target.id().equals(targetSetId))) {
+            throw new SessionNotFoundException();
         }
         if (reps < 1 || reps > 1000) {
             throw new InvalidTrainingException("Las reps deben estar entre 1 y 1000");
@@ -111,7 +152,7 @@ public class TrainingService {
             throw new InvalidTrainingException("La nota no puede superar 500 caracteres");
         }
         Instant now = clock.instant();
-        return sessions.addSet(
+        SessionSet created = sessions.addSet(
                 entryId,
                 UuidV7.generate(),
                 type,
@@ -122,6 +163,10 @@ public class TrainingService {
                 SetMath.e1rm(type, weight, reps),
                 now,
                 notes);
+        if (targetSetId != null) {
+            sessions.deleteTargetSet(targetSetId);
+        }
+        return created;
     }
 
     @Transactional

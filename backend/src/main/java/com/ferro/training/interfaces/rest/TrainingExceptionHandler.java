@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ferro.training.domain.InvalidSessionStateException;
 import com.ferro.training.domain.InvalidTrainingException;
+import com.ferro.training.domain.RoutineNameTakenException;
+import com.ferro.training.domain.RoutineNotFoundException;
 import com.ferro.training.domain.SessionAlreadyActiveException;
 import com.ferro.training.domain.SessionNotFoundException;
 
@@ -34,6 +36,21 @@ public class TrainingExceptionHandler {
                 .body(problem);
     }
 
+    @ExceptionHandler(RoutineNotFoundException.class)
+    ResponseEntity<ProblemDetail> routineNotFound(RoutineNotFoundException exception) {
+        return problem(HttpStatus.NOT_FOUND, "NOT_FOUND", "No encontrado", exception.getMessage(), "not-found");
+    }
+
+    @ExceptionHandler(RoutineNameTakenException.class)
+    ResponseEntity<ProblemDetail> routineNameTaken(RoutineNameTakenException exception) {
+        return problem(
+                HttpStatus.CONFLICT,
+                "ROUTINE_NAME_TAKEN",
+                "Nombre de rutina duplicado",
+                exception.getMessage(),
+                "routine-name-taken");
+    }
+
     @ExceptionHandler(SessionNotFoundException.class)
     ResponseEntity<ProblemDetail> notFound(SessionNotFoundException exception) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
@@ -52,6 +69,17 @@ public class TrainingExceptionHandler {
         problem.setType(URI.create("https://ferro.dev/problems/invalid-session-state"));
         problem.setProperty("code", "INVALID_SESSION_STATE");
         return ResponseEntity.status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+                .body(problem);
+    }
+
+    private ResponseEntity<ProblemDetail> problem(
+            HttpStatus status, String code, String title, String detail, String type) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
+        problem.setTitle(title);
+        problem.setType(URI.create("https://ferro.dev/problems/" + type));
+        problem.setProperty("code", code);
+        return ResponseEntity.status(status)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
                 .body(problem);
     }

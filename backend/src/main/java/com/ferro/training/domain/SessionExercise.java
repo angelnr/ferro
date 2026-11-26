@@ -11,4 +11,5 @@ public record SessionExercise(
         Integer restSeconds,
         Integer supersetGroup,
         String notes,
-        List<SessionSet> sets) {}
+        List<SessionSet> sets,
+        List<TargetSet> targetSets) {}

@@ -86,8 +86,11 @@ y creación inline.
 **M3 completado:** sesión en vivo con ejercicios (añadir, reordenar, drag & drop, eliminar,
 supersets A1/A2), series inmediatas con tipo/nota y edición, performance anterior + PR,
 descanso/cronómetro, volumen/e1RM, PRs, resumen al finalizar, descarte, recuperación de sesión
-activa, auto-cierre 24 h y notas de sesión/ejercicio/serie. Series objetivo y plantillas llegan
-en M4; el historial visual, en M5.
+activa, auto-cierre 24 h y notas de sesión/ejercicio/serie.
+
+**M4 completado:** rutinas con CRUD, duplicado, builder de series objetivo, supersets,
+reordenación y arranque de sesión con objetivos pendientes; desde Home o la lista de rutinas.
+El historial visual llega en M5.
 
 ## Desarrollo local y verificación
 

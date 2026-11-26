@@ -49,6 +49,19 @@ async function authenticated(page: Page): Promise<void> {
   await page.route('**/api/v1/workout-sessions/active', (route) =>
     route.fulfill({ status: 204, body: '' }),
   );
+  await page.route('**/api/v1/routines?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [],
+        page: 0,
+        size: 5,
+        totalElements: 0,
+        totalPages: 0,
+      }),
+    }),
+  );
   await page.route('**/api/v1/exercises/*', (route) =>
     route.fulfill({ status: 404, contentType: 'application/problem+json', body: '{}' }),
   );
@@ -267,6 +280,7 @@ test('runs a full live training session', async ({ page }) => {
     supersetGroup: number | null;
     notes: string | null;
     sets: MockSet[];
+    targetSets: unknown[];
   }
   interface MockSession {
     id: string;
@@ -296,6 +310,7 @@ test('runs a full live training session', async ({ page }) => {
         supersetGroup: null,
         notes: null,
         sets: [],
+        targetSets: [],
       },
       {
         id: 'entry-2',
@@ -306,6 +321,7 @@ test('runs a full live training session', async ({ page }) => {
         supersetGroup: null,
         notes: null,
         sets: [],
+        targetSets: [],
       },
       {
         id: 'entry-3',
@@ -316,6 +332,7 @@ test('runs a full live training session', async ({ page }) => {
         supersetGroup: null,
         notes: null,
         sets: [],
+        targetSets: [],
       },
     ],
   };
@@ -419,4 +436,177 @@ test('runs a full live training session', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Finalizar' }).click();
   await expect(page.getByText('MAX_WEIGHT')).toBeVisible();
+});
+
+test('creates a routine and completes its pending target sets', async ({ page }) => {
+  await authenticated(page);
+  const routine = {
+    id: 'routine-1',
+    name: 'PPL',
+    notes: 'Empuje',
+    exercises: [
+      {
+        id: 'routine-exercise-1',
+        exerciseId: 'exercise-1',
+        name: 'Press de banca con barra',
+        position: 0,
+        restSeconds: 120,
+        supersetGroup: null,
+        notes: null,
+        sets: [
+          {
+            id: 'target-routine-1',
+            position: 0,
+            setType: 'NORMAL',
+            targetReps: 8,
+            targetWeight: 60,
+            targetRir: 2,
+          },
+        ],
+      },
+    ],
+  };
+  const session = {
+    id: 'session-routine',
+    name: 'PPL',
+    status: 'ACTIVE',
+    startedAt: '2026-11-26T12:00:00Z',
+    finishedAt: null,
+    durationSeconds: null,
+    totalVolume: 0,
+    exercises: [
+      {
+        id: 'entry-routine-1',
+        exerciseId: 'exercise-1',
+        name: 'Press de banca con barra',
+        position: 0,
+        restSeconds: 120,
+        supersetGroup: null,
+        notes: null,
+        sets: [] as unknown[],
+        targetSets: [
+          {
+            id: 'target-1',
+            position: 0,
+            setType: 'NORMAL',
+            targetReps: 8,
+            targetWeight: 60,
+            targetRir: 2,
+          },
+        ],
+      },
+    ],
+  };
+
+  await page.route('**/api/v1/routines?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [{ id: routine.id, name: routine.name, exerciseCount: 1, lastUsedAt: null }],
+        page: 0,
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+      }),
+    }),
+  );
+  await page.route('**/api/v1/routines', (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify(routine),
+    }),
+  );
+  await page.route('**/api/v1/routines/routine-1', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(routine),
+    }),
+  );
+  await page.route('**/api/v1/routines/routine-1/start', (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify(session),
+    }),
+  );
+  await page.route('**/api/v1/workout-sessions/session-routine', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(session),
+    }),
+  );
+  await page.route('**/api/v1/workout-sessions/session-routine/exercises/*/sets', (route) => {
+    const body = route.request().postDataJSON() as {
+      reps: number;
+      weight: number;
+      targetSetId?: string;
+    };
+    expect(body.targetSetId).toBe('target-1');
+    const set = {
+      id: 'set-routine-1',
+      position: 0,
+      setType: 'NORMAL',
+      reps: body.reps,
+      weight: body.weight,
+      rir: 2,
+      volume: body.reps * body.weight,
+      e1rm: body.weight * (1 + body.reps / 30),
+      loggedAt: '2026-11-26T12:05:00Z',
+      notes: null,
+    };
+    (session.exercises[0].sets as unknown[]).push(set);
+    session.exercises[0].targetSets = [];
+    return route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify(set),
+    });
+  });
+  await page.route('**/api/v1/exercises?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [
+          {
+            id: 'exercise-1',
+            name: 'Press de banca con barra',
+            nameEn: 'Barbell Bench Press',
+            muscleGroup: 'CHEST',
+            secondaryMuscles: ['TRICEPS'],
+            equipment: 'BARBELL',
+            mechanics: 'COMPOUND',
+            bodyweight: false,
+            mine: false,
+          },
+        ],
+        page: 0,
+        size: 30,
+        totalElements: 1,
+        totalPages: 1,
+      }),
+    }),
+  );
+
+  await page.goto('/routines/new');
+  await page.getByLabel('Nombre de la rutina').fill('PPL');
+  await page.getByLabel('Buscar ejercicio').fill('press');
+  await page.getByRole('option', { name: /Press de banca con barra/ }).click();
+  await page.getByRole('button', { name: 'Guardar' }).first().click();
+
+  await expect(page).toHaveURL(/\/routines$/);
+  await expect(page.getByRole('heading', { name: 'PPL' })).toBeVisible();
+  await page.getByRole('button', { name: 'Empezar' }).click();
+
+  await expect(page).toHaveURL(/\/training\/session-routine/);
+  await expect(page.getByText('Series objetivo pendientes')).toBeVisible();
+  await page.getByRole('button', { name: /NORMAL · 8×60/ }).click();
+  await page.getByRole('button', { name: 'Registrar serie' }).click();
+
+  await expect(page.getByText('Series objetivo pendientes')).toHaveCount(0);
+  await expect(page.getByText(/8 × 60 kg/)).toBeVisible();
 });

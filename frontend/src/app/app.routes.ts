@@ -44,6 +44,28 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'routines',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/routines/routines.page').then((component) => component.RoutinesPage),
+  },
+  {
+    path: 'routines/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/routines/routine-builder.page').then(
+        (component) => component.RoutineBuilderPage,
+      ),
+  },
+  {
+    path: 'routines/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/routines/routine-builder.page').then(
+        (component) => component.RoutineBuilderPage,
+      ),
+  },
+  {
     path: 'catalog',
     canActivate: [authGuard],
     loadComponent: () =>

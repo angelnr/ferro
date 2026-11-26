@@ -25,6 +25,7 @@ const SESSION = {
       restSeconds: null,
       supersetGroup: null,
       notes: null,
+      targetSets: [],
       sets: [
         {
           id: 'set-1',
@@ -55,6 +56,7 @@ const SESSION_TWO = {
       supersetGroup: null,
       notes: null,
       sets: [],
+      targetSets: [],
     },
   ],
 } as typeof SESSION;
@@ -381,6 +383,49 @@ describe('TrainingPage', () => {
     expect(page.bestSet({ sets: [{ loggedAt: 'a', setType: 'NORMAL', weight: 80 }] })).toBeTruthy();
   });
 
+  it('prefills the form from a pending target set', async () => {
+    const fixture = TestBed.createComponent(TrainingPage);
+    fixture.detectChanges();
+    const withTarget = {
+      ...SESSION,
+      exercises: [
+        {
+          ...SESSION.exercises[0],
+          targetSets: [
+            {
+              id: 'target-1',
+              position: 0,
+              setType: 'WARMUP',
+              targetReps: 5,
+              targetWeight: 40,
+              targetRir: 3,
+            },
+          ],
+        },
+      ],
+    };
+    http.expectOne(SESSION_URL).flush(withTarget);
+    await fixture.whenStable();
+    http.expectOne(HISTORY_URL).flush([]);
+    http.expectOne(PR_URL).flush(PR_RESPONSE);
+    await fixture.whenStable();
+    const page = fixture.componentInstance as unknown as {
+      setForm: { getRawValue(): Record<string, unknown> };
+      useTarget(entry: object, target: object): void;
+    };
+
+    page.useTarget(withTarget.exercises[0], withTarget.exercises[0].targetSets[0]);
+
+    expect(page.setForm.getRawValue()).toMatchObject({
+      entryId: 'entry-1',
+      reps: 5,
+      weight: 40,
+      rir: 3,
+      setType: 'WARMUP',
+      targetSetId: 'target-1',
+    });
+  });
+
   it('shows the previous performance of the exercise', async () => {
     const fixture = TestBed.createComponent(TrainingPage);
     fixture.detectChanges();
@@ -512,6 +557,7 @@ describe('TrainingPage', () => {
       rir: 2,
       setType: 'NORMAL',
       notes: '',
+      targetSetId: '',
     });
     const logging = page.logSet();
 

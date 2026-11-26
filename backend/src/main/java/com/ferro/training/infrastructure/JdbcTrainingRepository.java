@@ -27,6 +27,7 @@ import com.ferro.training.domain.SessionStatus;
 import com.ferro.training.domain.SetMath;
 import com.ferro.training.domain.SetType;
 import com.ferro.training.domain.StaleSession;
+import com.ferro.training.domain.TargetSet;
 import com.ferro.training.domain.WorkoutSession;
 
 @Repository
@@ -68,7 +69,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
     }
 
     @Override
-    public WorkoutSession create(UUID userId, UUID sessionId, String name, Instant now) {
+    public WorkoutSession create(UUID userId, UUID sessionId, String name, UUID routineId, Instant now) {
         List<UUID> active = jdbc.query(
                 "SELECT id FROM workout_sessions WHERE user_id = :userId AND status = 'ACTIVE'",
                 new MapSqlParameterSource("userId", userId),
@@ -79,12 +80,14 @@ public class JdbcTrainingRepository implements TrainingRepository {
         try {
             jdbc.update(
                     """
-                    INSERT INTO workout_sessions (id, user_id, name, status, started_at, total_volume)
-                    VALUES (:id, :userId, :name, 'ACTIVE', :now, 0)
+                    INSERT INTO workout_sessions
+                        (id, user_id, routine_id, name, status, started_at, total_volume)
+                    VALUES (:id, :userId, :routineId, :name, 'ACTIVE', :now, 0)
                     """,
                     new MapSqlParameterSource()
                             .addValue("id", sessionId)
                             .addValue("userId", userId)
+                            .addValue("routineId", routineId)
                             .addValue("name", name)
                             .addValue("now", Timestamp.from(now)));
         } catch (DuplicateKeyException exception) {
@@ -113,17 +116,58 @@ public class JdbcTrainingRepository implements TrainingRepository {
     }
 
     @Override
-    public void addExercise(UUID sessionId, UUID entryId, UUID exerciseId, int position) {
+    public void addExercise(
+            UUID sessionId,
+            UUID entryId,
+            UUID exerciseId,
+            int position,
+            Integer restSeconds,
+            Integer supersetGroup,
+            String notes) {
         jdbc.update(
                 """
-                INSERT INTO session_exercises (id, session_id, exercise_id, position)
-                VALUES (:id, :sessionId, :exerciseId, :position)
+                INSERT INTO session_exercises
+                    (id, session_id, exercise_id, position, rest_seconds, superset_group, notes)
+                VALUES (:id, :sessionId, :exerciseId, :position, :restSeconds, :supersetGroup, :notes)
                 """,
                 new MapSqlParameterSource()
                         .addValue("id", entryId)
                         .addValue("sessionId", sessionId)
                         .addValue("exerciseId", exerciseId)
-                        .addValue("position", position));
+                        .addValue("position", position)
+                        .addValue("restSeconds", restSeconds)
+                        .addValue("supersetGroup", supersetGroup)
+                        .addValue("notes", notes));
+    }
+
+    @Override
+    public void addTargetSet(
+            UUID entryId,
+            UUID targetSetId,
+            SetType setType,
+            int targetReps,
+            BigDecimal targetWeight,
+            Integer targetRir,
+            int position) {
+        jdbc.update(
+                """
+                INSERT INTO session_target_sets
+                    (id, session_exercise_id, position, set_type, target_reps, target_weight, target_rir)
+                VALUES (:id, :entryId, :position, CAST(:type AS set_type), :reps, :weight, :rir)
+                """,
+                new MapSqlParameterSource()
+                        .addValue("id", targetSetId)
+                        .addValue("entryId", entryId)
+                        .addValue("position", position)
+                        .addValue("type", setType.name())
+                        .addValue("reps", targetReps)
+                        .addValue("weight", targetWeight)
+                        .addValue("rir", targetRir));
+    }
+
+    @Override
+    public void deleteTargetSet(UUID targetSetId) {
+        jdbc.update("DELETE FROM session_target_sets WHERE id = :id", new MapSqlParameterSource("id", targetSetId));
     }
 
     @Override
@@ -322,6 +366,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
                         (Integer) rs.getObject("rest_seconds"),
                         (Integer) rs.getObject("superset_group"),
                         rs.getString("notes"),
+                        List.of(),
                         List.of()));
         List<SessionExercise> withSets = exercises.stream()
                 .map(exercise -> new SessionExercise(
@@ -332,7 +377,8 @@ public class JdbcTrainingRepository implements TrainingRepository {
                         exercise.restSeconds(),
                         exercise.supersetGroup(),
                         exercise.notes(),
-                        sets(exercise.id())))
+                        sets(exercise.id()),
+                        targetSets(exercise.id())))
                 .toList();
         return new WorkoutSession(
                 row.id(),
@@ -385,6 +431,22 @@ public class JdbcTrainingRepository implements TrainingRepository {
     private record SetRow(UUID id, int reps, BigDecimal weight, Instant loggedAt, SetType type) {}
 
     private record ExerciseRow(UUID id, String name) {}
+
+    private List<TargetSet> targetSets(UUID entryId) {
+        return jdbc.query(
+                """
+                SELECT id, position, set_type, target_reps, target_weight, target_rir
+                FROM session_target_sets WHERE session_exercise_id = :id ORDER BY position
+                """,
+                new MapSqlParameterSource("id", entryId),
+                (rs, rowNum) -> new TargetSet(
+                        rs.getObject("id", UUID.class),
+                        rs.getInt("position"),
+                        SetType.valueOf(rs.getString("set_type")),
+                        rs.getInt("target_reps"),
+                        rs.getBigDecimal("target_weight"),
+                        (Integer) rs.getObject("target_rir")));
+    }
 
     @Override
     public void updateSession(UUID sessionId, String name, String notes) {

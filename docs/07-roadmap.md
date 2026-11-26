@@ -99,8 +99,19 @@ no puede moverse es RF-033/040.
 
 ## M4 · Semana 5 — Rutinas (`training`)
 
-Entregables: RF-050…054 (CRUD + duplicar + builder series objetivo + arrancar desde
-plantilla + límites RN-12). Integración con RF-031 (pre-carga pendientes).
+**Estado:** ✅ completado · tag `v0.5.0` (2026-11-26)
+
+Entregables (RF-050…054):
+- [x] CRUD de rutinas con nombre único (409 `ROUTINE_NAME_TAKEN`), notas, lista con
+      `exerciseCount` y `lastUsedAt`.
+- [x] Builder con ejercicios ordenados, descanso, notas, supersets A1/A2 y series objetivo
+      (tipo, reps, peso y RIR).
+- [x] Duplicar rutina como `«{nombre} (copia)»`, con sufijo si el nombre ya existe.
+- [x] Reordenar con botones y drag & drop; eliminar ejercicios con confirmación.
+- [x] Arrancar desde rutina (lista, Home y `POST /routines/{id}/start` o
+      `POST /workout-sessions {routineId}`) copiando ejercicios y series objetivo pendientes.
+- [x] Límites RN-12/RN-24: 1–30 ejercicios, ≤15 series objetivo, reps 1–1000, nombre,
+      descanso 15–600 s y supersets 2–5 adyacentes.
 
 **DoD:** E2E «rutina → sesión»: crear PPL, arrancar, las series objetivo aparecen
 pendientes y al confirmar se completan. 409 duplicado nombre testado. `v0.5.0`.

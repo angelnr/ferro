@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ferro.training.domain.SessionExercise;
 import com.ferro.training.domain.SessionSet;
+import com.ferro.training.domain.TargetSet;
 import com.ferro.training.domain.WorkoutSession;
 
 public record WorkoutSessionResponse(
@@ -40,7 +41,8 @@ public record WorkoutSessionResponse(
             Integer restSeconds,
             Integer supersetGroup,
             String notes,
-            List<SetEntry> sets) {
+            List<SetEntry> sets,
+            List<TargetSetEntry> targetSets) {
 
         public static ExerciseEntry from(SessionExercise exercise) {
             return new ExerciseEntry(
@@ -51,7 +53,22 @@ public record WorkoutSessionResponse(
                     exercise.restSeconds(),
                     exercise.supersetGroup(),
                     exercise.notes(),
-                    exercise.sets().stream().map(SetEntry::from).toList());
+                    exercise.sets().stream().map(SetEntry::from).toList(),
+                    exercise.targetSets().stream().map(TargetSetEntry::from).toList());
+        }
+    }
+
+    public record TargetSetEntry(
+            String id, int position, String setType, int targetReps, BigDecimal targetWeight, Integer targetRir) {
+
+        public static TargetSetEntry from(TargetSet set) {
+            return new TargetSetEntry(
+                    set.id().toString(),
+                    set.position(),
+                    set.setType().name(),
+                    set.targetReps(),
+                    set.targetWeight(),
+                    set.targetRir());
         }
     }
 

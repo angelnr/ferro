@@ -11,6 +11,15 @@ export interface SessionSet {
   notes: string | null;
 }
 
+export interface TargetSet {
+  id: string;
+  position: number;
+  setType: string;
+  targetReps: number;
+  targetWeight: number | null;
+  targetRir: number | null;
+}
+
 export interface SessionExercise {
   id: string;
   exerciseId: string;
@@ -20,6 +29,7 @@ export interface SessionExercise {
   supersetGroup: number | null;
   notes: string | null;
   sets: SessionSet[];
+  targetSets: TargetSet[];
 }
 
 export interface WorkoutSession {
@@ -68,4 +78,5 @@ export interface LogSetPayload {
   rir?: number | null;
   setType: string;
   notes?: string | null;
+  targetSetId?: string | null;
 }

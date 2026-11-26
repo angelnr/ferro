@@ -9,4 +9,5 @@ public record LogSetRequest(
         @NotNull java.math.BigDecimal weight,
         @Min(0) @Max(10) Integer rir,
         String setType,
-        String notes) {}
+        String notes,
+        java.util.UUID targetSetId) {}
