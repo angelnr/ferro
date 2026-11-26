@@ -17,6 +17,9 @@ jobs:
     name: Backend · Java 21
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      # Los runners comparten IP y Maven Central devuelve 429; usar el mirror de Google.
+      FERRO_MAVEN_SETTINGS: config/maven/settings-ci.xml
     steps:
       - uses: actions/checkout@v4
 

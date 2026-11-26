@@ -112,6 +112,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `backend/pom.xml`; `FlywaySpringIntegrationTest`; invariante en `scripts/check-harness.sh`.
 - **Comprobación:** `mvn verify` falla si se quita el starter o si Flyway no aplica `V1` en el contexto Spring.
 
+### L-012 · Maven Central devuelve 429 en CI
+- **Fecha:** 2026-11-26
+- **Síntoma:** el job de backend falló resolviendo el parent POM con `429 Too Many Requests`; el código estaba bien.
+- **Causa raíz:** los runners de GitHub comparten rangos de IP y Central limita peticiones; un runner sin caché descarga cientos de artefactos de golpe.
+- **Prevención:** mirror de Central solo para CI (`settings-ci.xml`), misma coordenada/checksum; local sigue usando Central. La caché de Maven reduce el impacto a partir de la segunda ejecución.
+- **Artefacto:** `backend/config/maven/settings-ci.xml`; `FERRO_MAVEN_SETTINGS` en `scripts/lib.sh` y `.github/workflows/ci.yml`; invariante en `scripts/check-harness.sh`.
+- **Comprobación:** `gh run watch` del workflow CI; resolución de dependencias con un repositorio Maven vacío.
+
 ---
 
 ## Revisión por milestone

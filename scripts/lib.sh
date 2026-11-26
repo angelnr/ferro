@@ -97,7 +97,11 @@ run_gitleaks() {
 }
 
 mvn_cmd() {
-  run_backend mvn -B -ntp -Dmaven.repo.local=/tmp/.m2/repository "$@"
+  local extra=()
+  if [[ -n "${FERRO_MAVEN_SETTINGS:-}" ]]; then
+    extra=(-s "$FERRO_MAVEN_SETTINGS")
+  fi
+  run_backend mvn -B -ntp "${extra[@]}" -Dmaven.repo.local=/tmp/.m2/repository "$@"
 }
 
 frontend_install() {

@@ -26,6 +26,7 @@ for f in \
   AGENTS.md \
   Makefile \
   backend/pom.xml \
+  backend/config/maven/settings-ci.xml \
   backend/src/test/java/com/ferro/infrastructure/Postgres18ContainerTest.java \
   backend/src/test/java/com/ferro/support/AbstractPostgresIntegrationTest.java \
   backend/src/test/java/com/ferro/infrastructure/FlywayMigrationsTest.java \
@@ -49,6 +50,7 @@ for f in .githooks/pre-commit .githooks/pre-push .githooks/commit-msg scripts/ve
   need_exec "$f"
 done
 
+need_grep .github/workflows/ci.yml 'FERRO_MAVEN_SETTINGS' 'mirror de Maven en CI'
 need_grep backend/pom.xml '<failIfNoTests>true</failIfNoTests>' 'failIfNoTests=true'
 need_grep backend/pom.xml 'maven-checkstyle-plugin' 'checkstyle'
 need_grep backend/pom.xml 'spotless-maven-plugin' 'spotless'
