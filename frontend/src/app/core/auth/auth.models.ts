@@ -24,6 +24,13 @@ export interface AuthResponse {
   accessToken: string;
 }
 
+export interface OAuthCallbackResponse {
+  user: User | null;
+  accessToken: string | null;
+  needsEmail: boolean;
+  onboardingToken: string | null;
+}
+
 export interface MeResponse {
   user: User;
   preferences: Preferences;

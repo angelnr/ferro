@@ -164,6 +164,20 @@ describe('AuthStore', () => {
     const request = http.expectOne(`${environment.apiBaseUrl}/auth/oauth/google/callback`);
 
     expect(request.request.body).toEqual({ code: 'code', state: 'state' });
+    request.flush({ ...AUTH_RESPONSE, needsEmail: false, onboardingToken: null });
+
+    await expect(promise).resolves.toEqual({ needsEmail: false, onboardingToken: null });
+    expect(session.isAuthenticated()).toBe(true);
+  });
+
+  it('completes the email onboarding for an OAuth account', async () => {
+    const promise = store.oauthCompleteEmail('github', 'onboarding', 'user@ferro.dev');
+    const request = http.expectOne(`${environment.apiBaseUrl}/auth/oauth/github/complete-email`);
+
+    expect(request.request.body).toEqual({
+      onboardingToken: 'onboarding',
+      email: 'user@ferro.dev',
+    });
     request.flush(AUTH_RESPONSE);
 
     await expect(promise).resolves.toBe(true);

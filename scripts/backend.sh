@@ -16,12 +16,22 @@ if [[ "${1:-}" == "run" ]]; then
   require_docker
   ensure_image "$MAVEN_IMAGE"
   mkdir -p "$M2_CACHE"
+  # Allowlist CORS/CSRF: localhost + todas las IPv4 del host en el puerto del
+  # dev server, para poder usar la UI desde otro dispositivo de la tailnet/LAN.
+  cors_origins="${CORS_ALLOWED_ORIGINS:-http://localhost:4200,http://127.0.0.1:4200}"
+  extra_origins="$(dev_frontend_origins)"
+  if [[ -n "$extra_origins" ]]; then
+    cors_origins="${cors_origins},${extra_origins}"
+  fi
   # --network host: la app alcanza Postgres/Mailpit de infra/docker-compose.dev.yml en 127.0.0.1.
   tty_args=()
   if [[ -t 0 && -t 1 ]]; then tty_args=(-it); fi
+  docker rm -f ferro-api-dev >/dev/null 2>&1 || true
   exec docker run --rm "${tty_args[@]}" --network host "${DOCKER_COMMON[@]}" \
     --name ferro-api-dev \
     -e SERVER_PORT="${SERVER_PORT:-8080}" \
+    -e CORS_ALLOWED_ORIGINS="$cors_origins" \
+    -e APP_FRONTEND_URL="${APP_FRONTEND_URL:-http://localhost:4200}" \
     -e GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID:-}" \
     -e GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET:-}" \
     -e GOOGLE_REDIRECT_URI="${GOOGLE_REDIRECT_URI:-http://localhost:4200/auth/oauth/callback/google}" \

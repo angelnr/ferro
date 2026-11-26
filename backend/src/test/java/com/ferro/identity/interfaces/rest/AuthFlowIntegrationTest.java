@@ -133,6 +133,8 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("REFRESH_INVALID"));
 
+        assertThat(emailSender.securityEmails()).hasSize(1);
+
         // La reutilización revoca toda la familia, incluido el refresh recién emitido.
         mockMvc.perform(post("/api/v1/auth/refresh").cookie(newCookie))
                 .andExpect(status().isUnauthorized())
@@ -195,6 +197,7 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
         Registered registered = register(uniqueEmail());
 
         assertThat(emailSender.emails()).hasSize(1);
+        assertThat(emailSender.welcomeEmails()).hasSize(1);
         String token = tokenFrom(emailSender.last().link());
 
         mockMvc.perform(post("/api/v1/auth/email-verification/confirm")
@@ -484,6 +487,8 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
         private final List<SentEmail> resetEmails = new CopyOnWriteArrayList<>();
         private final List<Email> passwordChangedEmails = new CopyOnWriteArrayList<>();
         private final List<Email> accountDeletedEmails = new CopyOnWriteArrayList<>();
+        private final List<Email> welcomeEmails = new CopyOnWriteArrayList<>();
+        private final List<Email> securityEmails = new CopyOnWriteArrayList<>();
 
         @Override
         public void sendVerificationEmail(Email recipient, String verificationLink) {
@@ -505,6 +510,16 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
             accountDeletedEmails.add(recipient);
         }
 
+        @Override
+        public void sendWelcomeEmail(Email recipient) {
+            welcomeEmails.add(recipient);
+        }
+
+        @Override
+        public void sendSecurityAlertEmail(Email recipient) {
+            securityEmails.add(recipient);
+        }
+
         List<SentEmail> emails() {
             return List.copyOf(emails);
         }
@@ -521,6 +536,14 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
             return List.copyOf(accountDeletedEmails);
         }
 
+        List<Email> welcomeEmails() {
+            return List.copyOf(welcomeEmails);
+        }
+
+        List<Email> securityEmails() {
+            return List.copyOf(securityEmails);
+        }
+
         SentEmail last() {
             return emails.get(emails.size() - 1);
         }
@@ -534,6 +557,8 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
             resetEmails.clear();
             passwordChangedEmails.clear();
             accountDeletedEmails.clear();
+            welcomeEmails.clear();
+            securityEmails.clear();
         }
     }
 

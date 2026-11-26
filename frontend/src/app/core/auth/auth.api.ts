@@ -6,6 +6,7 @@ import {
   AuthResponse,
   LoginCredentials,
   MeResponse,
+  OAuthCallbackResponse,
   RegisterPayload,
   UpdateProfilePayload,
 } from './auth.models';
@@ -71,10 +72,22 @@ export class AuthApi {
     return this.http.get<{ url: string }>(`${this.base}/oauth/${provider}/authorize-url`);
   }
 
-  oauthCallback(provider: string, code: string, state: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(
+  oauthCallback(provider: string, code: string, state: string): Observable<OAuthCallbackResponse> {
+    return this.http.post<OAuthCallbackResponse>(
       `${this.base}/oauth/${provider}/callback`,
       { code, state },
+      { withCredentials: true },
+    );
+  }
+
+  oauthCompleteEmail(
+    provider: string,
+    onboardingToken: string,
+    email: string,
+  ): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.base}/oauth/${provider}/complete-email`,
+      { onboardingToken, email },
       { withCredentials: true },
     );
   }

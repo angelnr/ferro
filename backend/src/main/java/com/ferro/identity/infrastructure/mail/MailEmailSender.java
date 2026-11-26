@@ -51,6 +51,19 @@ public class MailEmailSender implements EmailSender {
         send(recipient, "Tu cuenta de Ferro ha sido eliminada", "Todos tus datos han sido borrados.");
     }
 
+    @Override
+    public void sendWelcomeEmail(Email recipient) {
+        send(recipient, "Bienvenido a Ferro", "Tu cuenta está creada. Verifica tu email y empieza a entrenar.");
+    }
+
+    @Override
+    public void sendSecurityAlertEmail(Email recipient) {
+        send(
+                recipient,
+                "Actividad sospechosa en tu cuenta de Ferro",
+                "Se ha reutilizado un refresh token revocado. Hemos cerrado todas tus sesiones.");
+    }
+
     private void send(Email recipient, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);

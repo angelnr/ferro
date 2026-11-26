@@ -69,6 +69,23 @@ if [[ -S /var/run/docker.sock ]]; then
   )
 fi
 
+# Orígenes del frontend de desarrollo accesibles desde otros dispositivos:
+# todas las IPv4 del host (tailnet y LAN) en el puerto del dev server.
+# Solo lo usa `scripts/backend.sh run`; nunca CI ni verificación.
+dev_frontend_origins() {
+  local port="${FERRO_FRONTEND_PORT:-4200}"
+  local ips=() addr
+  if command -v tailscale >/dev/null 2>&1; then
+    addr="$(tailscale ip -4 2>/dev/null | head -n1 || true)"
+    [[ -n "$addr" ]] && ips+=("$addr")
+  fi
+  while IFS= read -r addr; do
+    [[ -n "$addr" ]] && ips+=("$addr")
+  done < <(hostname -I 2>/dev/null | tr ' ' '\n' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' || true)
+  [[ ${#ips[@]} -eq 0 ]] && return 0
+  printf '%s\n' "${ips[@]}" | awk '!seen[$0]++' | sed -e "s|^|http://|" -e "s|\$|:${port}|" | paste -sd, -
+}
+
 run_backend() {
   require_docker
   ensure_image "$MAVEN_IMAGE"

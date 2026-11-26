@@ -55,7 +55,10 @@
     "continueGithub": "Continuar con GitHub",
     "oauthLoading": "Conectando con el proveedor…",
     "oauthErrorTitle": "No se pudo iniciar sesión",
-    "oauthError": "El proveedor no devolvió una cuenta válida. Inténtalo de nuevo."
+    "oauthError": "El proveedor no devolvió una cuenta válida. Inténtalo de nuevo.",
+    "oauthEmailTitle": "Completa tu cuenta",
+    "oauthEmailHint": "GitHub no nos ha entregado un email verificado. Indícalo y te enviaremos la verificación.",
+    "oauthEmailSubmit": "Continuar"
   },
   "home": {
     "dashboard": "Panel",

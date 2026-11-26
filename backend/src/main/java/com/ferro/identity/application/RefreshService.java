@@ -6,6 +6,7 @@ import java.time.Instant;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ferro.identity.application.port.EmailSender;
 import com.ferro.identity.application.port.RefreshTokenRepository;
 import com.ferro.identity.application.port.UserRepository;
 import com.ferro.identity.domain.RefreshInvalidException;
@@ -23,13 +24,19 @@ public class RefreshService {
 
     private final UserRepository users;
     private final RefreshTokenRepository refreshTokens;
+    private final EmailSender emailSender;
     private final SessionIssuer sessions;
     private final Clock clock;
 
     public RefreshService(
-            UserRepository users, RefreshTokenRepository refreshTokens, SessionIssuer sessions, Clock clock) {
+            UserRepository users,
+            RefreshTokenRepository refreshTokens,
+            EmailSender emailSender,
+            SessionIssuer sessions,
+            Clock clock) {
         this.users = users;
         this.refreshTokens = refreshTokens;
+        this.emailSender = emailSender;
         this.sessions = sessions;
         this.clock = clock;
     }
@@ -47,6 +54,7 @@ public class RefreshService {
 
         if (token.revokedAt() != null) {
             refreshTokens.revokeAllForUser(token.userId(), now);
+            users.findById(token.userId()).ifPresent(user -> emailSender.sendSecurityAlertEmail(user.email()));
             throw new RefreshInvalidException();
         }
         if (!token.isActive(now)) {

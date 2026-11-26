@@ -208,6 +208,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `run_playwright` en `scripts/lib.sh`; CI job `e2e`.
 - **Comprobación:** `make e2e` ejecuta 5 tests en Chromium.
 
+### L-024 · La UI no se podía abrir desde otro dispositivo (tailnet/LAN)
+- **Fecha:** 2026-11-26
+- **Síntoma:** `http://<ip-tailscale>:4200` no respondía aunque Angular estuviera arrancado y `curl` local funcionara.
+- **Causa raíz:** tres supuestos de «todo en la misma máquina»: el publish de Docker era `127.0.0.1:4200`, `apiBaseUrl` era `http://localhost:8082` (el `localhost` del dispositivo cliente) y la allowlist CORS/CSRF solo tenía orígenes locales.
+- **Prevención:** interfaz de escucha configurable (`FERRO_FRONTEND_BIND`), `apiBaseUrl` derivado de `location.hostname` y allowlist ampliada con las IPv4 reales del host en `run-backend`.
+- **Artefacto:** `scripts/frontend.sh`; `scripts/backend.sh` + `dev_frontend_origins` en `scripts/lib.sh`; `frontend/src/environments/environment.ts`; test `environment.spec.ts`.
+- **Comprobación:** `make verify`; manualmente `curl -I http://<ip>:4200` y login desde otro dispositivo con la API en `:8082`.
+
 ---
 
 ## Revisión por milestone

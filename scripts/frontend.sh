@@ -20,7 +20,11 @@ case "${1:-}" in
     mkdir -p "$NPM_CACHE"
     tty_args=()
     if [[ -t 0 && -t 1 ]]; then tty_args=(-it); fi
-    exec docker run --rm "${tty_args[@]}" -p 127.0.0.1:4200:4200 "${DOCKER_COMMON[@]}" \
+    # 127.0.0.1 por defecto; FERRO_FRONTEND_BIND=0.0.0.0 para tailnet/LAN.
+    frontend_bind="${FERRO_FRONTEND_BIND:-127.0.0.1}"
+    frontend_port="${FERRO_FRONTEND_PORT:-4200}"
+    log_info "Angular en http://${frontend_bind}:${frontend_port}"
+    exec docker run --rm "${tty_args[@]}" -p "${frontend_bind}:${frontend_port}:4200" "${DOCKER_COMMON[@]}" \
       -e NG_CLI_ANALYTICS=false \
       -v "$NPM_CACHE:/tmp/.npm" \
       -w /workspace/frontend \

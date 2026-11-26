@@ -72,12 +72,11 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 
 ## Estado del proyecto
 
-**✅ M0 completado (26-nov-2026, tag `v0.1.0`).** Esqueleto backend/frontend, esquema
-Flyway `V1–V5`, infraestructura local, Dockerfile/Compose de producción (borrador), CI y
-harness funcionan. **M1 casi completo:** identidad backend y UI (login, registro, sesión,
-verificación, perfil, contraseñas, borrado, rate limiting, CSP), OAuth Google/GitHub con PKCE
-y E2E Playwright. Falta configurar credenciales OAuth reales y el paso de email para GitHub
-sin email público.
+**✅ M0 completado** (tag `v0.1.0`) **y M1 completado** (tag `v0.2.0`, 26-nov-2026).
+Identidad completa: registro/login/refresh, verificación de email, perfil, contraseñas,
+borrado, rate limiting, CSP, OAuth Google/GitHub con PKCE y UI Angular con E2E Playwright.
+Para usar OAuth en real solo hay que configurar las credenciales de las apps; sin ellas los
+botones quedan ocultos.
 
 ## Desarrollo local y verificación
 
@@ -121,6 +120,28 @@ GITHUB_CLIENT_ID=... GITHUB_CLIENT_SECRET=... make run-backend
 Sin credenciales, `GET /api/v1/auth/oauth/providers` devuelve ambos proveedores a `false` y
 los botones quedan ocultos. GitHub con email privado devuelve `OAUTH_EMAIL_REQUIRED`; el paso
 de completar el email en la UI queda pendiente.
+
+### Acceso desde otros dispositivos (tailnet/LAN)
+
+Por defecto el dev server solo escucha en `127.0.0.1`. Para abrirlo a tu tailnet o LAN:
+
+```bash
+FERRO_FRONTEND_BIND=0.0.0.0 make run-frontend   # http://<ip-del-servidor>:4200
+make run-backend                                # añade las IPv4 del host a CORS/CSRF
+```
+
+- `make run-backend` amplía la allowlist con todas las IPv4 del host en el puerto 4200
+  (incluida la de Tailscale), así que no hay que editar `application.yml`.
+- En desarrollo `apiBaseUrl` se calcula con el hostname del navegador:
+  `http://<ip-del-servidor>:8082/api/v1`. Si cambias el puerto de la API con `SERVER_PORT`,
+  ajusta `DEV_API_PORT` en `frontend/src/environments/environment.ts`.
+- `APP_FRONTEND_URL=http://<ip-del-servidor>:4200 make run-backend` corrige los enlaces de los
+  emails (verificación, reset) cuando los abres desde otro dispositivo.
+- OAuth sigue necesitando redirect URI públicos registrados en Google/GitHub; desde la tailnet
+  puedes añadir `http://<ip-del-servidor>:4200/auth/oauth/callback/<proveedor>` en el proveedor
+  y `GOOGLE_REDIRECT_URI`/`GITHUB_REDIRECT_URI`.
+- Si el puerto no responde, revisa el firewall del host (p. ej. `sudo ufw allow in on tailscale0
+  to any port 4200`).
 
 | Comando | Para qué |
 |---|---|

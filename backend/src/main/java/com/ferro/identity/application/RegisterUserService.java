@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ferro.identity.application.port.CommonPasswordChecker;
+import com.ferro.identity.application.port.EmailSender;
 import com.ferro.identity.application.port.PasswordHasher;
 import com.ferro.identity.application.port.UserRepository;
 import com.ferro.identity.domain.AppLocale;
@@ -28,6 +29,7 @@ public class RegisterUserService {
     private final PasswordHasher passwordHasher;
     private final SessionIssuer sessions;
     private final EmailVerificationService emailVerifications;
+    private final EmailSender emailSender;
     private final CommonPasswordChecker commonPasswords;
     private final Clock clock;
 
@@ -36,12 +38,14 @@ public class RegisterUserService {
             PasswordHasher passwordHasher,
             SessionIssuer sessions,
             EmailVerificationService emailVerifications,
+            EmailSender emailSender,
             CommonPasswordChecker commonPasswords,
             Clock clock) {
         this.users = users;
         this.passwordHasher = passwordHasher;
         this.sessions = sessions;
         this.emailVerifications = emailVerifications;
+        this.emailSender = emailSender;
         this.commonPasswords = commonPasswords;
         this.clock = clock;
     }
@@ -76,6 +80,7 @@ public class RegisterUserService {
             throw new EmailTakenException();
         }
         emailVerifications.issueFor(user);
+        emailSender.sendWelcomeEmail(user.email());
         return sessions.issue(user);
     }
 

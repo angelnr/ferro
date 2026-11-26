@@ -128,7 +128,7 @@ test('updates preferences from settings', async ({ page }) => {
   await page.getByLabel('Descanso por defecto (segundos)').fill('120');
   await page.getByRole('button', { name: 'Guardar cambios' }).click();
 
-  await expect(page.getByText('Preferencias guardadas.')).toBeVisible();
+  await expect(page.getByText(/Preferences saved\.|Preferencias guardadas\./)).toBeVisible();
 });
 
 test('confirms an email from the verification link', async ({ page }) => {

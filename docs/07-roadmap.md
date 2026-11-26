@@ -43,20 +43,18 @@ Entregables:
 
 **Objetivo:** entrar, registrarse (email+OAuth), tener sesión segura.
 
-**Estado:** 🚧 casi completo · identidad backend y UI, perfil, contraseñas, borrado,
-rate limiting, CSP, OAuth Google/GitHub con PKCE y E2E Playwright. Falta configurar apps
-OAuth reales y el flujo de email para GitHub privado.
+**Estado:** ✅ completado · tag `v0.2.0` (2026-11-26)
 
 Entregables:
-- [ ] RF-001…011 completos (registro, login, refresh+rotación, logout, verificación,
+- [x] RF-001…011 completos (registro, login, refresh+rotación, logout, verificación,
       recuperación, OAuth Google y GitHub, perfil, cambio/borrado cuenta).
-- [ ] Emails: bienvenida, verificación, recuperación, seguridad (RF-084) vía Mailpit.
-- [ ] Seguridad transversal: rate limit (bucket4j), CORS allowlist, CSP, cookies
+- [x] Emails: bienvenida, verificación, recuperación, seguridad (RF-084) vía Mailpit.
+- [x] Seguridad transversal: rate limit (bucket4j), CORS allowlist, CSP, cookies
       refresh, bloqueo progresivo (ADR-0006).
-- [ ] Tests: unit dominio (VO Email/Password, rotación) + integración Testcontainers
+- [x] Tests: unit dominio (VO Email/Password, rotación) + integración Testcontainers
       (flujos completos, anti-IDOR básico) + E2E Playwright registro/login (con OAuth
       mockeado).
-- [ ] Swagger parcial de `/auth` + `/users`.
+- [x] Swagger parcial de `/auth` + `/users`.
 
 **DoD:** flujo E2E verde; cobertura `identity` ≥ 80 %; emails visibles en Mailpit;
 reutilización de refresh provoca revocación total (test). `git tag v0.2.0`.

@@ -60,13 +60,25 @@ El host puede no tener JDK ni Node: **todo se ejecuta en Docker** con versiones 
 | `make verify-fast` | Lint + secretos; **no válido como evidencia** | Pre-commit manual |
 | `make verify-backend` / `make verify-frontend` | Verificación de una sola parte | Debug |
 | `make dev-up` / `make dev-down` | Postgres 18, Mailpit, Prometheus y Grafana | Desarrollo local |
-| `make run-backend` | API en Docker contra la infra local (`SERVER_PORT=8082` si 8080 está ocupado) | Probar la app |
-| `make run-frontend` | Angular en Docker en http://localhost:4200 | Probar la UI |
+| `make run-backend` | API en Docker contra la infra local (`SERVER_PORT=8082` si 8080 está ocupado). Añade a la allowlist CORS/CSRF las IPv4 del host en `:4200` | Probar la app |
+| `make run-frontend` | Angular en Docker en http://localhost:4200; `FERRO_FRONTEND_BIND=0.0.0.0` para tailnet/LAN | Probar la UI |
 | `make secrets` | gitleaks sobre el historial | Auditoría |
 | `make baseline` | Actualiza el baseline tras **añadir** tests | Solo con tests nuevos |
 | `make e2e` | Playwright (Chromium) contra la UI (imagen Docker con navegadores) | M1+ |
 
 Evidencia: `make verify` escribe `.harness/last-verify.txt` y lo imprime. Pega ese bloque.
+
+Acceso desde otros dispositivos (tailnet/LAN):
+
+```bash
+FERRO_FRONTEND_BIND=0.0.0.0 make run-frontend  # publica el dev server en todas las interfaces
+make run-backend                               # allowlist CORS/CSRF con las IPv4 del host en :4200
+```
+
+`environment.ts` deriva `apiBaseUrl` de `location.hostname`, así que el navegador remoto llama a
+`http://<ip-del-servidor>:8082/api/v1` sin tocar código. `FERRO_FRONTEND_PORT` cambia el puerto
+publicado y `APP_FRONTEND_URL` los enlaces de los emails. OAuth sigue atado a los redirect URI
+registrados en el proveedor.
 
 ## 4. Protocolo de trabajo (obligatorio)
 

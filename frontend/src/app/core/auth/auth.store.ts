@@ -166,10 +166,40 @@ export const AuthStore = signalStore(
         patchState(store, { error: null });
       },
 
-      async oauthCallback(provider: string, code: string, state: string): Promise<boolean> {
+      async oauthCallback(
+        provider: string,
+        code: string,
+        state: string,
+      ): Promise<{ needsEmail: boolean; onboardingToken: string | null }> {
         patchState(store, { loading: true, error: null });
         try {
           const response = await firstValueFrom(api.oauthCallback(provider, code, state));
+          if (response.needsEmail) {
+            return { needsEmail: true, onboardingToken: response.onboardingToken };
+          }
+          session.setSession({
+            user: response.user!,
+            accessToken: response.accessToken!,
+          });
+          return { needsEmail: false, onboardingToken: null };
+        } catch (error) {
+          fail(error);
+          return { needsEmail: false, onboardingToken: null };
+        } finally {
+          patchState(store, { loading: false });
+        }
+      },
+
+      async oauthCompleteEmail(
+        provider: string,
+        onboardingToken: string,
+        email: string,
+      ): Promise<boolean> {
+        patchState(store, { loading: true, error: null });
+        try {
+          const response = await firstValueFrom(
+            api.oauthCompleteEmail(provider, onboardingToken, email),
+          );
           session.setSession(response);
           return true;
         } catch (error) {

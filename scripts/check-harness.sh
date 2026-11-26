@@ -41,7 +41,9 @@ for f in \
   backend/src/main/java/com/ferro/identity/interfaces/rest/UserController.java \
   backend/src/main/java/com/ferro/identity/interfaces/rest/PasswordResetController.java \
   backend/src/main/java/com/ferro/identity/interfaces/rest/OAuthController.java \
+  backend/src/main/java/com/ferro/identity/interfaces/rest/OAuthCallbackResponse.java \
   backend/src/main/java/com/ferro/identity/application/oauth/OAuthLoginService.java \
+  backend/src/main/java/com/ferro/identity/application/oauth/OAuthStateService.java \
   backend/src/main/java/com/ferro/identity/infrastructure/oauth/GoogleOAuthClient.java \
   backend/src/main/java/com/ferro/identity/infrastructure/oauth/GitHubOAuthClient.java \
   backend/src/test/java/com/ferro/identity/interfaces/rest/OAuthFlowIntegrationTest.java \
@@ -119,6 +121,10 @@ need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 
 need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/UserController.java '/api/v1/users/me' 'contrato de perfil'
 need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/PasswordResetController.java '/api/v1/auth/password-reset' 'contrato de recuperación'
 need_grep backend/src/main/resources/security/common-passwords.txt '^# Top 10k' 'lista de contraseñas comunes'
+need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/OAuthController.java 'complete-email' 'onboarding de email OAuth'
+need_grep backend/src/main/java/com/ferro/identity/application/port/EmailSender.java 'sendWelcomeEmail' 'email de bienvenida'
+need_grep backend/src/main/java/com/ferro/identity/application/port/EmailSender.java 'sendSecurityAlertEmail' 'email de seguridad'
+need_grep frontend/src/app/features/auth/oauth-callback/oauth-callback.page.ts 'needsEmail' 'UI de email OAuth'
 need_grep backend/pom.xml 'bucket4j_jdk17-core' 'rate limiting bucket4j'
 need_grep backend/src/main/resources/application.yml 'rate-limit' 'configuración de rate limit'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityHeadersFilter.java 'Content-Security-Policy' 'cabecera CSP'

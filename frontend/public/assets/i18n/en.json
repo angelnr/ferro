@@ -55,7 +55,10 @@
     "continueGithub": "Continue with GitHub",
     "oauthLoading": "Connecting with the provider…",
     "oauthErrorTitle": "Sign in failed",
-    "oauthError": "The provider did not return a valid account. Try again."
+    "oauthError": "The provider did not return a valid account. Try again.",
+    "oauthEmailTitle": "Finish your account",
+    "oauthEmailHint": "GitHub did not provide a verified email. Enter one and we will send a verification link.",
+    "oauthEmailSubmit": "Continue"
   },
   "home": {
     "dashboard": "Dashboard",

@@ -74,4 +74,38 @@ public class OAuthStateService {
             throw new OAuthLoginException("State OAuth inválido o caducado");
         }
     }
+
+    public String createEmailOnboarding(OAuthProvider provider, String subject, String displayName) {
+        Instant now = clock.instant();
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer(issuer)
+                .subject("oauth-email")
+                .issuedAt(now)
+                .expiresAt(now.plus(TTL))
+                .id(UUID.randomUUID().toString())
+                .claim("typ", "oauth_email")
+                .claim("provider", provider.name())
+                .claim("provider_subject", subject)
+                .claim("display_name", displayName == null ? "" : displayName)
+                .build();
+        JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
+        return encoder.encode(JwtEncoderParameters.from(header, claims)).getTokenValue();
+    }
+
+    public OAuthOnboarding parseEmailOnboarding(String token) {
+        try {
+            Jwt jwt = decoder.decode(token);
+            if (!"oauth_email".equals(jwt.getClaimAsString("typ"))) {
+                throw new OAuthLoginException("Token de onboarding inválido");
+            }
+            return new OAuthOnboarding(
+                    OAuthProvider.fromPath(jwt.getClaimAsString("provider")),
+                    jwt.getClaimAsString("provider_subject"),
+                    jwt.getClaimAsString("display_name"));
+        } catch (OAuthLoginException exception) {
+            throw exception;
+        } catch (RuntimeException exception) {
+            throw new OAuthLoginException("Token de onboarding inválido o caducado");
+        }
+    }
 }

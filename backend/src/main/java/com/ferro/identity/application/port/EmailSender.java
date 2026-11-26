@@ -12,4 +12,8 @@ public interface EmailSender {
     void sendPasswordChangedEmail(Email recipient);
 
     void sendAccountDeletedEmail(Email recipient);
+
+    void sendWelcomeEmail(Email recipient);
+
+    void sendSecurityAlertEmail(Email recipient);
 }

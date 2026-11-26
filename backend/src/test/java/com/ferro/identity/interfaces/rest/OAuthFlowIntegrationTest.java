@@ -35,7 +35,10 @@ import com.jayway.jsonpath.JsonPath;
         properties = {
             "ferro.oauth.google.client-id=test-google-client",
             "ferro.oauth.google.client-secret=test-google-secret",
-            "ferro.oauth.google.redirect-uri=http://localhost:4200/auth/oauth/callback/google"
+            "ferro.oauth.google.redirect-uri=http://localhost:4200/auth/oauth/callback/google",
+            "ferro.oauth.github.client-id=test-github-client",
+            "ferro.oauth.github.client-secret=test-github-secret",
+            "ferro.oauth.github.redirect-uri=http://localhost:4200/auth/oauth/callback/github"
         })
 @AutoConfigureMockMvc
 class OAuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
@@ -57,7 +60,7 @@ class OAuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
         mockMvc.perform(get("/api/v1/auth/oauth/providers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.google").value(true))
-                .andExpect(jsonPath("$.github").value(false));
+                .andExpect(jsonPath("$.github").value(true));
 
         MvcResult authorize = mockMvc.perform(get("/api/v1/auth/oauth/google/authorize-url"))
                 .andExpect(status().isOk())
@@ -88,10 +91,45 @@ class OAuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
     }
 
     @Test
-    void reports_oauth_not_configured_for_github() throws Exception {
-        mockMvc.perform(get("/api/v1/auth/oauth/github/authorize-url"))
-                .andExpect(status().isServiceUnavailable())
-                .andExpect(jsonPath("$.code").value("OAUTH_NOT_CONFIGURED"));
+    void github_without_verified_email_requires_onboarding_email() throws Exception {
+        OAuthClient github = mock(OAuthClient.class);
+        when(github.fetchUser(eq("github-code"), anyString()))
+                .thenReturn(new OAuthUser("github-subject", null, false, "GitHub Tester"));
+        when(clients.clientFor(OAuthProvider.GITHUB)).thenReturn(github);
+
+        MvcResult authorize = mockMvc.perform(get("/api/v1/auth/oauth/github/authorize-url"))
+                .andExpect(status().isOk())
+                .andReturn();
+        String state = UriComponentsBuilder.fromUriString(
+                        JsonPath.<String>read(authorize.getResponse().getContentAsString(), "$.url"))
+                .build()
+                .getQueryParams()
+                .getFirst("state");
+
+        MvcResult callback = mockMvc.perform(post("/api/v1/auth/oauth/github/callback")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"code\":\"github-code\",\"state\":\"%s\"}".formatted(state)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.needsEmail").value(true))
+                .andExpect(jsonPath("$.onboardingToken").isNotEmpty())
+                .andReturn();
+        String onboarding = JsonPath.read(callback.getResponse().getContentAsString(), "$.onboardingToken");
+
+        String email = "github" + UUID.randomUUID().toString().replace("-", "") + "@ferro.dev";
+        mockMvc.perform(post("/api/v1/auth/oauth/github/complete-email")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"onboardingToken\":\"%s\",\"email\":\"%s\"}".formatted(onboarding, email)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.user.email").value(email))
+                .andExpect(jsonPath("$.user.status").value("UNVERIFIED"))
+                .andExpect(jsonPath("$.accessToken").isNotEmpty());
+    }
+
+    @Test
+    void rejects_an_unknown_provider() throws Exception {
+        mockMvc.perform(get("/api/v1/auth/oauth/unknown/authorize-url"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("OAUTH_FAILED"));
     }
 
     @Test

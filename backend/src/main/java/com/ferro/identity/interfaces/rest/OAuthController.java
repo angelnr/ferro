@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ferro.identity.application.AuthResult;
 import com.ferro.identity.application.oauth.OAuthAuthorizeService;
+import com.ferro.identity.application.oauth.OAuthCallbackResult;
 import com.ferro.identity.application.oauth.OAuthLoginService;
 import com.ferro.identity.domain.OAuthProvider;
 
@@ -54,10 +55,28 @@ public class OAuthController {
 
     @PostMapping("/{provider}/callback")
     @Operation(summary = "Canjea el code OAuth y crea/vincula la cuenta")
-    public ResponseEntity<AuthResponse> callback(
+    public ResponseEntity<OAuthCallbackResponse> callback(
             @PathVariable String provider, @Valid @RequestBody OAuthCallbackRequest request) {
-        AuthResult result = loginService.login(OAuthProvider.fromPath(provider), request.code(), request.state());
+        OAuthCallbackResult result =
+                loginService.login(OAuthProvider.fromPath(provider), request.code(), request.state());
+        if (result.needsEmail()) {
+            return ResponseEntity.ok(OAuthCallbackResponse.needsEmail(result.onboardingToken()));
+        }
+        AuthResult session = result.session();
         return ResponseEntity.status(HttpStatus.OK)
+                .header(
+                        HttpHeaders.SET_COOKIE,
+                        cookieFactory.create(session.refreshToken()).toString())
+                .body(OAuthCallbackResponse.authenticated(session));
+    }
+
+    @PostMapping("/{provider}/complete-email")
+    @Operation(summary = "Completa el email de una cuenta OAuth que no lo entrega")
+    public ResponseEntity<AuthResponse> completeEmail(
+            @PathVariable String provider, @Valid @RequestBody OAuthCompleteEmailRequest request) {
+        AuthResult result = loginService.completeEmail(
+                OAuthProvider.fromPath(provider), request.onboardingToken(), request.email());
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .header(
                         HttpHeaders.SET_COOKIE,
                         cookieFactory.create(result.refreshToken()).toString())
@@ -66,4 +85,7 @@ public class OAuthController {
 
     public record OAuthCallbackRequest(
             @NotBlank String code, @NotBlank String state) {}
+
+    public record OAuthCompleteEmailRequest(
+            @NotBlank String onboardingToken, @NotBlank String email) {}
 }
