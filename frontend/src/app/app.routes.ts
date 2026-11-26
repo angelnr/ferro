@@ -44,6 +44,12 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'catalog',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/catalog/catalog.page').then((component) => component.CatalogPage),
+  },
+  {
     path: 'settings',
     canActivate: [authGuard],
     loadComponent: () =>

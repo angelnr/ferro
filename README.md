@@ -79,8 +79,9 @@ Para usar OAuth en real solo hay que configurar las credenciales de las apps; si
 botones quedan ocultos.
 
 **M2 en curso:** catálogo con 207 ejercicios sembrados, búsqueda por texto (sin acentos,
-ambos idiomas) y filtros por músculo/equipamiento. Faltan CRUD de ejercicios custom,
-detalle con estadísticas y el selector/combobox de la UI.
+ambos idiomas), filtros, paginación, CRUD/archivado de ejercicios custom, detalle y página
+de catálogo con creación inline. Falta el combobox reutilizable con debounce para el flujo
+de rutinas y completar las estadísticas del detalle.
 
 ## Desarrollo local y verificación
 

@@ -45,6 +45,8 @@ ferro:
     ttl: 24h
   mail:
     from: ${MAIL_FROM:no-reply@ferro.dev}
+  catalog:
+    custom-limit: ${CATALOG_CUSTOM_LIMIT:100}
   oauth:
     google:
       client-id: ${GOOGLE_CLIENT_ID:}

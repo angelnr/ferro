@@ -141,3 +141,37 @@ test('confirms an email from the verification link', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'Email verificado' })).toBeVisible();
 });
+
+test('searches the exercise catalog', async ({ page }) => {
+  await authenticated(page);
+  await page.route('**/api/v1/exercises**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [
+          {
+            id: 'exercise-1',
+            name: 'Press de banca con barra',
+            nameEn: 'Barbell Bench Press',
+            muscleGroup: 'CHEST',
+            secondaryMuscles: ['TRICEPS'],
+            equipment: 'BARBELL',
+            mechanics: 'COMPOUND',
+            bodyweight: false,
+            mine: false,
+          },
+        ],
+        page: 0,
+        size: 30,
+        totalElements: 1,
+        totalPages: 1,
+      }),
+    }),
+  );
+
+  await page.goto('/catalog');
+
+  await expect(page.getByRole('heading', { name: 'Ejercicios' })).toBeVisible();
+  await expect(page.getByText('Press de banca con barra')).toBeVisible();
+});

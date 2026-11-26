@@ -62,8 +62,9 @@ reutilización de refresh provoca revocación total (test). `git tag v0.2.0`.
 
 ## M2 · Semanas 2–3 — Catálogo (`catalog`)
 
-**Estado:** 🚧 en curso · seed de 207 ejercicios, búsqueda trgm/tokens con filtros y
-paginación implementados. Faltan CRUD custom, detalle con stats y selector/combobox UI.
+**Estado:** 🚧 casi completo · seed de 207 ejercicios, búsqueda con filtros/paginación,
+CRUD/archivado custom, detalle, página de catálogo con creación inline y E2E. Falta el
+combobox reutilizable para rutinas y estadísticas reales del detalle.
 
 Entregables:
 - [ ] `docs/seed-ejercicios.csv` (~200 filas) + validador en CI + Flyway V2 seed.

@@ -8,7 +8,8 @@
     "login": "Entrar",
     "logout": "Salir",
     "register": "Crear cuenta",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "catalog": "Catálogo"
   },
   "auth": {
     "loginTitle": "Entra en Ferro",
@@ -85,5 +86,23 @@
     "timeZone": "Zona horaria (solo lectura)",
     "saved": "Preferencias guardadas.",
     "save": "Guardar cambios"
+  },
+  "catalog": {
+    "title": "Catálogo",
+    "heading": "Ejercicios",
+    "subtitle": "207 ejercicios globales y tus ejercicios personalizados.",
+    "create": "Crear ejercicio",
+    "search": "Buscar",
+    "muscle": "Músculo",
+    "equipment": "Equipamiento",
+    "mechanics": "Mecánica",
+    "all": "Todos",
+    "bodyweight": "Peso corporal",
+    "nameEs": "Nombre en español",
+    "nameEn": "Nombre en inglés",
+    "save": "Guardar ejercicio",
+    "results": "{{count}} resultados",
+    "mine": "Mío",
+    "empty": "No hay ejercicios que coincidan."
   }
 }

@@ -8,7 +8,8 @@
     "login": "Sign in",
     "logout": "Sign out",
     "register": "Create account",
-    "settings": "Settings"
+    "settings": "Settings",
+    "catalog": "Catalog"
   },
   "auth": {
     "loginTitle": "Sign in to Ferro",
@@ -85,5 +86,23 @@
     "timeZone": "Time zone (read-only)",
     "saved": "Preferences saved.",
     "save": "Save changes"
+  },
+  "catalog": {
+    "title": "Catalog",
+    "heading": "Exercises",
+    "subtitle": "207 global exercises and your custom ones.",
+    "create": "Create exercise",
+    "search": "Search",
+    "muscle": "Muscle",
+    "equipment": "Equipment",
+    "mechanics": "Mechanics",
+    "all": "All",
+    "bodyweight": "Bodyweight",
+    "nameEs": "Spanish name",
+    "nameEn": "English name",
+    "save": "Save exercise",
+    "results": "{{count}} results",
+    "mine": "Mine",
+    "empty": "No exercises match."
   }
 }

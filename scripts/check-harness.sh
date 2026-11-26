@@ -50,6 +50,8 @@ for f in \
   backend/src/main/java/com/ferro/catalog/interfaces/rest/ExerciseController.java \
   backend/src/main/java/com/ferro/catalog/infrastructure/JdbcExerciseRepository.java \
   backend/src/test/java/com/ferro/catalog/interfaces/rest/ExerciseSearchIntegrationTest.java \
+  backend/src/test/java/com/ferro/catalog/interfaces/rest/ExerciseCrudIntegrationTest.java \
+  backend/src/main/java/com/ferro/catalog/application/ExerciseCatalogService.java \
   backend/src/main/java/com/ferro/identity/application/PasswordResetService.java \
   backend/src/main/java/com/ferro/platform/api/RateLimiter.java \
   backend/src/main/java/com/ferro/platform/ratelimit/RateLimitFilter.java \
@@ -81,6 +83,8 @@ for f in \
   frontend/src/app/features/auth/oauth-buttons/oauth-buttons.ts \
   frontend/src/app/features/auth/oauth-callback/oauth-callback.page.ts \
   frontend/src/app/features/settings/settings.page.ts \
+  frontend/src/app/features/catalog/catalog.page.ts \
+  frontend/src/app/features/catalog/catalog.page.spec.ts \
   frontend/e2e/auth.spec.ts \
   frontend/playwright.config.ts \
   frontend/src/app/features/home/home.page.ts \
@@ -135,6 +139,8 @@ need_grep backend/pom.xml 'bucket4j_jdk17-core' 'rate limiting bucket4j'
 need_grep backend/src/main/java/com/ferro/catalog/interfaces/rest/ExerciseController.java '/api/v1/exercises' 'contrato de catálogo'
 need_grep backend/src/main/resources/db/migration/V6__catalog_seed.sql 'INSERT INTO exercises' 'seed de catálogo'
 need_grep frontend/src/app/app.routes.ts 'settings' 'ruta de ajustes'
+need_grep frontend/src/app/app.routes.ts 'catalog' 'ruta de catálogo'
+need_grep backend/src/main/resources/application.yml 'custom-limit' 'límite de ejercicios custom'
 need_grep backend/src/main/resources/application.yml 'rate-limit' 'configuración de rate limit'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityHeadersFilter.java 'Content-Security-Policy' 'cabecera CSP'
 need_grep frontend/vercel.json 'Content-Security-Policy' 'CSP del frontend'
