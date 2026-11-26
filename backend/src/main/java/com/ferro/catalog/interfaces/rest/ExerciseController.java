@@ -21,6 +21,7 @@ import com.ferro.catalog.application.ExerciseCatalogService;
 import com.ferro.catalog.application.ExerciseSearchService;
 import com.ferro.catalog.application.UpdateExerciseCommand;
 import com.ferro.catalog.domain.Exercise;
+import com.ferro.catalog.domain.ExerciseDetail;
 import com.ferro.catalog.domain.PageResult;
 import com.ferro.shared.domain.InvalidPrincipalException;
 
@@ -87,7 +88,8 @@ public class ExerciseController {
     @Operation(summary = "Detalle del ejercicio con stats del usuario")
     public ExerciseDetailResponse detail(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
         UUID userId = userId(jwt);
-        return ExerciseDetailResponse.from(catalogService.detail(userId, id), userId);
+        ExerciseDetail detail = catalogService.detail(userId, id);
+        return ExerciseDetailResponse.from(detail, userId);
     }
 
     @GetMapping

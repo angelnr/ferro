@@ -175,3 +175,66 @@ test('searches the exercise catalog', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Ejercicios' })).toBeVisible();
   await expect(page.getByText('Press de banca con barra')).toBeVisible();
 });
+
+test('opens an exercise detail with stats', async ({ page }) => {
+  await authenticated(page);
+  await page.route('**/api/v1/exercises/exercise-1', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        exercise: {
+          id: 'exercise-1',
+          name: 'Press de banca con barra',
+          nameEn: 'Barbell Bench Press',
+          muscleGroup: 'CHEST',
+          secondaryMuscles: ['TRICEPS'],
+          equipment: 'BARBELL',
+          mechanics: 'COMPOUND',
+          bodyweight: false,
+          mine: false,
+        },
+        stats: {
+          personalRecords: [{ type: 'MAX_WEIGHT', value: 100, achievedAt: '2026-11-20T10:00:00Z' }],
+          bestE1rm: 133.33,
+          totalVolume: 1000,
+          sessionCount: 1,
+          e1rmSeries: [{ date: '2026-11-20T10:00:00Z', value: 133.33 }],
+        },
+      }),
+    }),
+  );
+  await page.route('**/api/v1/exercises?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [
+          {
+            id: 'exercise-1',
+            name: 'Press de banca con barra',
+            nameEn: 'Barbell Bench Press',
+            muscleGroup: 'CHEST',
+            secondaryMuscles: ['TRICEPS'],
+            equipment: 'BARBELL',
+            mechanics: 'COMPOUND',
+            bodyweight: false,
+            mine: false,
+          },
+        ],
+        page: 0,
+        size: 30,
+        totalElements: 1,
+        totalPages: 1,
+      }),
+    }),
+  );
+
+  await page.goto('/catalog');
+  await page.getByRole('link', { name: 'Press de banca con barra' }).click();
+
+  await expect(page).toHaveURL(/\/catalog\/exercise-1/);
+  await expect(page.getByRole('heading', { name: 'Press de banca con barra' })).toBeVisible();
+  await expect(page.getByText('MAX_WEIGHT')).toBeVisible();
+  await expect(page.getByText('133.33').first()).toBeVisible();
+});

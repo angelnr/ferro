@@ -1,10 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
 import { CatalogApi } from './catalog.api';
 import { Exercise } from './catalog.models';
+import { ExercisePicker } from './exercise-picker/exercise-picker';
 
 const MUSCLES = [
   'CHEST',
@@ -35,7 +37,7 @@ const EQUIPMENT = [
 
 @Component({
   selector: 'app-catalog-page',
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, ExercisePicker],
   template: `
     <section class="mt-8 space-y-6">
       <div class="flex flex-wrap items-end justify-between gap-4">
@@ -54,6 +56,11 @@ const EQUIPMENT = [
           {{ 'catalog.create' | translate }}
         </button>
       </div>
+
+      <app-exercise-picker
+        (selectedExercise)="openExercise($event)"
+        (createRequested)="prefillCreate($event)"
+      />
 
       <form
         class="grid gap-3 rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 sm:grid-cols-3"
@@ -185,7 +192,12 @@ const EQUIPMENT = [
             <li class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
               <div class="flex items-start justify-between gap-3">
                 <div>
-                  <p class="font-semibold">{{ exercise.name }}</p>
+                  <a
+                    [routerLink]="['/catalog', exercise.id]"
+                    class="font-semibold hover:text-emerald-400"
+                  >
+                    {{ exercise.name }}
+                  </a>
                   <p class="text-sm text-zinc-500">{{ exercise.nameEn }}</p>
                 </div>
                 @if (exercise.mine) {
@@ -209,6 +221,7 @@ const EQUIPMENT = [
 export class CatalogPage {
   private readonly api = inject(CatalogApi);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly router = inject(Router);
   protected readonly muscles = MUSCLES;
   protected readonly equipment = EQUIPMENT;
   protected readonly exercises = signal<Exercise[]>([]);
@@ -239,6 +252,15 @@ export class CatalogPage {
       .pipe(debounceTime(250), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(() => void this.load());
     void this.load();
+  }
+
+  protected openExercise(exercise: Exercise): void {
+    void this.router.navigate(['/catalog', exercise.id]);
+  }
+
+  protected prefillCreate(name: string): void {
+    this.showCreate.set(true);
+    this.createForm.patchValue({ nameEs: name });
   }
 
   protected async load(): Promise<void> {

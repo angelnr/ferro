@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ferro.catalog.application.port.ExerciseRepository;
+import com.ferro.catalog.application.port.ExerciseStatsRepository;
 import com.ferro.catalog.domain.Equipment;
 import com.ferro.catalog.domain.Exercise;
+import com.ferro.catalog.domain.ExerciseDetail;
 import com.ferro.catalog.domain.ExerciseInUseException;
 import com.ferro.catalog.domain.ExerciseLimitReachedException;
 import com.ferro.catalog.domain.ExerciseNotFoundException;
@@ -23,11 +25,15 @@ import com.ferro.shared.domain.UuidV7;
 public class ExerciseCatalogService {
 
     private final ExerciseRepository exercises;
+    private final ExerciseStatsRepository stats;
     private final int customLimit;
 
     public ExerciseCatalogService(
-            ExerciseRepository exercises, @Value("${ferro.catalog.custom-limit:100}") int customLimit) {
+            ExerciseRepository exercises,
+            ExerciseStatsRepository stats,
+            @Value("${ferro.catalog.custom-limit:100}") int customLimit) {
         this.exercises = exercises;
+        this.stats = stats;
         this.customLimit = customLimit;
     }
 
@@ -92,12 +98,12 @@ public class ExerciseCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public Exercise detail(UUID userId, UUID exerciseId) {
+    public ExerciseDetail detail(UUID userId, UUID exerciseId) {
         Exercise exercise = exercises.findById(exerciseId).orElseThrow(ExerciseNotFoundException::new);
         if (exercise.custom() && !userId.equals(exercise.ownerId())) {
             throw new ExerciseNotFoundException();
         }
-        return exercise;
+        return new ExerciseDetail(exercise, stats.statsFor(userId, exerciseId));
     }
 
     private String[] names(String nameEs, String nameEn) {

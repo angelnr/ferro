@@ -1,10 +1,13 @@
 package com.ferro.catalog.interfaces.rest;
 
-import com.ferro.catalog.domain.Exercise;
+import java.util.UUID;
+
+import com.ferro.catalog.domain.ExerciseDetail;
 
 public record ExerciseDetailResponse(ExerciseResponse exercise, ExerciseStatsResponse stats) {
 
-    public static ExerciseDetailResponse from(Exercise exercise, java.util.UUID userId) {
-        return new ExerciseDetailResponse(ExerciseResponse.from(exercise, userId), ExerciseStatsResponse.empty());
+    public static ExerciseDetailResponse from(ExerciseDetail detail, UUID userId) {
+        return new ExerciseDetailResponse(
+                ExerciseResponse.from(detail.exercise(), userId), ExerciseStatsResponse.from(detail.stats()));
     }
 }

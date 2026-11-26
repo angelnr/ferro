@@ -103,6 +103,17 @@
     "save": "Save exercise",
     "results": "{{count}} results",
     "mine": "Mine",
-    "empty": "No exercises match."
+    "empty": "No exercises match.",
+    "pick": "Search exercise",
+    "createNamed": "Create “{{name}}”",
+    "detail": "Detail",
+    "back": "Back to catalog",
+    "sessions": "Sessions",
+    "volume": "Total volume",
+    "e1rm": "Best e1RM",
+    "prs": "Personal records",
+    "e1rmSeries": "e1RM progress (52 weeks)",
+    "noStats": "No workouts with this exercise yet.",
+    "detailError": "Could not load the exercise."
   }
 }

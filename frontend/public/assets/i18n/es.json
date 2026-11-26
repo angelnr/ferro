@@ -103,6 +103,17 @@
     "save": "Guardar ejercicio",
     "results": "{{count}} resultados",
     "mine": "Mío",
-    "empty": "No hay ejercicios que coincidan."
+    "empty": "No hay ejercicios que coincidan.",
+    "pick": "Buscar ejercicio",
+    "createNamed": "Crear «{{name}}»",
+    "detail": "Detalle",
+    "back": "Volver al catálogo",
+    "sessions": "Sesiones",
+    "volume": "Volumen total",
+    "e1rm": "Mejor e1RM",
+    "prs": "Récords personales",
+    "e1rmSeries": "Progreso e1RM (52 semanas)",
+    "noStats": "Aún no hay entrenamientos con este ejercicio.",
+    "detailError": "No se pudo cargar el ejercicio."
   }
 }

@@ -78,10 +78,10 @@ borrado, rate limiting, CSP, OAuth Google/GitHub con PKCE y UI Angular con E2E P
 Para usar OAuth en real solo hay que configurar las credenciales de las apps; sin ellas los
 botones quedan ocultos.
 
-**M2 en curso:** catálogo con 207 ejercicios sembrados, búsqueda por texto (sin acentos,
-ambos idiomas), filtros, paginación, CRUD/archivado de ejercicios custom, detalle y página
-de catálogo con creación inline. Falta el combobox reutilizable con debounce para el flujo
-de rutinas y completar las estadísticas del detalle.
+**✅ M2 completado** (tag `v0.3.0`, 26-nov-2026). Catálogo con 207 ejercicios sembrados,
+búsqueda sin acentos en ES/EN, filtros, paginación, CRUD/archivado custom, estadísticas
+reales de detalle (PRs, volumen, e1RM y serie de 52 semanas), combobox accesible con debounce
+y creación inline. Siguiente: **M3 · training core**.
 
 ## Desarrollo local y verificación
 

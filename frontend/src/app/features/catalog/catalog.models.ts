@@ -18,12 +18,23 @@ export interface ExercisePage {
   totalPages: number;
 }
 
+export interface PersonalRecord {
+  type: string;
+  value: number;
+  achievedAt: string;
+}
+
+export interface E1rmPoint {
+  date: string;
+  value: number;
+}
+
 export interface ExerciseStats {
-  personalRecords: unknown[];
+  personalRecords: PersonalRecord[];
   bestE1rm: number | null;
   totalVolume: number;
   sessionCount: number;
-  e1rmSeries: unknown[];
+  e1rmSeries: E1rmPoint[];
 }
 
 export interface ExerciseDetail {
