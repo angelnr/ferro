@@ -62,5 +62,11 @@ describe('ExerciseDetailPage', () => {
     expect(fixture.nativeElement.textContent).toContain('Press de banca con barra');
     expect(fixture.nativeElement.textContent).toContain('133.33');
     expect(fixture.nativeElement.textContent).toContain('MAX_WEIGHT');
+    const page = fixture.componentInstance as unknown as {
+      linePoints(): string;
+      dots(): { x: number; y: number }[];
+    };
+    expect(page.linePoints()).toBeTruthy();
+    expect(page.dots().length).toBe(1);
   });
 });

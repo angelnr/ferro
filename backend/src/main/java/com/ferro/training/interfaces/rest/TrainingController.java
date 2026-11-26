@@ -171,7 +171,7 @@ public class TrainingController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Descarta la sesión activa")
     public ResponseEntity<Void> discard(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
-        training.discard(userId(jwt), id);
+        training.deleteSession(userId(jwt), id);
         return ResponseEntity.noContent().build();
     }
 

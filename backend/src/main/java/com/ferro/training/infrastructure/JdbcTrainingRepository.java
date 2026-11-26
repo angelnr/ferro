@@ -430,6 +430,8 @@ public class JdbcTrainingRepository implements TrainingRepository {
 
     private record SetRow(UUID id, int reps, BigDecimal weight, Instant loggedAt, SetType type) {}
 
+    private record RebuildSet(UUID id, int reps, BigDecimal weight, Instant loggedAt, SetType type) {}
+
     private record ExerciseRow(UUID id, String name) {}
 
     private List<TargetSet> targetSets(UUID entryId) {
@@ -557,6 +559,79 @@ public class JdbcTrainingRepository implements TrainingRepository {
                 UPDATE session_sets s SET position = ranked.new_position
                 FROM ranked WHERE s.id = ranked.id
                 """, new MapSqlParameterSource("id", entryId));
+    }
+
+    @Override
+    public void updateTotalVolume(UUID sessionId, BigDecimal volume) {
+        jdbc.update(
+                "UPDATE workout_sessions SET total_volume = :volume, updated_at = now() WHERE id = :id",
+                new MapSqlParameterSource().addValue("id", sessionId).addValue("volume", volume));
+    }
+
+    @Override
+    public void rebuildPersonalRecords(UUID userId, UUID exerciseId) {
+        jdbc.update(
+                "DELETE FROM personal_records WHERE user_id = :userId AND exercise_id = :exerciseId",
+                new MapSqlParameterSource().addValue("userId", userId).addValue("exerciseId", exerciseId));
+        List<RebuildSet> sets = jdbc.query(
+                """
+                SELECT ss.id, ss.reps, ss.weight, ss.logged_at, ss.set_type
+                FROM session_sets ss
+                JOIN session_exercises se ON se.id = ss.session_exercise_id
+                JOIN workout_sessions ws ON ws.id = se.session_id
+                WHERE ws.user_id = :userId AND se.exercise_id = :exerciseId
+                  AND ws.status IN ('FINISHED', 'AUTO_CLOSED')
+                ORDER BY ss.logged_at, ss.id
+                """,
+                new MapSqlParameterSource().addValue("userId", userId).addValue("exerciseId", exerciseId),
+                (rs, rowNum) -> new RebuildSet(
+                        rs.getObject("id", UUID.class),
+                        rs.getInt("reps"),
+                        rs.getBigDecimal("weight"),
+                        instant(rs.getTimestamp("logged_at")),
+                        SetType.valueOf(rs.getString("set_type"))));
+        String name = jdbc.queryForObject(
+                "SELECT name_es FROM exercises WHERE id = :id",
+                new MapSqlParameterSource("id", exerciseId),
+                String.class);
+        BigDecimal maxWeight = null;
+        BigDecimal maxE1rm = null;
+        for (RebuildSet set : sets) {
+            if (set.type() == SetType.WARMUP
+                    || set.weight() == null
+                    || set.weight().signum() <= 0) {
+                continue;
+            }
+            if (maxWeight == null || set.weight().compareTo(maxWeight) > 0) {
+                maxWeight = set.weight();
+                insertRecord(userId, exerciseId, name, PrType.MAX_WEIGHT, maxWeight, set.loggedAt(), set.id());
+            }
+            if (set.reps() <= 12) {
+                BigDecimal e1rm = SetMath.e1rm(set.type(), set.weight(), set.reps());
+                if (e1rm != null && (maxE1rm == null || e1rm.compareTo(maxE1rm) > 0)) {
+                    maxE1rm = e1rm;
+                    insertRecord(userId, exerciseId, name, PrType.MAX_E1RM, maxE1rm, set.loggedAt(), set.id());
+                }
+            }
+        }
+    }
+
+    private void insertRecord(
+            UUID userId, UUID exerciseId, String name, PrType type, BigDecimal value, Instant achievedAt, UUID setId) {
+        jdbc.update(
+                """
+                INSERT INTO personal_records
+                    (id, user_id, exercise_id, pr_type, value, achieved_at, session_set_id)
+                VALUES (:id, :userId, :exerciseId, CAST(:type AS pr_type), :value, :achievedAt, :setId)
+                """,
+                new MapSqlParameterSource()
+                        .addValue("id", UuidV7.generate())
+                        .addValue("userId", userId)
+                        .addValue("exerciseId", exerciseId)
+                        .addValue("type", type.name())
+                        .addValue("value", value)
+                        .addValue("achievedAt", Timestamp.from(achievedAt))
+                        .addValue("setId", setId));
     }
 
     @Override

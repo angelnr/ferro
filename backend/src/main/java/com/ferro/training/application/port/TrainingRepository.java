@@ -81,6 +81,10 @@ public interface TrainingRepository {
 
     void deleteSet(UUID setId);
 
+    void updateTotalVolume(UUID sessionId, java.math.BigDecimal volume);
+
+    void rebuildPersonalRecords(UUID userId, UUID exerciseId);
+
     List<PreviousSession> previousSessions(UUID userId, UUID exerciseId, int limit);
 
     List<StaleSession> staleActive(Instant threshold);

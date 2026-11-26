@@ -10,7 +10,9 @@
     "register": "Create account",
     "settings": "Settings",
     "catalog": "Catalog",
-    "routines": "Routines"
+    "routines": "Routines",
+    "progress": "Progress",
+    "body": "Body"
   },
   "auth": {
     "loginTitle": "Sign in to Ferro",
@@ -182,5 +184,52 @@
     "name": "Routine name",
     "targetSets": "Target sets",
     "addSet": "Add target set"
+  },
+  "progress": {
+    "title": "Progress",
+    "history": "History",
+    "stats": "Statistics",
+    "records": "Records",
+    "from": "From",
+    "to": "To",
+    "exerciseFilter": "Filter by exercise",
+    "clearFilter": "Clear filter",
+    "error": "Progress could not be loaded",
+    "empty": "No finished sessions yet.",
+    "exercises": "exercises",
+    "sets": "sets",
+    "autoClosed": "Auto-closed",
+    "prBadge": "PR",
+    "backHistory": "Back to history",
+    "edit": "Edit",
+    "delete": "Delete",
+    "volume": "Volume",
+    "sessions": "Sessions",
+    "streak": "Current streak",
+    "bestStreak": "Best streak",
+    "weeklyVolume": "Volume per week",
+    "weeklySessions": "Sessions per week",
+    "muscleDistribution": "Muscle distribution (4 weeks)",
+    "weeks": "weeks",
+    "noRecords": "No records yet.",
+    "previousRecords": "Previous records"
+  },
+  "body": {
+    "title": "Body",
+    "measurements": "Measurements",
+    "error": "Measurement could not be saved",
+    "date": "Date",
+    "weight": "Weight (kg)",
+    "chest": "Chest (cm)",
+    "waist": "Waist (cm)",
+    "hip": "Hip (cm)",
+    "arm": "Arm (cm)",
+    "thigh": "Thigh (cm)",
+    "add": "Record",
+    "evolution": "Evolution",
+    "points": "points",
+    "noStats": "No data in this range.",
+    "recent": "Recent history",
+    "empty": "No measurements yet."
   }
 }

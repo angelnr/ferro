@@ -610,3 +610,149 @@ test('creates a routine and completes its pending target sets', async ({ page })
   await expect(page.getByText('Series objetivo pendientes')).toHaveCount(0);
   await expect(page.getByText(/8 × 60 kg/)).toBeVisible();
 });
+
+test('shows workout history and statistics', async ({ page }) => {
+  await authenticated(page);
+  await page.route('**/api/v1/progress/sessions?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [
+          {
+            id: 'session-history',
+            name: 'PPL cerrada',
+            startedAt: '2026-11-20T10:00:00Z',
+            finishedAt: '2026-11-20T11:00:00Z',
+            durationSeconds: 3600,
+            totalVolume: 1000,
+            exerciseCount: 2,
+            setCount: 8,
+            hasPr: true,
+            status: 'FINISHED',
+          },
+        ],
+        page: 0,
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+      }),
+    }),
+  );
+  await page.route('**/api/v1/progress/summary?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        weeks: 12,
+        weeklyVolume: [{ weekStart: '2026-11-16T00:00:00Z', value: 1000 }],
+        weeklySessions: [{ weekStart: '2026-11-16T00:00:00Z', value: 1 }],
+        currentStreak: 2,
+        bestStreak: 4,
+        current: { volume: 1000, sessions: 1, sets: 8 },
+        previous: { volume: 900, sessions: 1, sets: 7 },
+        muscleDistribution: [{ muscleGroup: 'CHEST', volume: 600 }],
+        periodStart: '2026-09-01T00:00:00Z',
+        periodEnd: '2026-11-24T00:00:00Z',
+      }),
+    }),
+  );
+
+  await page.goto('/history');
+  await expect(page.getByRole('heading', { name: 'Historial' })).toBeVisible();
+  await expect(page.getByText('PPL cerrada')).toBeVisible();
+  await page.getByRole('link', { name: 'Estadísticas' }).click();
+  await expect(page).toHaveURL(/\/stats$/);
+  await expect(page.getByText('1,000 kg')).toBeVisible();
+  await expect(page.getByText('CHEST')).toBeVisible();
+});
+
+test('shows records and records a body measurement', async ({ page }) => {
+  await authenticated(page);
+  await page.route('**/api/v1/progress/prs**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        {
+          exerciseId: 'exercise-1',
+          exerciseName: 'Press de banca con barra',
+          current: [
+            { type: 'MAX_WEIGHT', value: 100, achievedAt: '2026-11-20T10:00:00Z' },
+            { type: 'MAX_E1RM', value: 126.67, achievedAt: '2026-11-20T10:00:00Z' },
+          ],
+          history: [],
+        },
+      ]),
+    }),
+  );
+  await page.route('**/api/v1/body-measurements/stats?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        weight: [
+          { date: '2026-11-01T00:00:00Z', value: 81 },
+          { date: '2026-11-20T00:00:00Z', value: 80 },
+        ],
+        chest: [],
+        waist: [],
+        hip: [],
+        arm: [],
+        thigh: [],
+      }),
+    }),
+  );
+  await page.route('**/api/v1/body-measurements?**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        content: [
+          {
+            id: 'body-1',
+            measuredAt: '2026-11-20T10:00:00Z',
+            weight: 80,
+            chest: null,
+            waist: 82,
+            hip: null,
+            arm: null,
+            thigh: null,
+            notes: null,
+          },
+        ],
+        page: 0,
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+      }),
+    }),
+  );
+  await page.route('**/api/v1/body-measurements', (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        id: 'body-2',
+        measuredAt: '2026-11-21T12:00:00Z',
+        weight: 79.5,
+        chest: null,
+        waist: null,
+        hip: null,
+        arm: null,
+        thigh: null,
+        notes: null,
+      }),
+    }),
+  );
+
+  await page.goto('/records');
+  await expect(page.getByText('Press de banca con barra')).toBeVisible();
+  await expect(page.getByText('100 kg')).toBeVisible();
+
+  await page.goto('/body');
+  await expect(page.getByRole('heading', { name: 'Mediciones' })).toBeVisible();
+  await page.locator('#body-weight').fill('79.5');
+  await page.getByRole('button', { name: 'Registrar' }).click();
+  await expect(page.getByRole('button', { name: 'Registrar' })).toBeEnabled();
+});

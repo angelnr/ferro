@@ -90,7 +90,10 @@ activa, auto-cierre 24 h y notas de sesión/ejercicio/serie.
 
 **M4 completado:** rutinas con CRUD, duplicado, builder de series objetivo, supersets,
 reordenación y arranque de sesión con objetivos pendientes; desde Home o la lista de rutinas.
-El historial visual llega en M5.
+
+**M5 completado:** historial paginado, detalle con edición limitada y recálculo de PRs,
+página de récords, panel de estadísticas, e1RM por ejercicio y registro/evolución de peso
+y medidas corporales.
 
 ## Desarrollo local y verificación
 

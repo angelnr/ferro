@@ -118,14 +118,23 @@ pendientes y al confirmar se completan. 409 duplicado nombre testado. `v0.5.0`.
 
 ## M5 · Semana 6 — Progreso y Cuerpo (`progress`, `body`)
 
-Entregables: RF-060…073 (historial paginado, detalle, edición limitada con recálculo,
-página PRs, panel stats con rango 4/12/24, streak RN-06, e1RM por ejercicio,
-comparativa; peso y medidas con gráficas y edición). Gráficas con librería (ECharts
-`ngx-echarts` o Chart.js — decidir en PR con spike de 1 h, criterio: bundle y a11y).
+**Estado:** ✅ completado · tag `v0.6.0` (2026-11-26)
 
-**DoD:** stats cuadran con cálculo manual del E2E maestro (fixtures deterministas);
-recálculo tras editar sesión pasada testado (PR baja → desaparece de activos).
-`v0.6.0`.
+Entregables (RF-060…073):
+- [x] Historial paginado con filtros por fecha/ejercicio, duración, volumen, series,
+      badge PR y distinción `AUTO_CLOSED`.
+- [x] Detalle de sesión readonly con edición de nombre/notas y corrección de series;
+      recálculo idempotente de volumen y PRs; borrado con limpieza de PRs.
+- [x] Página de PRs con actuales, histórico colapsable y filtro por ejercicio.
+- [x] Panel de estadísticas 4/12/24 semanas: volumen/sesiones por semana, racha,
+      comparativa y distribución muscular. Gráficas ligeras en SVG/CSS, sin dependencia nueva.
+- [x] e1RM por ejercicio en detalle, 52 semanas, solo series con reps ≤ 12 (RN-03).
+- [x] Cuerpo: alta/edición/borrado de peso y perímetros, una medición por día con
+      confirmación de sobrescritura, evolución SVG y tabla reciente.
+- [x] RF-066 y RF-067 quedan para M7/backlog (SHOULD/COULD).
+
+**DoD:** stats contrastadas con fixtures del E2E; recálculo tras editar/eliminar una
+sesión pasada testado (PR baja/desaparece). `v0.6.0`.
 
 ## M6 · Semana 7 — PWA, i18n, a11y, pulido
 

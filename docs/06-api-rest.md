@@ -177,6 +177,7 @@ POST …/finish → 200 {
 | Método · Path | Auth | Descripción |
 |---|---|---|
 | GET `/body-measurements` | 🔑 | `from, to, page` |
+| GET `/body-measurements/{id}` | 🔑 | Detalle (404 si es ajeno) |
 | POST `/body-measurements` | 🔑 | RF-070/071 `{measuredAt, weight?, chest?, waist?, hip?, arm?, thigh?, notes?}` → 201 |
 | PATCH `/body-measurements/{id}` | 🔑 | RF-073 |
 | DELETE `/body-measurements/{id}` | 🔑 | 204 |

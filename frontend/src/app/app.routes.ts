@@ -44,6 +44,38 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'history',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/progress/history.page').then((component) => component.HistoryPage),
+  },
+  {
+    path: 'history/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/progress/session-detail.page').then(
+        (component) => component.SessionDetailPage,
+      ),
+  },
+  {
+    path: 'records',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/progress/records.page').then((component) => component.RecordsPage),
+  },
+  {
+    path: 'stats',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/progress/stats.page').then((component) => component.StatsPage),
+  },
+  {
+    path: 'body',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/body/body.page').then((component) => component.BodyPage),
+  },
+  {
     path: 'routines',
     canActivate: [authGuard],
     loadComponent: () =>

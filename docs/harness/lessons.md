@@ -272,6 +272,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `V7__session_target_sets.sql`; `TrainingService.logSet(..., targetSetId)`; `RoutineFlowIntegrationTest`.
 - **Comprobación:** iniciar rutina deja `targetSets`, registrar con `targetSetId` lo vacía y el volumen/PR siguen saliendo solo de `session_sets`.
 
+### L-031 · Editar una sesión cerrada debe reconstruir PRs, no solo insertar
+- **Fecha:** 2026-11-26
+- **Síntoma:** al corregir una serie a la baja, el PR antiguo seguía activo porque el recálculo solo insertaba récords mejores.
+- **Causa raíz:** el cálculo de PR era incremental y no contemplaba borrados/correcciones.
+- **Prevención:** en sesiones `FINISHED`/`AUTO_CLOSED`, editar o borrar series reconstruye los PRs de ese ejercicio desde todas las sesiones terminadas y recalcula `total_volume`.
+- **Artefacto:** `rebuildPersonalRecords`, `recalculateAfterEdit`; test `ProgressFlowIntegrationTest.recalculates_volume_and_prs_when_editing_a_finished_session`.
+- **Comprobación:** bajar una serie actualiza volumen y PR; borrar la sesión elimina sus PRs del historial.
+
 ---
 
 ## Revisión por milestone

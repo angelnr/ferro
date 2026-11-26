@@ -10,7 +10,9 @@
     "register": "Crear cuenta",
     "settings": "Ajustes",
     "catalog": "Catálogo",
-    "routines": "Rutinas"
+    "routines": "Rutinas",
+    "progress": "Progreso",
+    "body": "Cuerpo"
   },
   "auth": {
     "loginTitle": "Entra en Ferro",
@@ -182,5 +184,52 @@
     "name": "Nombre de la rutina",
     "targetSets": "Series objetivo",
     "addSet": "Añadir serie objetivo"
+  },
+  "progress": {
+    "title": "Progreso",
+    "history": "Historial",
+    "stats": "Estadísticas",
+    "records": "Récords",
+    "from": "Desde",
+    "to": "Hasta",
+    "exerciseFilter": "Filtrar por ejercicio",
+    "clearFilter": "Quitar filtro",
+    "error": "No se pudo cargar el progreso",
+    "empty": "Aún no hay sesiones terminadas.",
+    "exercises": "ejercicios",
+    "sets": "series",
+    "autoClosed": "Auto-cerrada",
+    "prBadge": "PR",
+    "backHistory": "Volver al historial",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "volume": "Volumen",
+    "sessions": "Sesiones",
+    "streak": "Racha actual",
+    "bestStreak": "Mejor racha",
+    "weeklyVolume": "Volumen por semana",
+    "weeklySessions": "Sesiones por semana",
+    "muscleDistribution": "Distribución muscular (4 semanas)",
+    "weeks": "semanas",
+    "noRecords": "Aún no hay récords.",
+    "previousRecords": "Récords anteriores"
+  },
+  "body": {
+    "title": "Cuerpo",
+    "measurements": "Mediciones",
+    "error": "No se pudo guardar la medición",
+    "date": "Fecha",
+    "weight": "Peso (kg)",
+    "chest": "Pecho (cm)",
+    "waist": "Cintura (cm)",
+    "hip": "Cadera (cm)",
+    "arm": "Brazo (cm)",
+    "thigh": "Muslo (cm)",
+    "add": "Registrar",
+    "evolution": "Evolución",
+    "points": "puntos",
+    "noStats": "Sin datos en este rango.",
+    "recent": "Histórico reciente",
+    "empty": "Aún no hay mediciones."
   }
 }

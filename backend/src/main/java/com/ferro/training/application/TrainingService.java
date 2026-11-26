@@ -264,7 +264,7 @@ public class TrainingService {
             BigDecimal weight,
             Integer rir,
             String notes) {
-        WorkoutSession session = activeFor(userId, sessionId);
+        WorkoutSession session = editableFor(userId, sessionId);
         SessionExercise entry = session.exercises().stream()
                 .filter(exercise -> exercise.id().equals(entryId))
                 .findFirst()
@@ -278,12 +278,13 @@ public class TrainingService {
             throw new InvalidTrainingException("La nota no puede superar 500 caracteres");
         }
         sessions.updateSet(setId, type, reps, weight, rir, notes);
+        recalculateAfterEdit(userId, session, entry.exerciseId());
         return get(userId, sessionId);
     }
 
     @Transactional
     public WorkoutSession deleteSet(UUID userId, UUID sessionId, UUID entryId, UUID setId) {
-        WorkoutSession session = activeFor(userId, sessionId);
+        WorkoutSession session = editableFor(userId, sessionId);
         SessionExercise entry = session.exercises().stream()
                 .filter(exercise -> exercise.id().equals(entryId))
                 .findFirst()
@@ -293,6 +294,7 @@ public class TrainingService {
                 .findFirst()
                 .orElseThrow(SessionNotFoundException::new);
         sessions.deleteSet(setId);
+        recalculateAfterEdit(userId, session, entry.exerciseId());
         return get(userId, sessionId);
     }
 
@@ -324,6 +326,22 @@ public class TrainingService {
         sessions.discard(sessionId, clock.instant());
     }
 
+    @Transactional
+    public void deleteSession(UUID userId, UUID sessionId) {
+        WorkoutSession session = get(userId, sessionId);
+        if (session.status() == SessionStatus.DISCARDED) {
+            return;
+        }
+        List<UUID> exerciseIds = session.exercises().stream()
+                .map(SessionExercise::exerciseId)
+                .distinct()
+                .toList();
+        sessions.discard(sessionId, clock.instant());
+        if (session.status() != SessionStatus.ACTIVE) {
+            exerciseIds.forEach(exerciseId -> sessions.rebuildPersonalRecords(userId, exerciseId));
+        }
+    }
+
     private void validateSet(int reps, BigDecimal weight, Integer rir) {
         if (reps < 1 || reps > 1000) {
             throw new InvalidTrainingException("Las reps deben estar entre 1 y 1000");
@@ -335,6 +353,23 @@ public class TrainingService {
         }
         if (rir != null && (rir < 0 || rir > 10)) {
             throw new InvalidTrainingException("El RIR debe estar entre 0 y 10");
+        }
+    }
+
+    private WorkoutSession editableFor(UUID userId, UUID sessionId) {
+        WorkoutSession session = get(userId, sessionId);
+        if (session.status() != SessionStatus.ACTIVE
+                && session.status() != SessionStatus.FINISHED
+                && session.status() != SessionStatus.AUTO_CLOSED) {
+            throw new InvalidSessionStateException("La sesión no se puede editar");
+        }
+        return session;
+    }
+
+    private void recalculateAfterEdit(UUID userId, WorkoutSession session, UUID exerciseId) {
+        if (session.status() != SessionStatus.ACTIVE) {
+            sessions.updateTotalVolume(session.id(), sessions.totalVolume(session.id()));
+            sessions.rebuildPersonalRecords(userId, exerciseId);
         }
     }
 

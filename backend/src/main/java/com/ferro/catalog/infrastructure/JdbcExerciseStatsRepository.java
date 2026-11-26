@@ -46,7 +46,7 @@ public class JdbcExerciseStatsRepository implements ExerciseStatsRepository {
                 JOIN session_exercises se ON se.session_id = ws.id
                 JOIN session_sets ss ON ss.session_exercise_id = se.id
                 WHERE ws.user_id = :userId AND se.exercise_id = :exerciseId
-                  AND ss.weight > 0 AND ws.status IN ('FINISHED', 'AUTO_CLOSED')
+                  AND ss.weight > 0 AND ss.reps <= 12 AND ws.status IN ('FINISHED', 'AUTO_CLOSED')
                 """, params, BigDecimal.class);
 
         List<ExerciseStats.PersonalRecord> records = jdbc.query(
@@ -68,7 +68,7 @@ public class JdbcExerciseStatsRepository implements ExerciseStatsRepository {
                 JOIN session_exercises se ON se.session_id = ws.id
                 JOIN session_sets ss ON ss.session_exercise_id = se.id
                 WHERE ws.user_id = :userId AND se.exercise_id = :exerciseId
-                  AND ss.weight > 0 AND ws.status IN ('FINISHED', 'AUTO_CLOSED')
+                  AND ss.weight > 0 AND ss.reps <= 12 AND ws.status IN ('FINISHED', 'AUTO_CLOSED')
                   AND ws.started_at >= now() - interval '52 weeks'
                 GROUP BY week ORDER BY week
                 """,
