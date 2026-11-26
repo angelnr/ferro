@@ -216,6 +216,22 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `scripts/frontend.sh`; `scripts/backend.sh` + `dev_frontend_origins` en `scripts/lib.sh`; `frontend/src/environments/environment.ts`; test `environment.spec.ts`.
 - **Comprobación:** `make verify`; manualmente `curl -I http://<ip>:4200` y login desde otro dispositivo con la API en `:8082`.
 
+### L-024 · El seed del catálogo no puede ir en V2 si V2 ya está aplicada
+- **Fecha:** 2026-11-26
+- **Síntoma:** el plan original ponía el seed en V2, pero V2 ya estaba aplicada en dev/CI; editar V2 rompería checksums.
+- **Causa raíz:** forwards-only (RNF-40) y una migración de esquema ya publicada.
+- **Prevención:** seed en `V6__catalog_seed.sql`, con la tabla de migraciones de doc 05 actualizada.
+- **Artefacto:** V6; `docs/05-modelo-datos.md`; validador CI del CSV.
+- **Comprobación:** Testcontainers aplica V1–V6 desde una BD vacía y el seed tiene 207 filas.
+
+### L-025 · «press banca» no es una subcadena de «Press de banca»
+- **Fecha:** 2026-11-26
+- **Síntoma:** la búsqueda literal de RF-021 no encontraba «Press de banca con barra».
+- **Causa raíz:** el nombre contiene la stopword «de»; un `LIKE '%press banca%'` no coincide.
+- **Prevención:** trocear la consulta en tokens y exigir que todos aparezcan (en cualquiera de los dos idiomas).
+- **Artefacto:** `JdbcExerciseRepository`; `ExerciseSearchIntegrationTest`.
+- **Comprobación:** «press banca», «banca» y «BENCH» devuelven resultados; «extension» encuentra «Extensión».
+
 ---
 
 ## Revisión por milestone

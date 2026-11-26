@@ -47,6 +47,9 @@ for f in \
   backend/src/main/java/com/ferro/identity/infrastructure/oauth/GoogleOAuthClient.java \
   backend/src/main/java/com/ferro/identity/infrastructure/oauth/GitHubOAuthClient.java \
   backend/src/test/java/com/ferro/identity/interfaces/rest/OAuthFlowIntegrationTest.java \
+  backend/src/main/java/com/ferro/catalog/interfaces/rest/ExerciseController.java \
+  backend/src/main/java/com/ferro/catalog/infrastructure/JdbcExerciseRepository.java \
+  backend/src/test/java/com/ferro/catalog/interfaces/rest/ExerciseSearchIntegrationTest.java \
   backend/src/main/java/com/ferro/identity/application/PasswordResetService.java \
   backend/src/main/java/com/ferro/platform/api/RateLimiter.java \
   backend/src/main/java/com/ferro/platform/ratelimit/RateLimitFilter.java \
@@ -59,6 +62,9 @@ for f in \
   backend/src/main/resources/db/migration/V3__training.sql \
   backend/src/main/resources/db/migration/V4__progress_and_body.sql \
   backend/src/main/resources/db/migration/V5__feature_flags.sql \
+  backend/src/main/resources/db/migration/V6__catalog_seed.sql \
+  docs/seed-ejercicios.csv \
+  scripts/validate-seed.py \
   infra/docker-compose.dev.yml \
   infra/docker-compose.prod.yml \
   infra/caddy/Caddyfile \
@@ -94,7 +100,7 @@ for f in \
   need_file "$f"
 done
 
-for f in .githooks/pre-commit .githooks/pre-push .githooks/commit-msg scripts/verify.sh scripts/backend.sh scripts/frontend.sh; do
+for f in .githooks/pre-commit .githooks/pre-push .githooks/commit-msg scripts/verify.sh scripts/backend.sh scripts/frontend.sh scripts/validate-seed.py; do
   need_exec "$f"
 done
 
@@ -126,6 +132,9 @@ need_grep backend/src/main/java/com/ferro/identity/application/port/EmailSender.
 need_grep backend/src/main/java/com/ferro/identity/application/port/EmailSender.java 'sendSecurityAlertEmail' 'email de seguridad'
 need_grep frontend/src/app/features/auth/oauth-callback/oauth-callback.page.ts 'needsEmail' 'UI de email OAuth'
 need_grep backend/pom.xml 'bucket4j_jdk17-core' 'rate limiting bucket4j'
+need_grep backend/src/main/java/com/ferro/catalog/interfaces/rest/ExerciseController.java '/api/v1/exercises' 'contrato de catálogo'
+need_grep backend/src/main/resources/db/migration/V6__catalog_seed.sql 'INSERT INTO exercises' 'seed de catálogo'
+need_grep frontend/src/app/app.routes.ts 'settings' 'ruta de ajustes'
 need_grep backend/src/main/resources/application.yml 'rate-limit' 'configuración de rate limit'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityHeadersFilter.java 'Content-Security-Policy' 'cabecera CSP'
 need_grep frontend/vercel.json 'Content-Security-Policy' 'CSP del frontend'

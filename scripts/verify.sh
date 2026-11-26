@@ -134,6 +134,11 @@ run_docs() {
   python3 "$ROOT/scripts/check-docs.py"
 }
 
+run_seed() {
+  require_command python3
+  python3 "$ROOT/scripts/validate-seed.py"
+}
+
 run_backend_verify() {
   mvn_cmd clean verify || return 1
   backend_tests_run
@@ -175,6 +180,7 @@ case "$MODE" in
     run_step "Harness: invariantes" run_harness_checks
     run_step "Secretos: gitleaks" run_secrets
     run_step "Docs: enlaces relativos" run_docs
+    run_step "Catálogo: seed" run_seed
     run_step "Backend: mvn verify" run_backend_verify
     run_step "Frontend: instalar dependencias" run_frontend_install
     run_step "Frontend: formato y lint" run_frontend_verify
@@ -184,6 +190,7 @@ case "$MODE" in
   backend)
     require_docker
     run_step "Harness: invariantes" run_harness_checks
+    run_step "Catálogo: seed" run_seed
     run_step "Backend: mvn verify" run_backend_verify
     ;;
   frontend)

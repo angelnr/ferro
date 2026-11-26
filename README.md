@@ -78,6 +78,10 @@ borrado, rate limiting, CSP, OAuth Google/GitHub con PKCE y UI Angular con E2E P
 Para usar OAuth en real solo hay que configurar las credenciales de las apps; sin ellas los
 botones quedan ocultos.
 
+**M2 en curso:** catálogo con 207 ejercicios sembrados, búsqueda por texto (sin acentos,
+ambos idiomas) y filtros por músculo/equipamiento. Faltan CRUD de ejercicios custom,
+detalle con estadísticas y el selector/combobox de la UI.
+
 ## Desarrollo local y verificación
 
 El harness **no necesita JDK ni Node en el host**: ejecuta versiones fijas en Docker

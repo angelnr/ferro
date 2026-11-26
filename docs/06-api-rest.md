@@ -210,6 +210,7 @@ POST …/finish → 200 {
 | `OAUTH_FAILED` | 401 | state/code inválido o proveedor no válido |
 | `OAUTH_EMAIL_REQUIRED` | 422 | proveedor sin email verificado (GitHub privado) |
 | `OAUTH_NOT_CONFIGURED` | 503 | proveedor sin client-id/secret |
+| `INVALID_FILTER` | 400 | filtro de catálogo no válido |
 | `RATE_LIMITED` | 429 | RN-20 |
 | `NOT_FOUND` | 404 | recurso inexistente **o ajeno** (anti-IDOR, RNF-18) |
 | `INTERNAL_ERROR` | 500 | no filtrar detalles |

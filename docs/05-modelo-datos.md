@@ -263,11 +263,12 @@ de dominio para emails y derivados (outbox de facto — ver ADR-0002 §alternati
 | V | Contenido |
 |---|---|
 | V1 | extensiones (`pg_trgm`), tipos enum, tablas `identity` |
-| V2 | tablas `catalog` + **seed ~200 ejercicios** (CSV real en `backend/src/main/resources/db/seed/`) |
+| V2 | tablas `catalog` (sin seed) |
 | V3 | tablas `training` (sesiones + rutinas) |
 | V4 | tablas `progress` y `body` |
 | V5 | `feature_flags` + seeds de flags |
-| (M7) V6 | datos demo (cuenta demo + 12 semanas sintéticas, solo prod-demo) |
+| V6 | seed del catálogo (~200 ejercicios, `docs/seed-ejercicios.csv`) |
+| (M7) V7 | datos demo (cuenta demo + 12 semanas sintéticas, solo prod-demo) |
 
 ## 5 · Seed del catálogo (~200 ejercicios)
 

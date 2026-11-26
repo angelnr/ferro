@@ -1,0 +1,208 @@
+name_es,name_en,muscle_group,secondary,equipment,mechanics,bodyweight
+Press de banca con barra,Barbell Bench Press,CHEST,TRICEPS;SHOULDERS,BARBELL,COMPOUND,false
+Press de banca con mancuernas,Dumbbell Bench Press,CHEST,TRICEPS;SHOULDERS,DUMBBELL,COMPOUND,false
+Press de banca en máquina,Machine Bench Press,CHEST,TRICEPS;SHOULDERS,MACHINE,COMPOUND,false
+Press inclinado con barra,Barbell Incline Press,CHEST,SHOULDERS;TRICEPS,BARBELL,COMPOUND,false
+Press inclinado con mancuernas,Dumbbell Incline Press,CHEST,SHOULDERS;TRICEPS,DUMBBELL,COMPOUND,false
+Press inclinado en máquina,Machine Incline Press,CHEST,SHOULDERS;TRICEPS,MACHINE,COMPOUND,false
+Press declinado con barra,Barbell Decline Press,CHEST,TRICEPS,BARBELL,COMPOUND,false
+Press declinado con mancuernas,Dumbbell Decline Press,CHEST,TRICEPS,DUMBBELL,COMPOUND,false
+Aperturas con mancuernas,Dumbbell Chest Fly,CHEST,SHOULDERS,DUMBBELL,ISOLATION,false
+Aperturas en polea,Cable Chest Fly,CHEST,SHOULDERS,CABLE,ISOLATION,false
+Aperturas en máquina,Machine Chest Fly,CHEST,SHOULDERS,MACHINE,ISOLATION,false
+Fondos en paralelas,Chest Dips,CHEST,TRICEPS;SHOULDERS,BODYWEIGHT,COMPOUND,true
+Pullover,Dumbbell Pullover,CHEST,BACK,DUMBBELL,ISOLATION,false
+Press cerrado con barra,Barbell Close-Grip Bench Press,TRICEPS,CHEST;SHOULDERS,BARBELL,COMPOUND,false
+Dominadas,Pull-Ups,BACK,BICEPS,BODYWEIGHT,COMPOUND,true
+Jalón al pecho en polea,Cable Lat Pulldown,BACK,BICEPS,CABLE,COMPOUND,false
+Jalón al pecho en máquina,Machine Lat Pulldown,BACK,BICEPS,MACHINE,COMPOUND,false
+Remo con barra,Barbell Row,BACK,BICEPS;SHOULDERS,BARBELL,COMPOUND,false
+Remo con mancuerna,Dumbbell Row,BACK,BICEPS,DUMBBELL,COMPOUND,false
+Remo en polea,Cable Row,BACK,BICEPS,CABLE,COMPOUND,false
+Remo en T con barra,Barbell T-Bar Row,BACK,BICEPS,BARBELL,COMPOUND,false
+Remo en T en máquina,Machine T-Bar Row,BACK,BICEPS,MACHINE,COMPOUND,false
+Remo invertido,Inverted Row,BACK,BICEPS,BODYWEIGHT,COMPOUND,true
+Hiperextensiones,Back Extension,BACK,GLUTES;HAMSTRINGS,BODYWEIGHT,COMPOUND,true
+Hiperextensiones en máquina,Machine Back Extension,BACK,GLUTES;HAMSTRINGS,MACHINE,COMPOUND,false
+Pullover en polea,Cable Pullover,BACK,CHEST,CABLE,ISOLATION,false
+Press militar con barra,Barbell Overhead Press,SHOULDERS,TRICEPS,BARBELL,COMPOUND,false
+Press militar con mancuernas,Dumbbell Overhead Press,SHOULDERS,TRICEPS,DUMBBELL,COMPOUND,false
+Press militar en máquina,Machine Overhead Press,SHOULDERS,TRICEPS,MACHINE,COMPOUND,false
+Press Arnold con mancuernas,Dumbbell Arnold Press,SHOULDERS,TRICEPS,DUMBBELL,COMPOUND,false
+Elevaciones laterales con mancuernas,Dumbbell Lateral Raise,SHOULDERS,,DUMBBELL,ISOLATION,false
+Elevaciones laterales en polea,Cable Lateral Raise,SHOULDERS,,CABLE,ISOLATION,false
+Elevaciones laterales en máquina,Machine Lateral Raise,SHOULDERS,,MACHINE,ISOLATION,false
+Elevaciones frontales con mancuernas,Dumbbell Front Raise,SHOULDERS,,DUMBBELL,ISOLATION,false
+Elevaciones frontales en polea,Cable Front Raise,SHOULDERS,,CABLE,ISOLATION,false
+Pájaros con mancuernas,Dumbbell Reverse Fly,SHOULDERS,BACK,DUMBBELL,ISOLATION,false
+Pájaros en polea,Cable Reverse Fly,SHOULDERS,BACK,CABLE,ISOLATION,false
+Pájaros en máquina,Machine Reverse Fly,SHOULDERS,BACK,MACHINE,ISOLATION,false
+Face pull en polea,Cable Face Pull,SHOULDERS,BACK,CABLE,ISOLATION,false
+Press tras nuca con barra,Barbell Behind-the-Neck Press,SHOULDERS,TRICEPS,BARBELL,COMPOUND,false
+Curl con barra,Barbell Curl,BICEPS,FOREARMS,BARBELL,ISOLATION,false
+Curl con mancuernas,Dumbbell Curl,BICEPS,,DUMBBELL,ISOLATION,false
+Curl martillo con mancuernas,Dumbbell Hammer Curl,BICEPS,FOREARMS,DUMBBELL,ISOLATION,false
+Curl martillo en polea,Cable Hammer Curl,BICEPS,FOREARMS,CABLE,ISOLATION,false
+Curl predicador con barra,Barbell Preacher Curl,BICEPS,,BARBELL,ISOLATION,false
+Curl predicador en máquina,Machine Preacher Curl,BICEPS,,MACHINE,ISOLATION,false
+Curl en polea,Cable Curl,BICEPS,,CABLE,ISOLATION,false
+Curl inclinado con mancuernas,Dumbbell Incline Curl,BICEPS,,DUMBBELL,ISOLATION,false
+Curl concentrado con mancuernas,Dumbbell Concentration Curl,BICEPS,,DUMBBELL,ISOLATION,false
+Press francés con barra,Barbell French Press,TRICEPS,,BARBELL,ISOLATION,false
+Press francés con mancuernas,Dumbbell French Press,TRICEPS,,DUMBBELL,ISOLATION,false
+Extensión en polea,Cable Pushdown,TRICEPS,,CABLE,ISOLATION,false
+Extensión sobre cabeza con mancuernas,Dumbbell Overhead Extension,TRICEPS,,DUMBBELL,ISOLATION,false
+Extensión sobre cabeza en polea,Cable Overhead Extension,TRICEPS,,CABLE,ISOLATION,false
+Patada de tríceps con mancuernas,Dumbbell Triceps Kickback,TRICEPS,,DUMBBELL,ISOLATION,false
+Patada de tríceps en polea,Cable Triceps Kickback,TRICEPS,,CABLE,ISOLATION,false
+Fondos en banco,Bench Dips,TRICEPS,CHEST,BODYWEIGHT,COMPOUND,true
+Sentadilla trasera con barra,Barbell Back Squat,QUADS,GLUTES;HAMSTRINGS,BARBELL,COMPOUND,false
+Sentadilla frontal con barra,Barbell Front Squat,QUADS,GLUTES,BARBELL,COMPOUND,false
+Sentadilla búlgara con mancuernas,Dumbbell Bulgarian Split Squat,QUADS,GLUTES,DUMBBELL,COMPOUND,false
+Sentadilla búlgara con barra,Barbell Bulgarian Split Squat,QUADS,GLUTES,BARBELL,COMPOUND,false
+Sentadilla búlgara,Bulgarian Split Squat,QUADS,GLUTES,BODYWEIGHT,COMPOUND,false
+Sentadilla goblet con mancuernas,Dumbbell Goblet Squat,QUADS,GLUTES,DUMBBELL,COMPOUND,false
+Sentadilla goblet con kettlebell,Kettlebell Goblet Squat,QUADS,GLUTES,KETTLEBELL,COMPOUND,false
+Prensa de piernas en máquina,Machine Leg Press,QUADS,GLUTES;HAMSTRINGS,MACHINE,COMPOUND,false
+Hack squat en máquina,Machine Hack Squat,QUADS,GLUTES,MACHINE,COMPOUND,false
+Extensión de cuádriceps en máquina,Machine Leg Extension,QUADS,,MACHINE,ISOLATION,false
+Zancadas con mancuernas,Dumbbell Lunges,QUADS,GLUTES;HAMSTRINGS,DUMBBELL,COMPOUND,false
+Zancadas con barra,Barbell Lunges,QUADS,GLUTES;HAMSTRINGS,BARBELL,COMPOUND,false
+Zancadas,Lunges,QUADS,GLUTES;HAMSTRINGS,BODYWEIGHT,COMPOUND,false
+Step up con mancuernas,Dumbbell Step-Up,QUADS,GLUTES,DUMBBELL,COMPOUND,false
+Step up,Step-Up,QUADS,GLUTES,BODYWEIGHT,COMPOUND,false
+Peso muerto rumano con barra,Barbell Romanian Deadlift,HAMSTRINGS,GLUTES;BACK,BARBELL,COMPOUND,false
+Peso muerto rumano con mancuernas,Dumbbell Romanian Deadlift,HAMSTRINGS,GLUTES;BACK,DUMBBELL,COMPOUND,false
+Curl femoral tumbado en máquina,Machine Lying Leg Curl,HAMSTRINGS,,MACHINE,ISOLATION,false
+Curl femoral sentado en máquina,Machine Seated Leg Curl,HAMSTRINGS,,MACHINE,ISOLATION,false
+Buenos días con barra,Barbell Good Morning,HAMSTRINGS,GLUTES;BACK,BARBELL,COMPOUND,false
+Peso muerto piernas rígidas con barra,Barbell Stiff-Leg Deadlift,HAMSTRINGS,GLUTES;BACK,BARBELL,COMPOUND,false
+Peso muerto piernas rígidas con mancuernas,Dumbbell Stiff-Leg Deadlift,HAMSTRINGS,GLUTES;BACK,DUMBBELL,COMPOUND,false
+Hip thrust con barra,Barbell Hip Thrust,GLUTES,HAMSTRINGS,BARBELL,COMPOUND,false
+Hip thrust en máquina,Machine Hip Thrust,GLUTES,HAMSTRINGS,MACHINE,COMPOUND,false
+Puente de glúteo,Glute Bridge,GLUTES,HAMSTRINGS,BODYWEIGHT,COMPOUND,true
+Puente de glúteo con barra,Barbell Glute Bridge,GLUTES,HAMSTRINGS,BARBELL,COMPOUND,false
+Patada de glúteo en polea,Cable Glute Kickback,GLUTES,,CABLE,ISOLATION,false
+Patada de glúteo en máquina,Machine Glute Kickback,GLUTES,,MACHINE,ISOLATION,false
+Abducción de cadera en máquina,Machine Hip Abduction,GLUTES,,MACHINE,ISOLATION,false
+Abducción de cadera con banda,Band Hip Abduction,GLUTES,,BAND,ISOLATION,false
+Aducción de cadera en máquina,Machine Hip Adduction,GLUTES,,MACHINE,ISOLATION,false
+Elevación de talones de pie en máquina,Machine Standing Calf Raise,CALVES,,MACHINE,ISOLATION,false
+Elevación de talones de pie con barra,Barbell Standing Calf Raise,CALVES,,BARBELL,ISOLATION,false
+Elevación de talones de pie con mancuernas,Dumbbell Standing Calf Raise,CALVES,,DUMBBELL,ISOLATION,false
+Elevación de talones sentado en máquina,Machine Seated Calf Raise,CALVES,,MACHINE,ISOLATION,false
+Gemelo en prensa en máquina,Machine Calf Press,CALVES,,MACHINE,ISOLATION,false
+Plancha,Plank,CORE,,BODYWEIGHT,ISOLATION,true
+Plancha lateral,Side Plank,CORE,,BODYWEIGHT,ISOLATION,true
+Crunch,Crunch,CORE,,BODYWEIGHT,ISOLATION,true
+Crunch en polea,Cable Crunch,CORE,,CABLE,ISOLATION,false
+Elevación de piernas,Leg Raise,CORE,,BODYWEIGHT,ISOLATION,true
+Rueda abdominal,Ab Wheel Rollout,CORE,,BODYWEIGHT,COMPOUND,true
+Pallof press en polea,Cable Pallof Press,CORE,,CABLE,ISOLATION,false
+Giro ruso,Russian Twist,CORE,,BODYWEIGHT,ISOLATION,true
+Giro ruso con mancuernas,Dumbbell Russian Twist,CORE,,DUMBBELL,ISOLATION,false
+Curl de muñeca con mancuernas,Dumbbell Wrist Curl,FOREARMS,,DUMBBELL,ISOLATION,false
+Curl de muñeca con barra,Barbell Wrist Curl,FOREARMS,,BARBELL,ISOLATION,false
+Curl inverso con barra,Barbell Reverse Curl,FOREARMS,BICEPS,BARBELL,ISOLATION,false
+Curl inverso con mancuernas,Dumbbell Reverse Curl,FOREARMS,BICEPS,DUMBBELL,ISOLATION,false
+Paseo del granjero con mancuernas,Dumbbell Farmer's Walk,FOREARMS,FULL_BODY,DUMBBELL,COMPOUND,false
+Paseo del granjero con kettlebell,Kettlebell Farmer's Walk,FOREARMS,FULL_BODY,KETTLEBELL,COMPOUND,false
+Flexión de cuello,Neck Flexion,NECK,,BODYWEIGHT,ISOLATION,true
+Flexión de cuello en máquina,Machine Neck Flexion,NECK,,MACHINE,ISOLATION,false
+Extensión de cuello,Neck Extension,NECK,,BODYWEIGHT,ISOLATION,true
+Extensión de cuello en máquina,Machine Neck Extension,NECK,,MACHINE,ISOLATION,false
+Thruster con barra,Barbell Thruster,FULL_BODY,QUADS;SHOULDERS,BARBELL,COMPOUND,false
+Thruster con mancuernas,Dumbbell Thruster,FULL_BODY,QUADS;SHOULDERS,DUMBBELL,COMPOUND,false
+Clean and press con barra,Barbell Clean and Press,FULL_BODY,SHOULDERS;QUADS,BARBELL,COMPOUND,false
+Swing con kettlebell,Kettlebell Swing,FULL_BODY,GLUTES;HAMSTRINGS,KETTLEBELL,COMPOUND,false
+Burpee,Burpee,FULL_BODY,CHEST;QUADS,BODYWEIGHT,COMPOUND,true
+Snatch con kettlebell,Kettlebell Snatch,FULL_BODY,SHOULDERS;BACK,KETTLEBELL,COMPOUND,false
+Clean con kettlebell,Kettlebell Clean,FULL_BODY,GLUTES;BACK,KETTLEBELL,COMPOUND,false
+Flexiones,Push-Ups,CHEST,TRICEPS;SHOULDERS,BODYWEIGHT,COMPOUND,true
+Flexiones declinadas,Decline Push-Ups,CHEST,SHOULDERS,BODYWEIGHT,COMPOUND,true
+Flexiones diamante,Diamond Push-Ups,CHEST,TRICEPS,BODYWEIGHT,COMPOUND,true
+Aperturas inclinadas con mancuernas,Dumbbell Incline Fly,CHEST,SHOULDERS,DUMBBELL,ISOLATION,false
+Aperturas inclinadas en polea,Cable Incline Fly,CHEST,SHOULDERS,CABLE,ISOLATION,false
+Press banca con banda,Band Bench Press,CHEST,TRICEPS,BAND,COMPOUND,false
+Pullover en máquina,Machine Pullover,CHEST,BACK,MACHINE,ISOLATION,false
+Press suelo con mancuernas,Dumbbell Floor Press,CHEST,TRICEPS,DUMBBELL,COMPOUND,false
+Press suelo con barra,Barbell Floor Press,CHEST,TRICEPS,BARBELL,COMPOUND,false
+Pec deck en máquina,Machine Pec Deck,CHEST,SHOULDERS,MACHINE,ISOLATION,false
+Remo Pendlay con barra,Barbell Pendlay Row,BACK,BICEPS,BARBELL,COMPOUND,false
+Jalón agarre cerrado en polea,Cable Close-Grip Pulldown,BACK,BICEPS,CABLE,COMPOUND,false
+Remo unilateral en polea,Single-Arm Cable Row,BACK,BICEPS,CABLE,COMPOUND,false
+Dominadas lastradas,Weighted Pull-Ups,BACK,BICEPS,BODYWEIGHT,COMPOUND,true
+Remo con banda,Band Row,BACK,BICEPS,BAND,COMPOUND,false
+Encogimientos de trapecio con mancuernas,Dumbbell Shrugs,BACK,NECK,DUMBBELL,ISOLATION,false
+Encogimientos de trapecio con barra,Barbell Shrugs,BACK,NECK,BARBELL,ISOLATION,false
+Encogimientos de trapecio en máquina,Machine Shrugs,BACK,NECK,MACHINE,ISOLATION,false
+Face pull alto en polea,Cable High Face Pull,SHOULDERS,BACK,CABLE,ISOLATION,false
+Press con banda,Band Overhead Press,SHOULDERS,TRICEPS,BAND,COMPOUND,false
+Elevación lateral inclinada con mancuernas,Dumbbell Incline Lateral Raise,SHOULDERS,,DUMBBELL,ISOLATION,false
+Handstand push-up,Handstand Push-Up,SHOULDERS,TRICEPS,BODYWEIGHT,COMPOUND,true
+Press militar sentado con barra,Barbell Seated Overhead Press,SHOULDERS,TRICEPS,BARBELL,COMPOUND,false
+Press militar sentado con mancuernas,Dumbbell Seated Overhead Press,SHOULDERS,TRICEPS,DUMBBELL,COMPOUND,false
+Press cubano con mancuernas,Dumbbell Cuban Press,SHOULDERS,BACK,DUMBBELL,COMPOUND,false
+Curl 21 con barra,Barbell 21s Curl,BICEPS,,BARBELL,ISOLATION,false
+Curl araña con mancuernas,Dumbbell Spider Curl,BICEPS,,DUMBBELL,ISOLATION,false
+Curl Bayesian en polea,Cable Bayesian Curl,BICEPS,,CABLE,ISOLATION,false
+Curl inverso en polea,Cable Reverse Curl,BICEPS,FOREARMS,CABLE,ISOLATION,false
+Curl con banda,Band Curl,BICEPS,,BAND,ISOLATION,false
+Curl en máquina,Machine Curl,BICEPS,,MACHINE,ISOLATION,false
+Press JM con barra,Barbell JM Press,TRICEPS,CHEST,BARBELL,COMPOUND,false
+Extensión con banda,Band Triceps Extension,TRICEPS,,BAND,ISOLATION,false
+Fondos en máquina,Machine Dips,TRICEPS,CHEST,MACHINE,COMPOUND,false
+Extensión unilateral en polea,Single-Arm Pushdown,TRICEPS,,CABLE,ISOLATION,false
+Press cerrado con mancuernas,Dumbbell Close-Grip Press,TRICEPS,CHEST,DUMBBELL,COMPOUND,false
+Patada en polea,Cable Kickback,TRICEPS,,CABLE,ISOLATION,false
+Sentadilla Zercher con barra,Barbell Zercher Squat,QUADS,GLUTES;CORE,BARBELL,COMPOUND,false
+Sentadilla con banda,Band Squat,QUADS,GLUTES,BAND,COMPOUND,false
+Prensa unilateral en máquina,Machine Single-Leg Press,QUADS,GLUTES,MACHINE,COMPOUND,false
+Extensión unilateral en máquina,Machine Single-Leg Extension,QUADS,,MACHINE,ISOLATION,false
+Zancada inversa con mancuernas,Dumbbell Reverse Lunge,QUADS,GLUTES;HAMSTRINGS,DUMBBELL,COMPOUND,false
+Zancada inversa,Reverse Lunge,QUADS,GLUTES;HAMSTRINGS,BODYWEIGHT,COMPOUND,false
+Step down con mancuernas,Dumbbell Step-Down,QUADS,GLUTES,DUMBBELL,COMPOUND,false
+Step down,Step-Down,QUADS,GLUTES,BODYWEIGHT,COMPOUND,false
+Sentadilla sissy,Sissy Squat,QUADS,,BODYWEIGHT,ISOLATION,true
+Sentadilla Smith,Smith Machine Squat,QUADS,GLUTES,MACHINE,COMPOUND,false
+Curl nórdico,Nordic Curl,HAMSTRINGS,,BODYWEIGHT,ISOLATION,true
+Peso muerto a una pierna con mancuernas,Dumbbell Single-Leg Deadlift,HAMSTRINGS,GLUTES,DUMBBELL,COMPOUND,false
+Peso muerto a una pierna con barra,Barbell Single-Leg Deadlift,HAMSTRINGS,GLUTES,BARBELL,COMPOUND,false
+Curl femoral con banda,Band Leg Curl,HAMSTRINGS,,BAND,ISOLATION,false
+Good morning sentado con barra,Barbell Seated Good Morning,HAMSTRINGS,GLUTES;BACK,BARBELL,COMPOUND,false
+Curl femoral de pie en máquina,Machine Standing Leg Curl,HAMSTRINGS,,MACHINE,ISOLATION,false
+Peso muerto rumano con banda,Band Romanian Deadlift,HAMSTRINGS,GLUTES,BAND,COMPOUND,false
+Hip thrust unilateral,Single-Leg Hip Thrust,GLUTES,HAMSTRINGS,BODYWEIGHT,COMPOUND,true
+Hip thrust unilateral con barra,Barbell Single-Leg Hip Thrust,GLUTES,HAMSTRINGS,BARBELL,COMPOUND,false
+Patada de glúteo en cuadrupedia,Quadruped Glute Kickback,GLUTES,,BODYWEIGHT,ISOLATION,true
+Patada de glúteo en cuadrupedia con banda,Band Quadruped Glute Kickback,GLUTES,,BAND,ISOLATION,false
+Abducción en polea,Cable Hip Abduction,GLUTES,,CABLE,ISOLATION,false
+Puente de glúteo a una pierna,Single-Leg Glute Bridge,GLUTES,HAMSTRINGS,BODYWEIGHT,COMPOUND,true
+Frog pump,Frog Pump,GLUTES,HAMSTRINGS,BODYWEIGHT,ISOLATION,true
+Step up lateral con mancuernas,Dumbbell Lateral Step-Up,GLUTES,QUADS,DUMBBELL,COMPOUND,false
+Step up lateral,Lateral Step-Up,GLUTES,QUADS,BODYWEIGHT,COMPOUND,false
+Elevación de talones en prensa unilateral en máquina,Machine Single-Leg Calf Press,CALVES,,MACHINE,ISOLATION,false
+Gemelo con banda,Band Calf Raise,CALVES,,BAND,ISOLATION,false
+Donkey calf raise en máquina,Machine Donkey Calf Raise,CALVES,,MACHINE,ISOLATION,false
+Hollow hold,Hollow Hold,CORE,,BODYWEIGHT,ISOLATION,true
+Dead bug,Dead Bug,CORE,,BODYWEIGHT,ISOLATION,true
+Mountain climbers,Mountain Climbers,CORE,QUADS,BODYWEIGHT,COMPOUND,true
+Leñador en polea,Cable Woodchopper,CORE,,CABLE,ISOLATION,false
+Rueda abdominal de rodillas,Kneeling Ab Wheel,CORE,,BODYWEIGHT,COMPOUND,true
+Elevación de rodillas colgado,Hanging Knee Raise,CORE,,BODYWEIGHT,ISOLATION,true
+Dragon flag,Dragon Flag,CORE,,BODYWEIGHT,COMPOUND,true
+Paseo del maletín con mancuernas,Dumbbell Suitcase Carry,CORE,FOREARMS,DUMBBELL,COMPOUND,false
+Paseo del maletín con kettlebell,Kettlebell Suitcase Carry,CORE,FOREARMS,KETTLEBELL,COMPOUND,false
+Curl de muñeca inverso con mancuernas,Dumbbell Reverse Wrist Curl,FOREARMS,,DUMBBELL,ISOLATION,false
+Curl de muñeca inverso con barra,Barbell Reverse Wrist Curl,FOREARMS,,BARBELL,ISOLATION,false
+Pinza con discos,Plate Pinch,FOREARMS,,OTHER,ISOLATION,false
+Extensión de dedos con banda,Band Finger Extension,FOREARMS,,BAND,ISOLATION,false
+Isométrico de cuello,Neck Isometric,NECK,,BODYWEIGHT,ISOLATION,true
+Encogimiento de cuello con banda,Band Neck Curl,NECK,,BAND,ISOLATION,false
+Man maker con mancuernas,Dumbbell Man Maker,FULL_BODY,SHOULDERS;QUADS,DUMBBELL,COMPOUND,false
+Devil press con mancuernas,Dumbbell Devil Press,FULL_BODY,SHOULDERS;GLUTES,DUMBBELL,COMPOUND,false
+Turkish get-up con kettlebell,Kettlebell Turkish Get-Up,FULL_BODY,CORE;SHOULDERS,KETTLEBELL,COMPOUND,false
+Bear crawl,Bear Crawl,FULL_BODY,CORE;SHOULDERS,BODYWEIGHT,COMPOUND,true
+Sled push,Sled Push,FULL_BODY,QUADS;GLUTES,OTHER,COMPOUND,false
+Wall ball,Wall Ball,FULL_BODY,QUADS;SHOULDERS,OTHER,COMPOUND,false
+Burpee con flexión,Burpee Push-Up,FULL_BODY,CHEST;QUADS,BODYWEIGHT,COMPOUND,true
