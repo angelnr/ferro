@@ -28,6 +28,19 @@ spring:
     out-of-order: false
     clean-disabled: true
 
+ferro:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:dev-only-ferro-jwt-secret-change-me-32b}
+      issuer: ferro
+      access-ttl: 15m
+    refresh:
+      ttl: 30d
+      cookie-secure: ${COOKIE_SECURE:false}
+      cookie-same-site: ${COOKIE_SAME_SITE:Lax}
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
+
 management:
   endpoints:
     web:

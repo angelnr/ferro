@@ -33,6 +33,7 @@ for f in \
   backend/src/test/java/com/ferro/support/AbstractPostgresIntegrationTest.java \
   backend/src/test/java/com/ferro/infrastructure/FlywayMigrationsTest.java \
   backend/src/test/java/com/ferro/infrastructure/FlywaySpringIntegrationTest.java \
+  backend/src/test/java/com/ferro/identity/interfaces/rest/AuthFlowIntegrationTest.java \
   backend/src/main/resources/db/migration/V1__identity_and_extensions.sql \
   backend/src/main/resources/db/migration/V2__catalog.sql \
   backend/src/main/resources/db/migration/V3__training.sql \
@@ -71,6 +72,11 @@ need_grep backend/pom.xml 'jacoco-maven-plugin' 'jacoco'
 need_grep backend/pom.xml 'COVEREDRATIO' 'umbral de cobertura JaCoCo'
 need_grep backend/pom.xml 'testcontainers-postgresql' 'Testcontainers PostgreSQL'
 need_grep backend/pom.xml 'spring-boot-starter-flyway' 'autoconfiguración de Flyway de Boot 4'
+need_grep backend/pom.xml 'spring-boot-starter-oauth2-resource-server' 'resource server JWT'
+need_grep backend/pom.xml 'bcprov-jdk18on' 'BouncyCastle para Argon2id'
+need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'anyRequest\(\)' 'regla de autenticación global'
+need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'SessionCreationPolicy.STATELESS' 'API stateless'
+need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/AuthController.java '/api/v1/auth' 'contrato de auth'
 need_grep backend/pom.xml 'flyway-database-postgresql' 'módulo Flyway PostgreSQL'
 need_grep backend/src/test/java/com/ferro/support/AbstractPostgresIntegrationTest.java 'postgres:18-alpine' 'PostgreSQL real 18 (no H2)'
 need_grep infra/docker-compose.dev.yml 'postgres:18-alpine' 'Postgres 18 en Compose'
@@ -79,6 +85,7 @@ need_grep backend/src/main/resources/db/migration/V3__training.sql 'weight BETWE
 need_grep backend/Dockerfile 'USER ferro' 'imagen backend sin root'
 need_grep backend/Dockerfile 'actuator/health/readiness' 'healthcheck de la imagen backend'
 need_grep infra/docker-compose.prod.yml 'condition: service_healthy' 'arranque ordenado de Postgres/API'
+need_grep infra/docker-compose.prod.yml 'JWT_SECRET' 'secreto JWT obligatorio en producción'
 need_grep backend/pom.xml 'maven-enforcer-plugin' 'enforcer'
 need_grep backend/pom.xml '<java.version>21</java.version>' 'Java 21'
 need_grep frontend/package.json '"test:coverage"' 'script test:coverage'

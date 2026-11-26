@@ -74,8 +74,9 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 
 **✅ M0 completado (26-nov-2026, tag `v0.1.0`).** Esqueleto backend/frontend, esquema
 Flyway `V1–V5`, infraestructura local, Dockerfile/Compose de producción (borrador), CI y
-harness funcionan. Siguiente: **M1 · identidad**. El alcance y los criterios de aceptación
-están en [docs/07-roadmap.md](./docs/07-roadmap.md).
+harness funcionan. **M1 en curso:** registro, login, refresh con rotación, logout y `/auth/me`
+ya implementados con Argon2id, JWT y cookie httpOnly. Faltan verificación de email, OAuth,
+rate limiting, perfil, recuperación de contraseña, OpenAPI y la UI de autenticación.
 
 ## Desarrollo local y verificación
 

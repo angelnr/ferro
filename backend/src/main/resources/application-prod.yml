@@ -3,6 +3,16 @@ logging:
     root: info
     com.ferro: info
 
+ferro:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+    refresh:
+      cookie-secure: true
+      cookie-same-site: None
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:https://ferro.vercel.app}
+
 management:
   endpoints:
     web:

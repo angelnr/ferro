@@ -27,6 +27,7 @@ services:
       DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ferro}
       DB_USER: ${POSTGRES_USER:-ferro}
       DB_PASSWORD: ${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en infra/.env}
+      JWT_SECRET: ${JWT_SECRET:?define JWT_SECRET (>=32 bytes) en infra/.env}
     depends_on:
       postgres:
         condition: service_healthy

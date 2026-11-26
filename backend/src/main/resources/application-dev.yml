@@ -3,6 +3,12 @@ logging:
     com.ferro: debug
     org.flywaydb: info
 
+ferro:
+  security:
+    refresh:
+      cookie-secure: false
+      cookie-same-site: Lax
+
 management:
   endpoint:
     health:

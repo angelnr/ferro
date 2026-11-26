@@ -38,7 +38,7 @@ backend al arrancar (o el test de Testcontainers en CI).
 
 ```bash
 cp infra/.env.example infra/.env
-# edita infra/.env: POSTGRES_PASSWORD, FERRO_DOMAIN e IMAGE_TAG
+# edita infra/.env: POSTGRES_PASSWORD, JWT_SECRET (>=32 bytes), FERRO_DOMAIN e IMAGE_TAG
 docker compose -f infra/docker-compose.prod.yml up -d --build
 ```
 

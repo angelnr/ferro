@@ -2,6 +2,7 @@ package com.ferro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 /**
  * Punto de entrada de Ferro.
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * ArchUnit y Spring Modulith.
  */
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class FerroApplication {
 
     public static void main(String[] args) {

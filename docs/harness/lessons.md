@@ -128,6 +128,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `V3__training.sql`; invariante en `scripts/check-harness.sh`; test de migraciones.
 - **Comprobación:** las migraciones aplican y el test de esquema pasa con el CHECK nuevo.
 
+### L-014 · Una excepción de autenticación no debe revertir el bloqueo/la revocación
+- **Fecha:** 2026-11-26
+- **Síntoma:** al lanzar `InvalidCredentials` tras un intento fallido, o `RefreshInvalid` tras detectar reutilización, la transacción podía revertir el contador de fallos o la revocación de toda la familia de refresh.
+- **Causa raíz:** `@Transactional` hace rollback por defecto ante cualquier `RuntimeException`, incluida la que se usa para devolver 401.
+- **Prevención:** `@Transactional(noRollbackFor = …)` en login y refresh para persistir los efectos de seguridad y responder 401/403 en la misma operación.
+- **Artefacto:** `LoginService`, `RefreshService`; tests `account_locks_after_five_consecutive_failures` y `refresh_rotates_and_reusing_a_revoked_token_revokes_the_family`.
+- **Comprobación:** 5 fallos consecutivos bloquean la cuenta y reutilizar un refresh invalida también el nuevo.
+
 ---
 
 ## Revisión por milestone
