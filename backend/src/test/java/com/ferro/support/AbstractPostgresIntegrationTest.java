@@ -17,7 +17,8 @@ public abstract class AbstractPostgresIntegrationTest {
                     DockerImageName.parse("postgres:18-alpine"))
             .withDatabaseName("ferro_test")
             .withUsername("ferro")
-            .withPassword("ferro");
+            // Contenedor efímero por JVM: la password no protege nada fuera del test.
+            .withPassword("ferro"); // ggignore
 
     static {
         POSTGRES.start();
