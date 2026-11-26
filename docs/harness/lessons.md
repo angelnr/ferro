@@ -232,6 +232,22 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `JdbcExerciseRepository`; `ExerciseSearchIntegrationTest`.
 - **Comprobación:** «press banca», «banca» y «BENCH» devuelven resultados; «extension» encuentra «Extensión».
 
+### L-026 · En PostgreSQL, un `INSERT` duplicado aborta la transacción
+- **Fecha:** 2026-11-26
+- **Síntoma:** al intentar abrir una segunda sesión activa, el handler devolvía 500 en vez de 409: no se podía consultar la sesión activa después del `DuplicateKeyException`.
+- **Causa raíz:** el error de unicidad deja la transacción PostgreSQL en estado abortado; cualquier consulta posterior falla.
+- **Prevención:** comprobar la sesión activa **antes** del `INSERT`; el `catch` de la carrera no vuelve a consultar en esa transacción.
+- **Artefacto:** `JdbcTrainingRepository.create`; test `TrainingFlowIntegrationTest`.
+- **Comprobación:** dos `POST /workout-sessions` devuelven 201 y 409 con `activeSessionId`.
+
+### L-027 · Un `@RestControllerAdvice` genérico eclipsa los handlers específicos
+- **Fecha:** 2026-11-26
+- **Síntoma:** `SessionNotFoundException` acababa en 500 porque el consejo de identidad capturaba `Exception` antes.
+- **Causa raíz:** el orden de los `@RestControllerAdvice` no está definido por especificidad.
+- **Prevención:** los consejos de módulo (`training`, `catalog`) llevan `@Order(HIGHEST_PRECEDENCE)`.
+- **Artefacto:** `TrainingExceptionHandler`, `CatalogExceptionHandler`; tests de 404.
+- **Comprobación:** una sesión ajena devuelve 404, no 500.
+
 ---
 
 ## Revisión por milestone

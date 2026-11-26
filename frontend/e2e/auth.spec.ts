@@ -173,7 +173,7 @@ test('searches the exercise catalog', async ({ page }) => {
   await page.goto('/catalog');
 
   await expect(page.getByRole('heading', { name: 'Ejercicios' })).toBeVisible();
-  await expect(page.getByText('Press de banca con barra')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Press de banca con barra' })).toBeVisible();
 });
 
 test('opens an exercise detail with stats', async ({ page }) => {
@@ -237,4 +237,42 @@ test('opens an exercise detail with stats', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Press de banca con barra' })).toBeVisible();
   await expect(page.getByText('MAX_WEIGHT')).toBeVisible();
   await expect(page.getByText('133.33').first()).toBeVisible();
+});
+
+test('starts a live training session', async ({ page }) => {
+  await authenticated(page);
+  const session = {
+    id: 'session-1',
+    name: 'Sesión del 2026-11-26',
+    status: 'ACTIVE',
+    startedAt: '2026-11-26T10:00:00Z',
+    finishedAt: null,
+    durationSeconds: null,
+    totalVolume: 640,
+    exercises: [
+      {
+        id: 'entry-1',
+        exerciseId: 'exercise-1',
+        name: 'Press de banca con barra',
+        position: 0,
+        restSeconds: null,
+        supersetGroup: null,
+        notes: null,
+        sets: [],
+      },
+    ],
+  };
+  await page.route('**/api/v1/workout-sessions', (route) =>
+    route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(session) }),
+  );
+  await page.route('**/api/v1/workout-sessions/session-1', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) }),
+  );
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Empezar a entrenar' }).click();
+
+  await expect(page).toHaveURL(/\/training\/session-1/);
+  await expect(page.getByRole('heading', { name: 'Sesión del 2026-11-26' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Press de banca con barra' })).toBeVisible();
 });

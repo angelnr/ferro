@@ -115,5 +115,22 @@
     "e1rmSeries": "Progreso e1RM (52 semanas)",
     "noStats": "Aún no hay entrenamientos con este ejercicio.",
     "detailError": "No se pudo cargar el ejercicio."
+  },
+  "training": {
+    "start": "Empezar a entrenar",
+    "startHint": "Registra tus series en vivo. Cada serie se guarda al instante.",
+    "live": "Sesión en vivo",
+    "exercises": "ejercicios",
+    "discard": "Descartar",
+    "finish": "Finalizar",
+    "newPrs": "Nuevos récords",
+    "empty": "Añade un ejercicio para empezar.",
+    "exercise": "Ejercicio",
+    "reps": "Reps",
+    "weight": "Peso (kg)",
+    "logSet": "Registrar serie",
+    "noSets": "Aún no hay series.",
+    "back": "Volver",
+    "notFound": "No se pudo cargar la sesión."
   }
 }

@@ -115,5 +115,22 @@
     "e1rmSeries": "e1RM progress (52 weeks)",
     "noStats": "No workouts with this exercise yet.",
     "detailError": "Could not load the exercise."
+  },
+  "training": {
+    "start": "Start training",
+    "startHint": "Log your sets live. Every set is saved immediately.",
+    "live": "Live session",
+    "exercises": "exercises",
+    "discard": "Discard",
+    "finish": "Finish",
+    "newPrs": "New personal records",
+    "empty": "Add an exercise to get started.",
+    "exercise": "Exercise",
+    "reps": "Reps",
+    "weight": "Weight (kg)",
+    "logSet": "Log set",
+    "noSets": "No sets yet.",
+    "back": "Back",
+    "notFound": "Could not load the session."
   }
 }

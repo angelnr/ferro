@@ -1,8 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthStore } from '../../core/auth/auth.store';
 import { SessionStore } from '../../core/auth/session.store';
+import { TrainingApi } from '../training/training.api';
 
 @Component({
   selector: 'app-home-page',
@@ -18,6 +21,20 @@ import { SessionStore } from '../../core/auth/session.store';
             {{ 'home.hello' | translate }}, {{ user.displayName }}
           </h1>
           <p class="mt-1 text-zinc-400">{{ user.email }}</p>
+        </div>
+
+        <div class="rounded-xl border border-emerald-900 bg-emerald-950/30 p-4">
+          <p class="text-sm text-zinc-300">{{ 'training.startHint' | translate }}</p>
+          <button
+            type="button"
+            (click)="startTraining()"
+            class="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-500"
+          >
+            {{ 'training.start' | translate }}
+          </button>
+          @if (startError(); as message) {
+            <p class="mt-2 text-sm text-red-300">{{ message }}</p>
+          }
         </div>
 
         @if (user.status === 'UNVERIFIED') {
@@ -92,7 +109,27 @@ export class HomePage {
   protected readonly session = inject(SessionStore);
   protected readonly auth = inject(AuthStore);
   private readonly router = inject(Router);
+  private readonly trainingApi = inject(TrainingApi);
   protected readonly resent = signal(false);
+  protected readonly startError = signal<string | null>(null);
+
+  protected async startTraining(): Promise<void> {
+    this.startError.set(null);
+    try {
+      const session = await firstValueFrom(this.trainingApi.start());
+      await this.router.navigate(['/training', session.id]);
+    } catch (error) {
+      const activeId =
+        error instanceof HttpErrorResponse
+          ? (error.error as { activeSessionId?: string } | null)?.activeSessionId
+          : undefined;
+      if (activeId) {
+        await this.router.navigate(['/training', activeId]);
+      } else {
+        this.startError.set('No se pudo iniciar la sesión');
+      }
+    }
+  }
 
   protected async resend(): Promise<void> {
     this.resent.set(await this.auth.resendVerification());

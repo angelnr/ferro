@@ -50,6 +50,12 @@ export const routes: Routes = [
       import('./features/catalog/catalog.page').then((component) => component.CatalogPage),
   },
   {
+    path: 'training/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/training/training.page').then((component) => component.TrainingPage),
+  },
+  {
     path: 'catalog/:id',
     canActivate: [authGuard],
     loadComponent: () =>

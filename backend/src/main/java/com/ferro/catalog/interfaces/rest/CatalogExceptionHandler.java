@@ -2,6 +2,8 @@ package com.ferro.catalog.interfaces.rest;
 
 import java.net.URI;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -17,6 +19,7 @@ import com.ferro.catalog.domain.InvalidFilterException;
 import com.ferro.shared.domain.InvalidPrincipalException;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CatalogExceptionHandler {
 
     @ExceptionHandler(InvalidPrincipalException.class)
