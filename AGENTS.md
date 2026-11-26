@@ -64,7 +64,7 @@ El host puede no tener JDK ni Node: **todo se ejecuta en Docker** con versiones 
 | `make run-frontend` | Angular en Docker en http://localhost:4200 | Probar la UI |
 | `make secrets` | gitleaks sobre el historial | Auditoría |
 | `make baseline` | Actualiza el baseline tras **añadir** tests | Solo con tests nuevos |
-| `make e2e` | Playwright (M1). Hoy falla a propósito | M1+ |
+| `make e2e` | Playwright (Chromium) contra la UI (imagen Docker con navegadores) | M1+ |
 
 Evidencia: `make verify` escribe `.harness/last-verify.txt` y lo imprime. Pega ese bloque.
 
@@ -133,7 +133,9 @@ infra/docker-compose.prod.yml   API + Postgres + Caddy (borrador M0)
 backend/Dockerfile              imagen multi-stage JRE 21, usuario no root
 backend/src/main/resources/db/migration/  migraciones Flyway (V1–V5, esquema completo)
 frontend/src/app/core/auth/     SessionStore, AuthStore, interceptor y guards
-frontend/src/app/features/auth/ login, registro, verificación y recuperación
+frontend/src/app/features/auth/ login, registro, verificación, OAuth y recuperación
+frontend/src/app/features/settings/ perfil y preferencias
+frontend/e2e/                   Playwright (auth + settings)
 frontend/vercel.json            CSP y cabeceras del frontend
 docs/harness/lessons.md          lecciones → reglas/tests/hooks
 docs/harness/test-baseline.json  mínimo de tests exigido

@@ -165,6 +165,20 @@ export const AuthStore = signalStore(
       clearError(): void {
         patchState(store, { error: null });
       },
+
+      async oauthCallback(provider: string, code: string, state: string): Promise<boolean> {
+        patchState(store, { loading: true, error: null });
+        try {
+          const response = await firstValueFrom(api.oauthCallback(provider, code, state));
+          session.setSession(response);
+          return true;
+        } catch (error) {
+          fail(error);
+          return false;
+        } finally {
+          patchState(store, { loading: false });
+        }
+      },
     };
   }),
 );

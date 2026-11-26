@@ -8,10 +8,12 @@ import { AuthResponse } from '../../core/auth/auth.models';
 import { SessionStore } from '../../core/auth/session.store';
 import { ForgotPasswordPage } from './forgot-password/forgot-password.page';
 import { HomePage } from '../home/home.page';
+import { SettingsPage } from '../settings/settings.page';
 import { LoginPage } from './login/login.page';
 import { RegisterPage } from './register/register.page';
 import { ResetPasswordPage } from './reset-password/reset-password.page';
 import { VerifyEmailPage } from './verify-email/verify-email.page';
+import { OAuthCallbackPage } from './oauth-callback/oauth-callback.page';
 
 interface FormPage {
   form: FormGroup;
@@ -45,6 +47,8 @@ function fakeAuth() {
     resendVerification: vi.fn().mockResolvedValue(true),
     requestPasswordReset: vi.fn().mockResolvedValue(true),
     resetPassword: vi.fn().mockResolvedValue(true),
+    updateProfile: vi.fn().mockResolvedValue(true),
+    oauthCallback: vi.fn().mockResolvedValue(true),
     logout: vi.fn().mockResolvedValue(undefined),
     logoutAll: vi.fn().mockResolvedValue(undefined),
     clearError: vi.fn(),
@@ -145,6 +149,25 @@ describe('auth pages', () => {
     expect(fixture.nativeElement.textContent).toContain('La contraseña es demasiado común');
   });
 
+  it('completes the OAuth callback and navigates home', async () => {
+    const auth = fakeAuth();
+    configure(OAuthCallbackPage, auth, {
+      snapshot: {
+        paramMap: convertToParamMap({ provider: 'google' }),
+        queryParamMap: convertToParamMap({ code: 'code', state: 'state' }),
+      },
+    });
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    const fixture = TestBed.createComponent(OAuthCallbackPage);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(auth.oauthCallback).toHaveBeenCalledWith('google', 'code', 'state');
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/');
+  });
+
   it('shows a success state after verifying the email', async () => {
     const auth = fakeAuth();
     configure(VerifyEmailPage, auth, {
@@ -238,6 +261,33 @@ describe('auth pages', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('auth.resetInvalid');
+  });
+
+  it('updates the profile from settings', async () => {
+    const auth = fakeAuth();
+    configure(SettingsPage, auth);
+    const session = TestBed.inject(SessionStore);
+    session.setSession(AUTH_RESPONSE);
+    const fixture = TestBed.createComponent(SettingsPage);
+    fixture.detectChanges();
+    const page = fixture.componentInstance as unknown as FormPage;
+
+    page.form.setValue({
+      displayName: 'Nuevo Nombre',
+      locale: 'en',
+      unitSystem: 'LB',
+      theme: 'LIGHT',
+      defaultRestSeconds: 120,
+    });
+    await page.submit();
+
+    expect(auth.updateProfile).toHaveBeenCalledWith({
+      displayName: 'Nuevo Nombre',
+      locale: 'en',
+      unitSystem: 'LB',
+      theme: 'LIGHT',
+      defaultRestSeconds: 120,
+    });
   });
 
   it('renders the authenticated home and resends verification', async () => {

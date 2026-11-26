@@ -74,9 +74,10 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 
 **✅ M0 completado (26-nov-2026, tag `v0.1.0`).** Esqueleto backend/frontend, esquema
 Flyway `V1–V5`, infraestructura local, Dockerfile/Compose de producción (borrador), CI y
-harness funcionan. **M1 en curso:** backend de identidad completo (registro, login, refresh,
-logout, verificación, perfil, contraseñas, borrado, rate limiting y CSP) y UI Angular de
-login/registro/verificación/recuperación. Faltan OAuth y E2E Playwright.
+harness funcionan. **M1 casi completo:** identidad backend y UI (login, registro, sesión,
+verificación, perfil, contraseñas, borrado, rate limiting, CSP), OAuth Google/GitHub con PKCE
+y E2E Playwright. Falta configurar credenciales OAuth reales y el paso de email para GitHub
+sin email público.
 
 ## Desarrollo local y verificación
 
@@ -105,6 +106,21 @@ Si el 8080 está ocupado: `SERVER_PORT=8082 make run-backend` (y ajusta el targe
 Prometheus en `infra/prometheus/prometheus.yml` si quieres scrapear ese puerto). Las
 migraciones Flyway se aplican solas al arrancar; para resetear la BD en local usa
 `docker compose -f infra/docker-compose.dev.yml down -v`.
+
+### OAuth en local
+
+Los botones de Google/GitHub solo aparecen si el backend tiene credenciales. Crea las apps
+OAuth con redirect URI `http://localhost:4200/auth/oauth/callback/google` (y `.../github`)
+y exporta:
+
+```bash
+GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=... make run-backend
+GITHUB_CLIENT_ID=... GITHUB_CLIENT_SECRET=... make run-backend
+```
+
+Sin credenciales, `GET /api/v1/auth/oauth/providers` devuelve ambos proveedores a `false` y
+los botones quedan ocultos. GitHub con email privado devuelve `OAUTH_EMAIL_REQUIRED`; el paso
+de completar el email en la UI queda pendiente.
 
 | Comando | Para qué |
 |---|---|

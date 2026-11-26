@@ -159,6 +159,17 @@ describe('AuthStore', () => {
     await expect(promise).resolves.toBe(true);
   });
 
+  it('completes an OAuth callback', async () => {
+    const promise = store.oauthCallback('google', 'code', 'state');
+    const request = http.expectOne(`${environment.apiBaseUrl}/auth/oauth/google/callback`);
+
+    expect(request.request.body).toEqual({ code: 'code', state: 'state' });
+    request.flush(AUTH_RESPONSE);
+
+    await expect(promise).resolves.toBe(true);
+    expect(session.isAuthenticated()).toBe(true);
+  });
+
   it('updates the profile and refreshes the user', async () => {
     session.setSession(AUTH_RESPONSE);
     const promise = store.updateProfile({ displayName: 'Nuevo', locale: 'en' });

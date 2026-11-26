@@ -62,4 +62,20 @@ export class AuthApi {
   updateProfile(payload: UpdateProfilePayload): Observable<void> {
     return this.http.patch<void>(`${environment.apiBaseUrl}/users/me`, payload);
   }
+
+  oauthProviders(): Observable<Record<string, boolean>> {
+    return this.http.get<Record<string, boolean>>(`${this.base}/oauth/providers`);
+  }
+
+  oauthAuthorizeUrl(provider: string): Observable<{ url: string }> {
+    return this.http.get<{ url: string }>(`${this.base}/oauth/${provider}/authorize-url`);
+  }
+
+  oauthCallback(provider: string, code: string, state: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.base}/oauth/${provider}/callback`,
+      { code, state },
+      { withCredentials: true },
+    );
+  }
 }

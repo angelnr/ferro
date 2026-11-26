@@ -3,10 +3,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthStore } from '../../../core/auth/auth.store';
+import { OAuthButtons } from '../oauth-buttons/oauth-buttons';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, OAuthButtons],
   template: `
     <section
       class="mx-auto mt-10 w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-xl"
@@ -57,6 +58,8 @@ import { AuthStore } from '../../../core/auth/auth.store';
           {{ (auth.loading() ? 'auth.loading' : 'auth.submitLogin') | translate }}
         </button>
       </form>
+
+      <app-oauth-buttons />
 
       <div class="mt-5 flex items-center justify-between text-sm text-zinc-400">
         <a routerLink="/register" class="hover:text-emerald-400">{{

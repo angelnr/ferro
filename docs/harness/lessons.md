@@ -192,6 +192,22 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `frontend/angular.json`; `auth-pages.spec.ts`; `auth.store.spec.ts`; invariante del harness.
 - **Comprobación:** el informe incluye `features/auth/*` y sigue ≥70 %.
 
+### L-022 · PKCE sin estado en BD: state firmado + code_verifier
+- **Fecha:** 2026-11-26
+- **Síntoma:** el flujo OAuth necesita conservar el `code_verifier` entre authorize y callback, pero no hay tabla para estados.
+- **Causa raíz:** guardar el verifier en memoria rompería con varias instancias; una tabla añade migración y limpieza.
+- **Prevención:** state JWT HS256 de 5 min que transporta provider, verifier y redirect_uri; el callback lo valida con el `JwtDecoder`.
+- **Artefacto:** `OAuthStateService`, `Pkce`, `OAuthFlowIntegrationTest`.
+- **Comprobación:** el callback canjea el code y un state de otro proveedor devuelve 401.
+
+### L-023 · Node Alpine y Playwright glibc no comparten `node_modules`
+- **Fecha:** 2026-11-26
+- **Síntoma:** `make e2e` con la imagen Playwright falló con «Cannot find native binding» al arrancar Angular.
+- **Causa raíz:** los binarios nativos instalados en `node:alpine` son musl; la imagen Playwright es Ubuntu/glibc.
+- **Prevención:** copiar el frontend sin `node_modules` a un directorio de trabajo y hacer `npm ci` dentro de la imagen Playwright.
+- **Artefacto:** `run_playwright` en `scripts/lib.sh`; CI job `e2e`.
+- **Comprobación:** `make e2e` ejecuta 5 tests en Chromium.
+
 ---
 
 ## Revisión por milestone

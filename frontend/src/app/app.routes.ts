@@ -37,6 +37,19 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'auth/oauth/callback/:provider',
+    loadComponent: () =>
+      import('./features/auth/oauth-callback/oauth-callback.page').then(
+        (component) => component.OAuthCallbackPage,
+      ),
+  },
+  {
+    path: 'settings',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/settings/settings.page').then((component) => component.SettingsPage),
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () =>

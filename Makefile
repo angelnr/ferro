@@ -52,9 +52,8 @@ secrets: ## Escanea el historial de git con gitleaks
 docs: ## Comprueba enlaces relativos de README y docs
 	@python3 scripts/check-docs.py
 
-e2e: ## E2E con Playwright (se configura en M1; hoy falla a propósito)
-	@echo "E2E no configurado todavía (M1). No hay victoria que declarar aquí." >&2
-	@exit 2
+e2e: ## E2E Playwright (Chromium) contra la UI
+	@scripts/frontend.sh e2e
 
 dev-up: ## Levanta Postgres 18, Mailpit, Prometheus y Grafana
 	@docker compose -f infra/docker-compose.dev.yml up -d

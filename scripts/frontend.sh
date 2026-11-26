@@ -27,6 +27,9 @@ case "${1:-}" in
       "$NODE_IMAGE" \
       npm start -- --host 0.0.0.0 --port 4200
     ;;
+  e2e)
+    run_playwright
+    ;;
   "")
     die "Uso: scripts/frontend.sh install|shell|run <script>|<args npm…>"
     ;;

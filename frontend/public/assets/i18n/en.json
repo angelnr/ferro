@@ -7,7 +7,8 @@
     "home": "Home",
     "login": "Sign in",
     "logout": "Sign out",
-    "register": "Create account"
+    "register": "Create account",
+    "settings": "Settings"
   },
   "auth": {
     "loginTitle": "Sign in to Ferro",
@@ -48,7 +49,13 @@
     "resetSubmit": "Change password",
     "newPassword": "New password",
     "confirmPassword": "Repeat password",
-    "passwordsMismatch": "Passwords do not match."
+    "passwordsMismatch": "Passwords do not match.",
+    "or": "or",
+    "continueGoogle": "Continue with Google",
+    "continueGithub": "Continue with GitHub",
+    "oauthLoading": "Connecting with the provider…",
+    "oauthErrorTitle": "Sign in failed",
+    "oauthError": "The provider did not return a valid account. Try again."
   },
   "home": {
     "dashboard": "Dashboard",
@@ -62,5 +69,18 @@
     "sessionHint": "The access token lives in memory only; reloading renews it with the httpOnly cookie.",
     "logoutAll": "Sign out everywhere",
     "comingSoon": "Workout tracking arrives in M3. Identity is ready."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Your profile, language, units and default rest.",
+    "locale": "Language",
+    "units": "Units",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "rest": "Default rest (seconds)",
+    "timeZone": "Time zone (read-only)",
+    "saved": "Preferences saved.",
+    "save": "Save changes"
   }
 }

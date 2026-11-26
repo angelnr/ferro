@@ -22,6 +22,12 @@ if [[ "${1:-}" == "run" ]]; then
   exec docker run --rm "${tty_args[@]}" --network host "${DOCKER_COMMON[@]}" \
     --name ferro-api-dev \
     -e SERVER_PORT="${SERVER_PORT:-8080}" \
+    -e GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID:-}" \
+    -e GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET:-}" \
+    -e GOOGLE_REDIRECT_URI="${GOOGLE_REDIRECT_URI:-http://localhost:4200/auth/oauth/callback/google}" \
+    -e GITHUB_CLIENT_ID="${GITHUB_CLIENT_ID:-}" \
+    -e GITHUB_CLIENT_SECRET="${GITHUB_CLIENT_SECRET:-}" \
+    -e GITHUB_REDIRECT_URI="${GITHUB_REDIRECT_URI:-http://localhost:4200/auth/oauth/callback/github}" \
     -v "$M2_CACHE:/tmp/.m2" \
     -w /workspace/backend \
     "$MAVEN_IMAGE" \

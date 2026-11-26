@@ -45,6 +45,17 @@ ferro:
     ttl: 24h
   mail:
     from: ${MAIL_FROM:no-reply@ferro.dev}
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+      client-secret: ${GOOGLE_CLIENT_SECRET:}
+      redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:4200/auth/oauth/callback/google}
+      scopes: ${GOOGLE_OAUTH_SCOPES:openid email profile}
+    github:
+      client-id: ${GITHUB_CLIENT_ID:}
+      client-secret: ${GITHUB_CLIENT_SECRET:}
+      redirect-uri: ${GITHUB_REDIRECT_URI:http://localhost:4200/auth/oauth/callback/github}
+      scopes: ${GITHUB_OAUTH_SCOPES:read:user user:email}
   rate-limit:
     enabled: ${RATE_LIMIT_ENABLED:true}
   security:

@@ -75,6 +75,36 @@ jobs:
             .harness/logs/
             frontend/coverage/
 
+  e2e:
+    name: E2E · Playwright
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+      options: --ipc=host
+    env:
+      CI: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar dependencias
+        run: npm ci
+        working-directory: frontend
+
+      - name: Ejecutar E2E
+        run: npx playwright test
+        working-directory: frontend
+
+      - name: Subir reporte
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          if-no-files-found: warn
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+
   secrets-and-docs:
     name: Secretos y documentación
     runs-on: ubuntu-latest

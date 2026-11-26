@@ -13,6 +13,13 @@
           >
             {{ 'nav.home' | translate }}
           </a>
+          <a
+            routerLink="/settings"
+            routerLinkActive="text-emerald-400"
+            class="text-zinc-400 hover:text-zinc-100"
+          >
+            {{ 'nav.settings' | translate }}
+          </a>
           <span class="hidden text-zinc-500 sm:inline">{{ session.user()?.email }}</span>
           <button type="button" (click)="logout()" class="text-zinc-400 hover:text-zinc-100">
             {{ 'nav.logout' | translate }}

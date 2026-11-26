@@ -43,9 +43,9 @@ Entregables:
 
 **Objetivo:** entrar, registrarse (email+OAuth), tener sesión segura.
 
-**Estado:** 🚧 en curso · backend de identidad completo (registro, login, refresh, logout,
-verificación, perfil, contraseñas, borrado, rate limiting, CSP) y UI Angular de auth
-(login, registro, verificación y recuperación). Faltan OAuth y E2E Playwright.
+**Estado:** 🚧 casi completo · identidad backend y UI, perfil, contraseñas, borrado,
+rate limiting, CSP, OAuth Google/GitHub con PKCE y E2E Playwright. Falta configurar apps
+OAuth reales y el flujo de email para GitHub privado.
 
 Entregables:
 - [ ] RF-001…011 completos (registro, login, refresh+rotación, logout, verificación,

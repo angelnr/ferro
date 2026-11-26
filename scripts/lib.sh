@@ -11,6 +11,7 @@ LOG_DIR="$HARNESS_DIR/logs"
 MAVEN_IMAGE="${FERRO_MAVEN_IMAGE:-maven:3.9-eclipse-temurin-21}"
 NODE_IMAGE="${FERRO_NODE_IMAGE:-node:24.22.1-alpine}"
 GITLEAKS_IMAGE="${FERRO_GITLEAKS_IMAGE:-ghcr.io/gitleaks/gitleaks:latest}"
+PLAYWRIGHT_IMAGE="${FERRO_PLAYWRIGHT_IMAGE:-mcr.microsoft.com/playwright:v1.65.1-noble}"
 
 M2_CACHE="${FERRO_M2_CACHE:-$HOME/.cache/ferro/m2}"
 NPM_CACHE="${FERRO_NPM_CACHE:-$HOME/.cache/ferro/npm}"
@@ -94,6 +95,28 @@ run_gitleaks() {
   require_docker
   ensure_image "$GITLEAKS_IMAGE"
   docker run --rm -v "$ROOT:/repo" "$GITLEAKS_IMAGE" "$@"
+}
+
+run_playwright() {
+  require_docker
+  ensure_image "$PLAYWRIGHT_IMAGE"
+  local e2e_cache="${FERRO_E2E_CACHE:-$HOME/.cache/ferro/e2e}"
+  mkdir -p "$e2e_cache" "$NPM_CACHE"
+  docker run --rm --ipc=host \
+    --user "$(id -u):$(id -g)" \
+    -e HOME=/tmp \
+    -e CI="${CI:-1}" \
+    -v "$ROOT/frontend:/src:ro" \
+    -v "$e2e_cache:/work" \
+    -v "$NPM_CACHE:/tmp/.npm" \
+    -w /work \
+    "$PLAYWRIGHT_IMAGE" \
+    sh -c 'find /work -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
+      cd /src
+      tar --exclude=node_modules --exclude=dist --exclude=.angular --exclude=playwright-report --exclude=test-results -cf - . | (cd /work && tar -xf -)
+      cd /work
+      npm ci --silent
+      npx playwright test "$@"' sh "$@"
 }
 
 mvn_cmd() {

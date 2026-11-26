@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +30,9 @@ import com.ferro.identity.domain.InvalidOriginException;
 import com.ferro.identity.domain.InvalidPasswordException;
 import com.ferro.identity.domain.InvalidProfileException;
 import com.ferro.identity.domain.InvalidUnitSystemException;
+import com.ferro.identity.domain.OAuthEmailRequiredException;
+import com.ferro.identity.domain.OAuthLoginException;
+import com.ferro.identity.domain.OAuthNotConfiguredException;
 import com.ferro.identity.domain.PasswordResetInvalidException;
 import com.ferro.identity.domain.RefreshInvalidException;
 import com.ferro.identity.domain.VerificationInvalidException;
@@ -37,6 +42,8 @@ import com.ferro.shared.domain.RateLimitExceededException;
 /** Traduce excepciones a RFC 7807 con un `code` estable para la UI y los tests. */
 @RestControllerAdvice
 public class AuthExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ProblemDetail> validation(MethodArgumentNotValidException exception) {
@@ -102,6 +109,21 @@ public class AuthExceptionHandler {
                 .body(problem);
     }
 
+    @ExceptionHandler(OAuthLoginException.class)
+    ResponseEntity<ProblemDetail> oauthFailed(OAuthLoginException exception) {
+        return response(problem(HttpStatus.UNAUTHORIZED, "OAUTH_FAILED", exception.getMessage()));
+    }
+
+    @ExceptionHandler(OAuthEmailRequiredException.class)
+    ResponseEntity<ProblemDetail> oauthEmailRequired(OAuthEmailRequiredException exception) {
+        return response(problem(HttpStatus.UNPROCESSABLE_ENTITY, "OAUTH_EMAIL_REQUIRED", exception.getMessage()));
+    }
+
+    @ExceptionHandler(OAuthNotConfiguredException.class)
+    ResponseEntity<ProblemDetail> oauthNotConfigured(OAuthNotConfiguredException exception) {
+        return response(problem(HttpStatus.SERVICE_UNAVAILABLE, "OAUTH_NOT_CONFIGURED", exception.getMessage()));
+    }
+
     @ExceptionHandler(AccountLockedException.class)
     ResponseEntity<ProblemDetail> accountLocked(AccountLockedException exception) {
         ProblemDetail problem = problem(
@@ -139,6 +161,7 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<ProblemDetail> unexpected(Exception exception) {
+        log.error("Error no controlado", exception);
         return response(
                 problem(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "Error interno, inténtalo más tarde"));
     }

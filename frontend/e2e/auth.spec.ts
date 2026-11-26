@@ -1,0 +1,143 @@
+import { Page, expect, test } from '@playwright/test';
+
+const USER = {
+  id: '01936a1e-0000-7000-8000-000000000000',
+  displayName: 'E2E Tester',
+  email: 'e2e@ferro.dev',
+  status: 'ACTIVE',
+  locale: 'es',
+  unitSystem: 'KG',
+  theme: 'DARK',
+  timeZone: 'Europe/Madrid',
+  defaultRestSeconds: 90,
+};
+
+const AUTH_RESPONSE = { user: USER, accessToken: 'e2e-access-token' };
+
+const REFRESH_INVALID = {
+  status: 401,
+  contentType: 'application/problem+json',
+  body: JSON.stringify({ code: 'REFRESH_INVALID', detail: 'Refresh token no válido' }),
+};
+
+async function anonymous(page: Page): Promise<void> {
+  await page.route('**/api/v1/auth/refresh', (route) => route.fulfill(REFRESH_INVALID));
+  await page.route('**/api/v1/auth/oauth/providers', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: '{"google":false,"github":false}',
+    }),
+  );
+}
+
+async function authenticated(page: Page): Promise<void> {
+  await page.route('**/api/v1/auth/oauth/providers', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: '{"google":false,"github":false}',
+    }),
+  );
+  await page.route('**/api/v1/auth/refresh', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(AUTH_RESPONSE),
+    }),
+  );
+}
+
+test('redirects anonymous users to login', async ({ page }) => {
+  await anonymous(page);
+  await page.goto('/');
+
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole('heading', { name: 'Entra en Ferro' })).toBeVisible();
+});
+
+test('logs in and reaches the home page', async ({ page }) => {
+  await anonymous(page);
+  await page.route('**/api/v1/auth/login', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(AUTH_RESPONSE),
+    }),
+  );
+
+  await page.goto('/login');
+  await page.getByLabel('Email').fill(USER.email);
+  await page.getByLabel('Contraseña').fill('Ferro12345');
+  await page.getByRole('button', { name: 'Entrar' }).click();
+
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('heading', { name: `Hola, ${USER.displayName}` })).toBeVisible();
+  await expect(page.getByRole('main').getByText(USER.email)).toBeVisible();
+});
+
+test('registers a new account and shows the verification banner', async ({ page }) => {
+  await anonymous(page);
+  await page.route('**/api/v1/auth/register', (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        user: { ...USER, status: 'UNVERIFIED' },
+        accessToken: 'e2e-access-token',
+      }),
+    }),
+  );
+
+  await page.goto('/register');
+  await page.getByLabel('Nombre').fill('E2E Tester');
+  await page.getByLabel('Email').fill('nuevo@ferro.dev');
+  await page.getByLabel('Contraseña').fill('Ferro12345');
+  await page.getByLabel('Acepto el tratamiento de mis datos de salud para usar Ferro.').check();
+  await page.getByRole('button', { name: 'Crear cuenta' }).click();
+
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByText('Tu email aún no está verificado.')).toBeVisible();
+});
+
+test('updates preferences from settings', async ({ page }) => {
+  await authenticated(page);
+  await page.route('**/api/v1/users/me', (route) => route.fulfill({ status: 204, body: '' }));
+  await page.route('**/api/v1/auth/me', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        user: { ...USER, displayName: 'Nombre Nuevo', locale: 'en', unitSystem: 'LB' },
+        preferences: {
+          locale: 'en',
+          unitSystem: 'LB',
+          theme: 'DARK',
+          timeZone: USER.timeZone,
+          defaultRestSeconds: 120,
+          timerSound: true,
+        },
+      }),
+    }),
+  );
+
+  await page.goto('/settings');
+  await page.getByLabel('Nombre').fill('Nombre Nuevo');
+  await page.getByLabel('Idioma').selectOption('en');
+  await page.getByLabel('Unidades').selectOption('LB');
+  await page.getByLabel('Descanso por defecto (segundos)').fill('120');
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+
+  await expect(page.getByText('Preferencias guardadas.')).toBeVisible();
+});
+
+test('confirms an email from the verification link', async ({ page }) => {
+  await anonymous(page);
+  await page.route('**/api/v1/auth/email-verification/confirm', (route) =>
+    route.fulfill({ status: 204, body: '' }),
+  );
+
+  await page.goto('/verify-email?token=e2e-token');
+
+  await expect(page.getByRole('heading', { name: 'Email verificado' })).toBeVisible();
+});

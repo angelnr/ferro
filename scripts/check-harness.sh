@@ -40,6 +40,11 @@ for f in \
   backend/src/main/java/com/ferro/platform/security/OpenApiConfig.java \
   backend/src/main/java/com/ferro/identity/interfaces/rest/UserController.java \
   backend/src/main/java/com/ferro/identity/interfaces/rest/PasswordResetController.java \
+  backend/src/main/java/com/ferro/identity/interfaces/rest/OAuthController.java \
+  backend/src/main/java/com/ferro/identity/application/oauth/OAuthLoginService.java \
+  backend/src/main/java/com/ferro/identity/infrastructure/oauth/GoogleOAuthClient.java \
+  backend/src/main/java/com/ferro/identity/infrastructure/oauth/GitHubOAuthClient.java \
+  backend/src/test/java/com/ferro/identity/interfaces/rest/OAuthFlowIntegrationTest.java \
   backend/src/main/java/com/ferro/identity/application/PasswordResetService.java \
   backend/src/main/java/com/ferro/platform/api/RateLimiter.java \
   backend/src/main/java/com/ferro/platform/ratelimit/RateLimitFilter.java \
@@ -65,6 +70,11 @@ for f in \
   frontend/src/app/core/auth/auth.guard.ts \
   frontend/src/app/features/auth/login/login.page.ts \
   frontend/src/app/features/auth/register/register.page.ts \
+  frontend/src/app/features/auth/oauth-buttons/oauth-buttons.ts \
+  frontend/src/app/features/auth/oauth-callback/oauth-callback.page.ts \
+  frontend/src/app/features/settings/settings.page.ts \
+  frontend/e2e/auth.spec.ts \
+  frontend/playwright.config.ts \
   frontend/src/app/features/home/home.page.ts \
   frontend/src/app/features/auth/auth-pages.spec.ts \
   frontend/vercel.json \
@@ -98,6 +108,11 @@ need_grep backend/pom.xml 'spring-boot-starter-oauth2-resource-server' 'resource
 need_grep backend/pom.xml 'bcprov-jdk18on' 'BouncyCastle para Argon2id'
 need_grep backend/pom.xml 'springdoc-openapi-starter-webmvc-ui' 'OpenAPI/Swagger'
 need_grep backend/pom.xml 'spring-boot-starter-mail' 'envío de emails'
+need_grep backend/src/main/resources/application.yml 'oauth' 'configuración OAuth'
+need_grep backend/src/main/java/com/ferro/identity/application/oauth/Pkce.java 'S256|SHA-256' 'PKCE'
+need_grep frontend/package.json '@playwright/test' 'Playwright'
+need_grep frontend/playwright.config.ts 'webServer' 'E2E con servidor propio'
+need_grep Makefile 'e2e:' 'target E2E'
 need_grep backend/src/main/resources/application.yml 'api-docs' 'ruta de OpenAPI'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'email-verification/confirm' 'confirmación pública'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java '/api/api-docs' 'OpenAPI público'

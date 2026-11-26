@@ -7,7 +7,8 @@
     "home": "Inicio",
     "login": "Entrar",
     "logout": "Salir",
-    "register": "Crear cuenta"
+    "register": "Crear cuenta",
+    "settings": "Ajustes"
   },
   "auth": {
     "loginTitle": "Entra en Ferro",
@@ -48,7 +49,13 @@
     "resetSubmit": "Cambiar contraseña",
     "newPassword": "Nueva contraseña",
     "confirmPassword": "Repite la contraseña",
-    "passwordsMismatch": "Las contraseñas no coinciden."
+    "passwordsMismatch": "Las contraseñas no coinciden.",
+    "or": "o",
+    "continueGoogle": "Continuar con Google",
+    "continueGithub": "Continuar con GitHub",
+    "oauthLoading": "Conectando con el proveedor…",
+    "oauthErrorTitle": "No se pudo iniciar sesión",
+    "oauthError": "El proveedor no devolvió una cuenta válida. Inténtalo de nuevo."
   },
   "home": {
     "dashboard": "Panel",
@@ -62,5 +69,18 @@
     "sessionHint": "El access token vive solo en memoria; al recargar se renueva con la cookie httpOnly.",
     "logoutAll": "Cerrar todas las sesiones",
     "comingSoon": "El tracking de entrenamientos llega en M3. La identidad ya está lista."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "subtitle": "Tu perfil, idioma, unidades y descanso por defecto.",
+    "locale": "Idioma",
+    "units": "Unidades",
+    "theme": "Tema",
+    "themeDark": "Oscuro",
+    "themeLight": "Claro",
+    "rest": "Descanso por defecto (segundos)",
+    "timeZone": "Zona horaria (solo lectura)",
+    "saved": "Preferencias guardadas.",
+    "save": "Guardar cambios"
   }
 }

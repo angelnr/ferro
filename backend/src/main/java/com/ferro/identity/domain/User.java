@@ -99,6 +99,27 @@ public final class User {
                 now);
     }
 
+    public static User registerOAuth(Email email, DisplayName displayName, boolean emailVerified, Instant now) {
+        return new User(
+                UuidV7.generate(),
+                email,
+                null,
+                displayName,
+                emailVerified ? UserStatus.ACTIVE : UserStatus.UNVERIFIED,
+                AppLocale.ES,
+                UnitSystem.KG,
+                Theme.DARK,
+                "Europe/Madrid",
+                90,
+                true,
+                emailVerified ? now : null,
+                now,
+                0,
+                null,
+                now,
+                now);
+    }
+
     public static User rehydrate(
             UUID id,
             Email email,
