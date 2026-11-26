@@ -164,6 +164,8 @@ need_grep frontend/src/app/features/training/training.page.ts 'restRemaining' 't
 need_grep backend/src/main/java/com/ferro/training/application/TrainingMaintenanceService.java 'autoCloseStaleSessions' 'auto-cierre 24 h'
 need_grep backend/src/main/java/com/ferro/training/application/TrainingService.java 'groupSuperset' 'supersets'
 need_grep frontend/src/app/features/training/training.page.ts 'groupSuperset' 'UI de supersets'
+need_grep frontend/src/app/features/training/training.page.ts 'draggable' 'drag & drop de ejercicios'
+need_grep frontend/src/app/features/training/training.page.ts 'totalSets' 'resumen de sesión'
 need_grep backend/src/main/resources/application.yml 'rate-limit' 'configuración de rate limit'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityHeadersFilter.java 'Content-Security-Policy' 'cabecera CSP'
 need_grep frontend/vercel.json 'Content-Security-Policy' 'CSP del frontend'

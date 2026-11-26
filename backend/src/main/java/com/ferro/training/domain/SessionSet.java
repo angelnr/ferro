@@ -13,4 +13,5 @@ public record SessionSet(
         Integer rir,
         BigDecimal volume,
         BigDecimal e1rm,
-        Instant loggedAt) {}
+        Instant loggedAt,
+        String notes) {}

@@ -83,9 +83,11 @@ búsqueda sin acentos en ES/EN, filtros, paginación, CRUD/archivado custom, est
 reales de detalle (PRs, volumen, e1RM y serie de 52 semanas), combobox accesible con debounce
 y creación inline.
 
-**M3 en curso:** sesión en vivo con ejercicios, series inmediatas editables, reordenación,
-supersets, descanso/cronómetro, volumen/e1RM, PRs, descarte, auto-cierre 24 h y performance
-anterior vía API. Faltan series objetivo (M4), historial visual y pulido mobile-first.
+**M3 completado:** sesión en vivo con ejercicios (añadir, reordenar, drag & drop, eliminar,
+supersets A1/A2), series inmediatas con tipo/nota y edición, performance anterior + PR,
+descanso/cronómetro, volumen/e1RM, PRs, resumen al finalizar, descarte, recuperación de sesión
+activa, auto-cierre 24 h y notas de sesión/ejercicio/serie. Series objetivo y plantillas llegan
+en M4; el historial visual, en M5.
 
 ## Desarrollo local y verificación
 

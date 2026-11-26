@@ -46,6 +46,12 @@ async function authenticated(page: Page): Promise<void> {
       body: JSON.stringify(AUTH_RESPONSE),
     }),
   );
+  await page.route('**/api/v1/workout-sessions/active', (route) =>
+    route.fulfill({ status: 204, body: '' }),
+  );
+  await page.route('**/api/v1/exercises/*', (route) =>
+    route.fulfill({ status: 404, contentType: 'application/problem+json', body: '{}' }),
+  );
 }
 
 test('redirects anonymous users to login', async ({ page }) => {
@@ -239,16 +245,47 @@ test('opens an exercise detail with stats', async ({ page }) => {
   await expect(page.getByText('133.33').first()).toBeVisible();
 });
 
-test('starts a live training session', async ({ page }) => {
+test('runs a full live training session', async ({ page }) => {
   await authenticated(page);
-  const session = {
+  interface MockSet {
+    id: string;
+    position: number;
+    setType: string;
+    reps: number;
+    weight: number;
+    rir: number | null;
+    volume: number;
+    e1rm: number;
+    loggedAt: string;
+  }
+  interface MockEntry {
+    id: string;
+    exerciseId: string;
+    name: string;
+    position: number;
+    restSeconds: number | null;
+    supersetGroup: number | null;
+    notes: string | null;
+    sets: MockSet[];
+  }
+  interface MockSession {
+    id: string;
+    name: string;
+    status: string;
+    startedAt: string;
+    finishedAt: string | null;
+    durationSeconds: number | null;
+    totalVolume: number;
+    exercises: MockEntry[];
+  }
+  const session: MockSession = {
     id: 'session-1',
     name: 'Sesión del 2026-11-26',
     status: 'ACTIVE',
     startedAt: '2026-11-26T10:00:00Z',
     finishedAt: null,
     durationSeconds: null,
-    totalVolume: 640,
+    totalVolume: 0,
     exercises: [
       {
         id: 'entry-1',
@@ -260,46 +297,93 @@ test('starts a live training session', async ({ page }) => {
         notes: null,
         sets: [],
       },
+      {
+        id: 'entry-2',
+        exerciseId: 'exercise-2',
+        name: 'Sentadilla trasera con barra',
+        position: 1,
+        restSeconds: null,
+        supersetGroup: null,
+        notes: null,
+        sets: [],
+      },
+      {
+        id: 'entry-3',
+        exerciseId: 'exercise-3',
+        name: 'Peso muerto con barra',
+        position: 2,
+        restSeconds: null,
+        supersetGroup: null,
+        notes: null,
+        sets: [],
+      },
     ],
   };
+
   await page.route('**/api/v1/workout-sessions', (route) =>
     route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify(session) }),
   );
   await page.route('**/api/v1/workout-sessions/session-1', (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) }),
   );
-
-  await page.route('**/api/v1/workout-sessions/session-1/exercises/entry-1/sets', (route) =>
-    route.fulfill({
+  await page.route('**/api/v1/exercises/*/history?**', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+  );
+  let setCounter = 0;
+  await page.route('**/api/v1/workout-sessions/session-1/exercises/*/sets', (route) => {
+    const entryId = new URL(route.request().url()).pathname.split('/').at(-2);
+    const entry = session.exercises.find((candidate) => candidate.id === entryId);
+    if (!entry) {
+      return route.fulfill({ status: 404, body: '{}' });
+    }
+    const body = route.request().postDataJSON() as { reps: number; weight: number };
+    setCounter += 1;
+    const set: MockSet = {
+      id: `set-${setCounter}`,
+      position: entry.sets.length,
+      setType: 'NORMAL',
+      reps: body.reps,
+      weight: body.weight,
+      rir: null,
+      volume: body.reps * body.weight,
+      e1rm: body.weight * (1 + body.reps / 30),
+      loggedAt: '2026-11-26T10:05:00Z',
+    };
+    entry.sets.push(set);
+    session.totalVolume += set.volume;
+    return route.fulfill({
       status: 201,
       contentType: 'application/json',
-      body: JSON.stringify({
-        id: 'set-1',
-        position: 0,
-        setType: 'NORMAL',
-        reps: 8,
-        weight: 80,
-        rir: null,
-        volume: 640,
-        e1rm: 101.33,
-        loggedAt: '2026-11-26T10:05:00Z',
-      }),
-    }),
-  );
+      body: JSON.stringify(set),
+    });
+  });
+  await page.route('**/api/v1/workout-sessions/session-1/supersets', (route) => {
+    const body = route.request().postDataJSON() as { entryIds: string[]; group: number | null };
+    for (const entry of session.exercises) {
+      if (body.entryIds.includes(entry.id)) {
+        entry.supersetGroup = body.group;
+      }
+    }
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(session),
+    });
+  });
   await page.route('**/api/v1/workout-sessions/session-1/finish', (route) =>
     route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
-        session: { ...session, status: 'FINISHED', totalVolume: 640 },
+        session: { ...session, status: 'FINISHED', finishedAt: '2026-11-26T11:00:00Z' },
         newPersonalRecords: [
           {
             exerciseId: 'exercise-1',
             exerciseName: 'Press de banca con barra',
             prType: 'MAX_WEIGHT',
-            value: 80,
+            value: 20,
             previousValue: null,
-            achievedAt: '2026-11-26T10:10:00Z',
+            achievedAt: '2026-11-26T11:00:00Z',
           },
         ],
       }),
@@ -312,9 +396,27 @@ test('starts a live training session', async ({ page }) => {
   await expect(page).toHaveURL(/\/training\/session-1/);
   await expect(page.getByRole('heading', { name: 'Sesión del 2026-11-26' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Press de banca con barra' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sentadilla trasera con barra' })).toBeVisible();
 
-  await page.getByRole('button', { name: 'Registrar serie' }).click();
+  await page.getByLabel('Seleccionar ejercicio').nth(0).check();
+  await page.getByLabel('Seleccionar ejercicio').nth(1).check();
+  await page.getByRole('button', { name: 'Agrupar superset' }).click();
+  await expect(page.getByText('A1', { exact: true })).toBeVisible();
+  await expect(page.getByText('A2', { exact: true })).toBeVisible();
+
+  for (let index = 0; index < 12; index += 1) {
+    const refreshed = page.waitForResponse(
+      (response) =>
+        response.url().endsWith('/workout-sessions/session-1') &&
+        response.request().method() === 'GET',
+    );
+    await page.getByRole('button', { name: 'Registrar serie' }).click();
+    await refreshed;
+  }
+
+  await expect(page.getByText('Descanso', { exact: true })).toBeVisible();
+  await expect(page.getByText('1920 kg')).toBeVisible();
+
   await page.getByRole('button', { name: 'Finalizar' }).click();
-
   await expect(page.getByText('MAX_WEIGHT')).toBeVisible();
 });

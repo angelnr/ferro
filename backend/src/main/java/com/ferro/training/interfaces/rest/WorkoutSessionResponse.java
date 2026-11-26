@@ -11,6 +11,7 @@ import com.ferro.training.domain.WorkoutSession;
 public record WorkoutSessionResponse(
         String id,
         String name,
+        String notes,
         String status,
         Instant startedAt,
         Instant finishedAt,
@@ -22,6 +23,7 @@ public record WorkoutSessionResponse(
         return new WorkoutSessionResponse(
                 session.id().toString(),
                 session.name(),
+                session.notes(),
                 session.status().name(),
                 session.startedAt(),
                 session.finishedAt(),
@@ -62,7 +64,8 @@ public record WorkoutSessionResponse(
             Integer rir,
             BigDecimal volume,
             BigDecimal e1rm,
-            Instant loggedAt) {
+            Instant loggedAt,
+            String notes) {
 
         public static SetEntry from(SessionSet set) {
             return new SetEntry(
@@ -74,7 +77,8 @@ public record WorkoutSessionResponse(
                     set.rir(),
                     set.volume(),
                     set.e1rm(),
-                    set.loggedAt());
+                    set.loggedAt(),
+                    set.notes());
         }
     }
 }

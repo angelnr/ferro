@@ -51,13 +51,14 @@ public class JdbcTrainingRepository implements TrainingRepository {
     public Optional<WorkoutSession> find(UUID userId, UUID sessionId) {
         List<Row> rows = jdbc.query(
                 """
-                SELECT id, name, status, started_at, finished_at, duration_seconds, total_volume
+                SELECT id, name, notes, status, started_at, finished_at, duration_seconds, total_volume
                 FROM workout_sessions WHERE id = :sessionId AND user_id = :userId
                 """,
                 new MapSqlParameterSource("sessionId", sessionId).addValue("userId", userId),
                 (rs, rowNum) -> new Row(
                         rs.getObject("id", UUID.class),
                         rs.getString("name"),
+                        rs.getString("notes"),
                         SessionStatus.valueOf(rs.getString("status")),
                         instant(rs.getTimestamp("started_at")),
                         instant(rs.getTimestamp("finished_at")),
@@ -135,7 +136,8 @@ public class JdbcTrainingRepository implements TrainingRepository {
             Integer rir,
             BigDecimal volume,
             BigDecimal e1rm,
-            Instant loggedAt) {
+            Instant loggedAt,
+            String notes) {
         Integer position = jdbc.queryForObject(
                 "SELECT coalesce(max(position), -1) + 1 FROM session_sets WHERE session_exercise_id = :id",
                 new MapSqlParameterSource("id", entryId),
@@ -144,8 +146,8 @@ public class JdbcTrainingRepository implements TrainingRepository {
         jdbc.update(
                 """
                 INSERT INTO session_sets
-                    (id, session_exercise_id, position, set_type, reps, weight, rir, logged_at)
-                VALUES (:id, :entryId, :position, CAST(:type AS set_type), :reps, :weight, :rir, :loggedAt)
+                    (id, session_exercise_id, position, set_type, reps, weight, rir, logged_at, notes)
+                VALUES (:id, :entryId, :position, CAST(:type AS set_type), :reps, :weight, :rir, :loggedAt, :notes)
                 """,
                 new MapSqlParameterSource()
                         .addValue("id", setId)
@@ -155,8 +157,9 @@ public class JdbcTrainingRepository implements TrainingRepository {
                         .addValue("reps", reps)
                         .addValue("weight", weight)
                         .addValue("rir", rir)
-                        .addValue("loggedAt", Timestamp.from(loggedAt)));
-        return new SessionSet(setId, next, setType, reps, weight, rir, volume, e1rm, loggedAt);
+                        .addValue("loggedAt", Timestamp.from(loggedAt))
+                        .addValue("notes", notes));
+        return new SessionSet(setId, next, setType, reps, weight, rir, volume, e1rm, loggedAt, notes);
     }
 
     @Override
@@ -334,6 +337,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
         return new WorkoutSession(
                 row.id(),
                 row.name(),
+                row.notes(),
                 row.status(),
                 row.startedAt(),
                 row.finishedAt(),
@@ -344,7 +348,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
 
     private List<SessionSet> sets(UUID entryId) {
         return jdbc.query("""
-                SELECT id, position, set_type, reps, weight, rir, logged_at
+                SELECT id, position, set_type, reps, weight, rir, logged_at, notes
                 FROM session_sets WHERE session_exercise_id = :id ORDER BY position
                 """, new MapSqlParameterSource("id", entryId), (rs, rowNum) -> {
             SetType type = SetType.valueOf(rs.getString("set_type"));
@@ -359,7 +363,8 @@ public class JdbcTrainingRepository implements TrainingRepository {
                     (Integer) rs.getObject("rir"),
                     SetMath.volume(type, weight, reps),
                     SetMath.e1rm(type, weight, reps),
-                    instant(rs.getTimestamp("logged_at")));
+                    instant(rs.getTimestamp("logged_at")),
+                    rs.getString("notes"));
         });
     }
 
@@ -370,6 +375,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
     private record Row(
             UUID id,
             String name,
+            String notes,
             SessionStatus status,
             Instant startedAt,
             Instant finishedAt,
@@ -451,18 +457,20 @@ public class JdbcTrainingRepository implements TrainingRepository {
     }
 
     @Override
-    public void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir) {
+    public void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir, String notes) {
         jdbc.update(
                 """
                 UPDATE session_sets SET set_type = CAST(:type AS set_type), reps = :reps,
-                    weight = :weight, rir = :rir, updated_at = now() WHERE id = :id
+                    weight = :weight, rir = :rir, notes = coalesce(:notes, notes),
+                    updated_at = now() WHERE id = :id
                 """,
                 new MapSqlParameterSource()
                         .addValue("id", setId)
                         .addValue("type", type.name())
                         .addValue("reps", reps)
                         .addValue("weight", weight)
-                        .addValue("rir", rir));
+                        .addValue("rir", rir)
+                        .addValue("notes", notes));
     }
 
     @Override

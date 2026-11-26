@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthStore } from '../../core/auth/auth.store';
 import { SessionStore } from '../../core/auth/session.store';
 import { TrainingApi } from '../training/training.api';
+import { WorkoutSession } from '../training/training.models';
 
 @Component({
   selector: 'app-home-page',
@@ -24,14 +25,27 @@ import { TrainingApi } from '../training/training.api';
         </div>
 
         <div class="rounded-xl border border-emerald-900 bg-emerald-950/30 p-4">
-          <p class="text-sm text-zinc-300">{{ 'training.startHint' | translate }}</p>
-          <button
-            type="button"
-            (click)="startTraining()"
-            class="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-500"
-          >
-            {{ 'training.start' | translate }}
-          </button>
+          @if (activeSession(); as active) {
+            <p class="text-sm font-semibold text-emerald-200">
+              {{ 'training.activeBanner' | translate }}
+            </p>
+            <button
+              type="button"
+              (click)="continueTraining()"
+              class="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-500"
+            >
+              {{ 'training.continue' | translate }} · {{ active.name }}
+            </button>
+          } @else {
+            <p class="text-sm text-zinc-300">{{ 'training.startHint' | translate }}</p>
+            <button
+              type="button"
+              (click)="startTraining()"
+              class="mt-3 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-500"
+            >
+              {{ 'training.start' | translate }}
+            </button>
+          }
           @if (startError(); as message) {
             <p class="mt-2 text-sm text-red-300">{{ message }}</p>
           }
@@ -105,13 +119,29 @@ import { TrainingApi } from '../training/training.api';
     }
   `,
 })
-export class HomePage {
+export class HomePage implements OnInit {
   protected readonly session = inject(SessionStore);
   protected readonly auth = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly trainingApi = inject(TrainingApi);
   protected readonly resent = signal(false);
   protected readonly startError = signal<string | null>(null);
+  protected readonly activeSession = signal<WorkoutSession | null>(null);
+
+  async ngOnInit(): Promise<void> {
+    try {
+      this.activeSession.set(await firstValueFrom(this.trainingApi.active()));
+    } catch {
+      this.activeSession.set(null);
+    }
+  }
+
+  protected async continueTraining(): Promise<void> {
+    const active = this.activeSession();
+    if (active) {
+      await this.router.navigate(['/training', active.id]);
+    }
+  }
 
   protected async startTraining(): Promise<void> {
     this.startError.set(null);

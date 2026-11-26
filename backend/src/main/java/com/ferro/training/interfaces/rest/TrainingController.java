@@ -76,8 +76,8 @@ public class TrainingController {
             @PathVariable UUID entryId,
             @Valid @RequestBody LogSetRequest request) {
         SetType type = parseSetType(request.setType());
-        SessionSet set =
-                training.logSet(userId(jwt), id, entryId, type, request.reps(), request.weight(), request.rir());
+        SessionSet set = training.logSet(
+                userId(jwt), id, entryId, type, request.reps(), request.weight(), request.rir(), request.notes());
         return ResponseEntity.status(HttpStatus.CREATED).body(WorkoutSessionResponse.SetEntry.from(set));
     }
 
@@ -137,7 +137,8 @@ public class TrainingController {
                 type,
                 request.reps() == null ? 0 : request.reps(),
                 request.weight() == null ? java.math.BigDecimal.ZERO : request.weight(),
-                request.rir()));
+                request.rir(),
+                request.notes()));
     }
 
     @DeleteMapping("/{id}/exercises/{entryId}/sets/{setId}")

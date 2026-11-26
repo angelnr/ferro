@@ -100,6 +100,63 @@ class TrainingFlowIntegrationTest extends AbstractPostgresIntegrationTest {
     }
 
     @Test
+    void persists_session_exercise_and_set_notes() throws Exception {
+        String body = mockMvc.perform(post("/api/v1/workout-sessions").header("Authorization", bearer(token)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        String sessionId = JsonPath.read(body, "$.id");
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId)
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"name\":\"Pierna pesada\",\"notes\":\"Dormir más\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Pierna pesada"))
+                .andExpect(jsonPath("$.notes").value("Dormir más"));
+
+        String exerciseBody = mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises")
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"exerciseId\":\"" + exerciseId + "\"}"))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        String entryId = JsonPath.read(exerciseBody, "$.exercises[0].id");
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId)
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"restSeconds\":120,\"notes\":\"Codo alto\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises[0].restSeconds").value(120))
+                .andExpect(jsonPath("$.exercises[0].notes").value("Codo alto"));
+
+        String setBody = mockMvc.perform(
+                        post("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId + "/sets")
+                                .header("Authorization", bearer(token))
+                                .contentType(APPLICATION_JSON)
+                                .content("{\"reps\":8,\"weight\":80,\"setType\":\"NORMAL\",\"notes\":\"Subió fácil\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.notes").value("Subió fácil"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        String setId = JsonPath.read(setBody, "$.id");
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId + "/sets/" + setId)
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"reps\":9,\"weight\":82.5,\"rir\":1,\"setType\":\"FAILURE\",\"notes\":\"Dura\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises[0].sets[0].setType").value("FAILURE"))
+                .andExpect(jsonPath("$.exercises[0].sets[0].reps").value(9))
+                .andExpect(jsonPath("$.exercises[0].sets[0].notes").value("Dura"));
+    }
+
+    @Test
     void discards_a_session_and_hides_it_from_other_users() throws Exception {
         String body = mockMvc.perform(post("/api/v1/workout-sessions").header("Authorization", bearer(token)))
                 .andExpect(status().isCreated())

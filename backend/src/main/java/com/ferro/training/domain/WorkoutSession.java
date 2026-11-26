@@ -8,6 +8,7 @@ import java.util.UUID;
 public record WorkoutSession(
         UUID id,
         String name,
+        String notes,
         SessionStatus status,
         Instant startedAt,
         Instant finishedAt,

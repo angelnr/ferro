@@ -36,7 +36,8 @@ public interface TrainingRepository {
             Integer rir,
             BigDecimal volume,
             BigDecimal e1rm,
-            Instant loggedAt);
+            Instant loggedAt,
+            String notes);
 
     BigDecimal totalVolume(UUID sessionId);
 
@@ -58,7 +59,7 @@ public interface TrainingRepository {
 
     void setSupersetGroup(UUID sessionId, List<UUID> entryIds, Integer group);
 
-    void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir);
+    void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir, String notes);
 
     void deleteSet(UUID setId);
 

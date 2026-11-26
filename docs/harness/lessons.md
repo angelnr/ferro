@@ -256,6 +256,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `EmailNotifier`, `MailEmailSender`, `TrainingMaintenanceService`; test de auto-cierre.
 - **Comprobación:** `ModulithArchitectureTest` verde y la notificación se verifica en el test.
 
+### L-029 · Un `http.verify()` fallido encadena 24 tests en rojo
+- **Fecha:** 2026-11-26
+- **Síntoma:** al añadir la carga automática del historial/PR, el primer test de `TrainingPage` falló por una petición pendiente y los 24 siguientes fallaron con «Cannot configure the test module when the test module has already been instantiated».
+- **Causa raíz:** el `afterEach` ejecutaba `http.verify()` antes de `TestBed.resetTestingModule()`; al lanzar, el reset no ocurría y el TestBed sucio contaminaba el resto de specs.
+- **Prevención:** todo `afterEach` que verifique HTTP debe resetear TestBed en `finally`, y cada carga asíncrona opcional (historial, PR) debe declararse en el helper de test.
+- **Artefacto:** `training.page.spec.ts` (`afterEach` con `try/finally`, helper `loadSession` que vacía historial y PR).
+- **Comprobación:** `make verify-frontend` con 60 tests y sin errores de TestBed.
+
 ---
 
 ## Revisión por milestone

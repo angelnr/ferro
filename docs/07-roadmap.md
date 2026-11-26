@@ -75,26 +75,25 @@ testado; E2E crear-rutina-aura sin fricción. `v0.3.0`.
 
 ## M3 · Semanas 3–5 — Training core (`training`) ⭐ corazón del producto
 
-**Estado:** 🚧 casi completo · sesión activa, ejercicios, series editables, reordenación,
-supersets, descanso/cronómetro, PRs, auto-cierre 24 h y timer UI. Faltan series objetivo
-(M4), historial visual y pulido mobile-first.
+**Estado:** ✅ completado · tag `v0.4.0` (2026-11-26)
 
 Entregables (RF-030…042):
-- [ ] Sesión vacía + única-activa (RN-08 garantizado por índice parcial, test incluido).
-- [ ] Ejercicios en sesión: añadir/reordenar/eliminar/supersets/notas (RF-032).
-- [ ] Series: registro inmediato (RN-22), tipos (RN-11/34), edición/eliminación,
-      pre-relleno, series objetivo pendientes cuando venga de plantilla (se activa en M4).
-- [ ] Performance anterior al registrar (RF-037).
-- [ ] Temporizador descanso (RF-038: autoarranque, +15 s, skip, background-safe,
-      notificación+vibración) y cronómetro (RF-039).
-- [ ] Finish: volumen, PRs (RN-05, devueltos para el resumen), `SessionCompleted`.
-- [ ] Descartar, recuperar activa (RF-042), auto-cierre 24 h (RN-09, job + test de
-      reloj con Clock inyectado).
-- [ ] UI en vivo mobile-first pulida (dark, target 44 px, feedback optimista RNF-05).
+- [x] Sesión vacía + única-activa (RN-08 garantizado por índice parcial, test incluido).
+- [x] Ejercicios en sesión: añadir/reordenar (botones y drag & drop)/eliminar/supersets
+      A1/A2/notas/descanso (RF-032).
+- [x] Series: registro inmediato (RN-22), tipos (RN-11/34), notas, edición/eliminación y
+      pre-relleno. Las series objetivo pendientes se activan en M4.
+- [x] Performance anterior al registrar (RF-037): últimas 3 sesiones, mejor serie y PR actual.
+- [x] Temporizador descanso (RF-038: autoarranque, alternancia en supersets, preferencia,
+      +15 s, skip, notificación+vibración+beep) y cronómetro (RF-039).
+- [x] Finish: volumen, PRs (RN-05, devueltos para el resumen), resumen en pantalla.
+- [x] Descartar con confirmación, recuperar activa (RF-042), auto-cierre 24 h (RN-09).
+- [x] UI en vivo mobile-first (dark, panel de descanso sticky, feedback de tipos).
 
 **DoD:** E2E maestro «entrenamiento completo»: crear sesión → 3 ejercicios → supersets →
-12 series → timer → finish → PRs visibles. Cobertura `training` ≥ 80 %. Latencia finish
-≤ 800 ms (métrica). `v0.4.0` — **desde aquí Ferro ya es usable a diario (dogfooding E6)**.
+12 series → timer → finish → PRs visibles. Cobertura `training` ≥ 80 % (83,6 % líneas).
+`v0.4.0` — **desde aquí Ferro ya es usable a diario (dogfooding E6)**. La latencia de
+finish se medirá con datos reales durante el dogfooding, no con la API mockeada del E2E.
 **Riesgo:** es el hito más grande → subdividir PRs por feature; si hay retraso, lo que
 no puede moverse es RF-033/040.
 

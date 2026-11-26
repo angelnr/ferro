@@ -80,7 +80,14 @@ public class TrainingService {
 
     @Transactional
     public SessionSet logSet(
-            UUID userId, UUID sessionId, UUID entryId, SetType type, int reps, BigDecimal weight, Integer rir) {
+            UUID userId,
+            UUID sessionId,
+            UUID entryId,
+            SetType type,
+            int reps,
+            BigDecimal weight,
+            Integer rir,
+            String notes) {
         WorkoutSession session = activeFor(userId, sessionId);
         SessionExercise entry = session.exercises().stream()
                 .filter(exercise -> exercise.id().equals(entryId))
@@ -100,6 +107,9 @@ public class TrainingService {
         if (rir != null && (rir < 0 || rir > 10)) {
             throw new InvalidTrainingException("El RIR debe estar entre 0 y 10");
         }
+        if (notes != null && notes.length() > 500) {
+            throw new InvalidTrainingException("La nota no puede superar 500 caracteres");
+        }
         Instant now = clock.instant();
         return sessions.addSet(
                 entryId,
@@ -110,7 +120,8 @@ public class TrainingService {
                 rir,
                 SetMath.volume(type, weight, reps),
                 SetMath.e1rm(type, weight, reps),
-                now);
+                now,
+                notes);
     }
 
     @Transactional
@@ -206,7 +217,8 @@ public class TrainingService {
             SetType type,
             int reps,
             BigDecimal weight,
-            Integer rir) {
+            Integer rir,
+            String notes) {
         WorkoutSession session = activeFor(userId, sessionId);
         SessionExercise entry = session.exercises().stream()
                 .filter(exercise -> exercise.id().equals(entryId))
@@ -217,7 +229,10 @@ public class TrainingService {
                 .findFirst()
                 .orElseThrow(SessionNotFoundException::new);
         validateSet(reps, weight, rir);
-        sessions.updateSet(setId, type, reps, weight, rir);
+        if (notes != null && notes.length() > 500) {
+            throw new InvalidTrainingException("La nota no puede superar 500 caracteres");
+        }
+        sessions.updateSet(setId, type, reps, weight, rir, notes);
         return get(userId, sessionId);
     }
 

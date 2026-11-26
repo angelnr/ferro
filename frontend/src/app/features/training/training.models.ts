@@ -8,6 +8,7 @@ export interface SessionSet {
   volume: number;
   e1rm: number | null;
   loggedAt: string;
+  notes: string | null;
 }
 
 export interface SessionExercise {
@@ -24,12 +25,27 @@ export interface SessionExercise {
 export interface WorkoutSession {
   id: string;
   name: string;
+  notes: string | null;
   status: string;
   startedAt: string;
   finishedAt: string | null;
   durationSeconds: number | null;
   totalVolume: number;
   exercises: SessionExercise[];
+}
+
+export interface PreviousSet {
+  reps: number;
+  weight: number;
+  rir: number | null;
+  setType: string;
+  loggedAt: string;
+}
+
+export interface PreviousSession {
+  sessionId: string;
+  startedAt: string;
+  sets: PreviousSet[];
 }
 
 export interface NewPersonalRecord {
@@ -51,5 +67,5 @@ export interface LogSetPayload {
   weight: number;
   rir?: number | null;
   setType: string;
-  notes?: string;
+  notes?: string | null;
 }
