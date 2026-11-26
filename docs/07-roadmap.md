@@ -138,16 +138,21 @@ sesión pasada testado (PR baja/desaparece). `v0.6.0`.
 
 ## M6 · Semana 7 — PWA, i18n, a11y, pulido
 
+**Estado:** 🚧 en curso · PWA, i18n frontend, a11y básica, tema claro y onboarding hechos.
+
 Entregables:
-- [ ] PWA: manifest, service worker app shell (ADR-0009), instalable Android,
-      banner «sin conexión» (RNF-13), iconos + splash.
-- [ ] i18n ES/EN completo (runtime, ADR-0008) incluidos emails y errores API.
-- [ ] a11y: axe-core en E2E sin violaciones críticas; foco/teclado revisado.
-- [ ] Tema claro opcional; onboarding RF-088; cuenta demo + datos sintéticos (RF-087).
-- [ ] Lighthouse CI: perf ≥ 90, BP ≥ 95, budget bundle (RNF-06).
+- [x] PWA: manifest, iconos/splash, service worker app shell (ADR-0009), banner offline
+      con reintento y registro solo en producción.
+- [x] i18n runtime ES/EN, `lang` dinámico y gate de paridad de claves.
+- [ ] i18n de errores API y emails (catálogos backend) — pendiente.
+- [x] A11y: skip-link, foco visible, `prefers-reduced-motion`, navegación por teclado
+      en E2E y labels/ARIA revisados. Axe-core automatizado pendiente de dependencia.
+- [x] Tema claro aplicado sobre la UI; onboarding de 3 tarjetas + rutinas de ejemplo.
+- [ ] Cuenta demo + datos sintéticos RF-087 — pendiente.
+- [x] Lighthouse CI de rendimiento/best-practices configurado (job `lighthouse`).
 
 **DoD:** instalada en Android real y usada en el gimnasio (E6 sigue); Lighthouse
-gate verde en CI. `v0.7.0`.
+gate verde en CI. `v0.7.0` — **aún no alcanzado**.
 
 ## M7 · Semana 8 — Producción y publicación
 

@@ -66,6 +66,10 @@ for f in \
   backend/src/main/java/com/ferro/platform/ratelimit/RateLimitFilter.java \
   backend/src/main/java/com/ferro/platform/security/SecurityHeadersFilter.java \
   backend/src/test/java/com/ferro/platform/ratelimit/RateLimitIntegrationTest.java \
+  frontend/public/manifest.webmanifest \
+  frontend/public/sw.js \
+  frontend/public/icons/icon-192.png \
+  frontend/public/icons/icon-512.png \
   frontend/vercel.json \
   backend/src/main/resources/security/common-passwords.txt \
   backend/src/main/resources/db/migration/V1__identity_and_extensions.sql \
@@ -76,6 +80,7 @@ for f in \
   backend/src/main/resources/db/migration/V6__catalog_seed.sql \
   docs/seed-ejercicios.csv \
   scripts/validate-seed.py \
+  scripts/check-i18n.py \
   infra/docker-compose.dev.yml \
   infra/docker-compose.prod.yml \
   infra/caddy/Caddyfile \
@@ -103,6 +108,10 @@ for f in \
   frontend/playwright.config.ts \
   frontend/src/app/features/home/home.page.ts \
   frontend/src/app/features/auth/auth-pages.spec.ts \
+  frontend/public/manifest.webmanifest \
+  frontend/public/sw.js \
+  frontend/public/icons/icon-192.png \
+  frontend/public/icons/icon-512.png \
   frontend/vercel.json \
   frontend/src/app/features/README.md \
   frontend/public/assets/i18n/es.json \
@@ -196,6 +205,9 @@ need_grep frontend/package.json '"lint"' 'script lint'
 need_grep frontend/package.json '@ngrx/signals' 'SignalStore'
 need_grep frontend/package.json '@ngx-translate/core' 'i18n runtime'
 need_grep frontend/src/app/app.config.ts 'provideTranslateService' 'i18n configurado'
+need_grep frontend/src/index.html 'manifest.webmanifest' 'manifest PWA'
+need_grep frontend/src/main.ts 'serviceWorker.register' 'registro del service worker'
+need_grep frontend/src/app/app.html 'app-onboarding' 'onboarding'
 need_grep frontend/src/app/app.config.ts 'provideAppInitializer' 'restore de sesión al arrancar'
 need_grep frontend/src/app/core/auth/auth.store.ts 'signalStore' 'AuthStore con SignalStore'
 need_grep frontend/angular.json '"coverageInclude"' 'cobertura sobre todas las fuentes de la app'
@@ -224,6 +236,8 @@ fi
 if grep -R "no-verify" "$ROOT/.githooks" "$ROOT/scripts" --exclude='check-harness.sh' >/dev/null 2>&1; then
   fail "algún script/hook intenta saltarse los hooks (--no-verify)"
 fi
+
+python3 "$ROOT/scripts/check-i18n.py" || fail "catálogos i18n ES/EN desincronizados"
 
 if [[ "$errors" -ne 0 ]]; then
   printf '\n%s invariante(s) del harness roto(s).\n' "$errors" >&2

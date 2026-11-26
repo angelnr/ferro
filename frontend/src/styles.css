@@ -7,3 +7,76 @@
 body {
   @apply bg-zinc-950 text-zinc-100 antialiased;
 }
+
+:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Tema claro: se aplica sobre las utilidades oscuras existentes sin duplicar plantillas. */
+html[data-theme='light'] {
+  color-scheme: light;
+}
+
+html[data-theme='light'] body {
+  background-color: #fafafa;
+  color: #18181b;
+}
+
+html[data-theme='light'] .bg-zinc-950 {
+  background-color: #fafafa;
+}
+
+html[data-theme='light'] .bg-zinc-900\/60,
+html[data-theme='light'] .bg-zinc-900\/90,
+html[data-theme='light'] .bg-zinc-900 {
+  background-color: #ffffff;
+}
+
+html[data-theme='light'] .bg-zinc-800,
+html[data-theme='light'] .bg-zinc-800\/80 {
+  background-color: #e4e4e7;
+}
+
+html[data-theme='light'] .text-zinc-100,
+html[data-theme='light'] .text-zinc-200,
+html[data-theme='light'] .text-zinc-300 {
+  color: #27272a;
+}
+
+html[data-theme='light'] .text-zinc-400,
+html[data-theme='light'] .text-zinc-500 {
+  color: #52525b;
+}
+
+html[data-theme='light'] .text-zinc-600 {
+  color: #71717a;
+}
+
+html[data-theme='light'] .border-zinc-800,
+html[data-theme='light'] .border-zinc-700 {
+  border-color: #d4d4d8;
+}
+
+html[data-theme='light'] input,
+html[data-theme='light'] select,
+html[data-theme='light'] textarea {
+  background-color: #ffffff !important;
+  color: #18181b !important;
+  border-color: #d4d4d8 !important;
+}
+
+html[data-theme='light'] .divide-zinc-800 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #e4e4e7;
+}

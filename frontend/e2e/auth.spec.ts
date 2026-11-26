@@ -32,6 +32,7 @@ async function anonymous(page: Page): Promise<void> {
 }
 
 async function authenticated(page: Page): Promise<void> {
+  await page.addInitScript(() => localStorage.setItem('ferro.onboarding.seen', '1'));
   await page.route('**/api/v1/auth/oauth/providers', (route) =>
     route.fulfill({
       status: 200,
@@ -755,4 +756,20 @@ test('shows records and records a body measurement', async ({ page }) => {
   await page.locator('#body-weight').fill('79.5');
   await page.getByRole('button', { name: 'Registrar' }).click();
   await expect(page.getByRole('button', { name: 'Registrar' })).toBeEnabled();
+});
+
+test('supports keyboard navigation with a skip link', async ({ page }) => {
+  await authenticated(page);
+  await page.goto('/');
+  const skip = page.getByRole('link', { name: 'Saltar al contenido' });
+  for (let index = 0; index < 3; index += 1) {
+    await page.keyboard.press('Tab');
+    if (await skip.evaluate((element) => element === document.activeElement)) {
+      break;
+    }
+  }
+  await expect(skip).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#main$/);
+  await expect(page.locator('#main')).toBeFocused();
 });

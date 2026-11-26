@@ -1,7 +1,9 @@
 {
   "app": {
     "tagline": "Log it. Progress. Repeat.",
-    "subtitle": "Strength training tracker"
+    "subtitle": "Strength training tracker",
+    "offline": "Offline. Your data cannot be saved until you are back online.",
+    "retry": "Retry"
   },
   "nav": {
     "home": "Home",
@@ -231,5 +233,19 @@
     "noStats": "No data in this range.",
     "recent": "Recent history",
     "empty": "No measurements yet."
+  },
+  "onboarding": {
+    "title": "Welcome to Ferro",
+    "step1Title": "Create your routine",
+    "step1Body": "Organize exercises, rests and target sets in a reusable template.",
+    "step2Title": "Start training",
+    "step2Body": "Log every set instantly and check your previous performance.",
+    "step3Title": "See your progress",
+    "step3Body": "History, records and statistics to know you are moving forward.",
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Start",
+    "seed": "Create sample routines",
+    "seedError": "Sample routines could not be created"
   }
 }

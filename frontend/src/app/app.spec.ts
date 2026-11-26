@@ -31,8 +31,25 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('a')?.textContent).toContain('Ferro');
+    expect(compiled.querySelector('header a')?.textContent).toContain('Ferro');
     expect(compiled.textContent).toContain('nav.login');
+  });
+
+  it('shows and hides the offline banner', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const component = fixture.componentInstance as unknown as {
+      offline: () => boolean;
+      ngOnDestroy(): void;
+    };
+    window.dispatchEvent(new Event('offline'));
+    fixture.detectChanges();
+    expect(component.offline()).toBe(true);
+    expect(fixture.nativeElement.textContent).toContain('app.offline');
+    window.dispatchEvent(new Event('online'));
+    fixture.detectChanges();
+    expect(component.offline()).toBe(false);
+    component.ngOnDestroy();
   });
 
   it('should show the user and allow logout when authenticated', async () => {

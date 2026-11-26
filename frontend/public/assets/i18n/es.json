@@ -1,7 +1,9 @@
 {
   "app": {
     "tagline": "Registra. Progresa. Repite.",
-    "subtitle": "Tracker de entrenamientos de fuerza"
+    "subtitle": "Tracker de entrenamientos de fuerza",
+    "offline": "Sin conexión. Los datos no se pueden guardar hasta que vuelvas a estar online.",
+    "retry": "Reintentar"
   },
   "nav": {
     "home": "Inicio",
@@ -231,5 +233,19 @@
     "noStats": "Sin datos en este rango.",
     "recent": "Histórico reciente",
     "empty": "Aún no hay mediciones."
+  },
+  "onboarding": {
+    "title": "Bienvenido a Ferro",
+    "step1Title": "Crea tu rutina",
+    "step1Body": "Organiza tus ejercicios, descansos y series objetivo en una plantilla reutilizable.",
+    "step2Title": "Empieza a entrenar",
+    "step2Body": "Registra cada serie al instante y consulta tu rendimiento anterior.",
+    "step3Title": "Mira tu progreso",
+    "step3Body": "Historial, récords y estadísticas para saber que avanzas.",
+    "skip": "Saltar",
+    "next": "Siguiente",
+    "start": "Empezar",
+    "seed": "Crear rutinas de ejemplo",
+    "seedError": "No se pudieron crear las rutinas de ejemplo"
   }
 }
