@@ -131,6 +131,8 @@
     "logSet": "Registrar serie",
     "noSets": "Aún no hay series.",
     "back": "Volver",
-    "notFound": "No se pudo cargar la sesión."
+    "notFound": "No se pudo cargar la sesión.",
+    "rest": "Descanso",
+    "skipRest": "Saltar"
   }
 }

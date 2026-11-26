@@ -75,9 +75,9 @@ testado; E2E crear-rutina-aura sin fricción. `v0.3.0`.
 
 ## M3 · Semanas 3–5 — Training core (`training`) ⭐ corazón del producto
 
-**Estado:** 🚧 en curso · crear sesión, recuperar activa, añadir ejercicio, registrar
-series inmediatas, volumen/e1RM, PRs al finalizar, descarte y UI mínima de sesión.
-Faltan temporizador, reordenación/supersets, auto-cierre y historial.
+**Estado:** 🚧 en curso · sesión activa, ejercicios, series inmediatas, edición/borrado,
+reordenación, descanso, PRs, descarte, performance anterior, auto-cierre 24 h y timer UI.
+Faltan supersets completos, series objetivo (M4), historial visual y pulido.
 
 Entregables (RF-030…042):
 - [ ] Sesión vacía + única-activa (RN-08 garantizado por índice parcial, test incluido).

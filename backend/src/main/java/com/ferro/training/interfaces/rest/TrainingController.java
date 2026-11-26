@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,6 +79,67 @@ public class TrainingController {
         SessionSet set =
                 training.logSet(userId(jwt), id, entryId, type, request.reps(), request.weight(), request.rir());
         return ResponseEntity.status(HttpStatus.CREATED).body(WorkoutSessionResponse.SetEntry.from(set));
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Edita nombre o notas de la sesión")
+    public WorkoutSessionResponse update(
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID id, @Valid @RequestBody UpdateSessionRequest request) {
+        return WorkoutSessionResponse.from(training.updateSession(userId(jwt), id, request.name(), request.notes()));
+    }
+
+    @PatchMapping("/{id}/exercises/{entryId}")
+    @Operation(summary = "Edita o reordena un ejercicio de la sesión")
+    public WorkoutSessionResponse updateExercise(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @PathVariable UUID entryId,
+            @Valid @RequestBody UpdateExerciseRequest request) {
+        return WorkoutSessionResponse.from(training.updateExercise(
+                userId(jwt),
+                id,
+                entryId,
+                request.position(),
+                request.restSeconds(),
+                request.supersetGroup(),
+                request.notes()));
+    }
+
+    @DeleteMapping("/{id}/exercises/{entryId}")
+    @Operation(summary = "Elimina un ejercicio y sus series")
+    public WorkoutSessionResponse deleteExercise(
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID id, @PathVariable UUID entryId) {
+        return WorkoutSessionResponse.from(training.deleteExercise(userId(jwt), id, entryId));
+    }
+
+    @PatchMapping("/{id}/exercises/{entryId}/sets/{setId}")
+    @Operation(summary = "Edita una serie")
+    public WorkoutSessionResponse updateSet(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @PathVariable UUID entryId,
+            @PathVariable UUID setId,
+            @Valid @RequestBody UpdateSetRequest request) {
+        SetType type = request.setType() == null ? SetType.NORMAL : parseSetType(request.setType());
+        return WorkoutSessionResponse.from(training.updateSet(
+                userId(jwt),
+                id,
+                entryId,
+                setId,
+                type,
+                request.reps() == null ? 0 : request.reps(),
+                request.weight() == null ? java.math.BigDecimal.ZERO : request.weight(),
+                request.rir()));
+    }
+
+    @DeleteMapping("/{id}/exercises/{entryId}/sets/{setId}")
+    @Operation(summary = "Elimina una serie")
+    public WorkoutSessionResponse deleteSet(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @PathVariable UUID entryId,
+            @PathVariable UUID setId) {
+        return WorkoutSessionResponse.from(training.deleteSet(userId(jwt), id, entryId, setId));
     }
 
     @PostMapping("/{id}/finish")

@@ -77,6 +77,27 @@ describe('TrainingPage', () => {
     expect(fixture.nativeElement.textContent).toContain('640');
   });
 
+  it('formats and controls the rest timer', () => {
+    const fixture = TestBed.createComponent(TrainingPage);
+    fixture.detectChanges();
+    http.expectOne(`${environment.apiBaseUrl}/workout-sessions/session-1`).flush(SESSION);
+    const page = fixture.componentInstance as unknown as {
+      restRemaining: { set(value: number | null): void; (): number | null };
+      formatRest(seconds: number): string;
+      addRest(): void;
+      skipRest(): void;
+      ngOnDestroy(): void;
+    };
+
+    expect(page.formatRest(90)).toBe('1:30');
+    page.restRemaining.set(90);
+    page.addRest();
+    expect(page.restRemaining()).toBe(105);
+    page.skipRest();
+    expect(page.restRemaining()).toBeNull();
+    page.ngOnDestroy();
+  });
+
   it('adds an exercise and discards the session', async () => {
     const fixture = TestBed.createComponent(TrainingPage);
     fixture.detectChanges();

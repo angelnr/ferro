@@ -3,6 +3,7 @@ package com.ferro;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Punto de entrada de Ferro.
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  * ArchUnit y Spring Modulith.
  */
 @SpringBootApplication
+@EnableScheduling
 @ConfigurationPropertiesScan
 public class FerroApplication {
 

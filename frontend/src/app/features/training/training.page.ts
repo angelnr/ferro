@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnDestroy, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -124,6 +124,35 @@ import { TrainingApi } from './training.api';
           </button>
         </form>
 
+        @if (restRemaining(); as remaining) {
+          <div
+            class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sky-900 bg-sky-950/40 p-4"
+          >
+            <div>
+              <p class="text-xs uppercase tracking-wider text-sky-400">
+                {{ 'training.rest' | translate }}
+              </p>
+              <p class="text-3xl font-black tabular-nums">{{ formatRest(remaining) }}</p>
+            </div>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                (click)="addRest()"
+                class="rounded-lg border border-sky-700 px-3 py-1.5 text-sm"
+              >
+                +15 s
+              </button>
+              <button
+                type="button"
+                (click)="skipRest()"
+                class="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm"
+              >
+                {{ 'training.skipRest' | translate }}
+              </button>
+            </div>
+          </div>
+        }
+
         <div class="space-y-4">
           @for (entry of current.exercises; track entry.id) {
             <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
@@ -153,7 +182,7 @@ import { TrainingApi } from './training.api';
     </section>
   `,
 })
-export class TrainingPage {
+export class TrainingPage implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly api = inject(TrainingApi);
@@ -163,6 +192,8 @@ export class TrainingPage {
   protected readonly logging = signal(false);
   protected readonly finishing = signal(false);
   protected readonly newPrs = signal<NewPersonalRecord[]>([]);
+  protected readonly restRemaining = signal<number | null>(null);
+  private restHandle: ReturnType<typeof setInterval> | null = null;
 
   protected readonly setForm = this.formBuilder.nonNullable.group({
     entryId: ['', [Validators.required]],
@@ -206,6 +237,8 @@ export class TrainingPage {
       const updated = await firstValueFrom(this.api.get(session.id));
       this.session.set(updated);
       this.setForm.patchValue({ reps: value.reps, weight: value.weight, rir: null });
+      const entry = updated.exercises.find((candidate) => candidate.id === value.entryId);
+      this.startRest(entry?.restSeconds ?? 90);
     } catch {
       this.error.set(true);
     } finally {
@@ -240,6 +273,46 @@ export class TrainingPage {
       await this.router.navigateByUrl('/');
     } catch {
       this.error.set(true);
+    }
+  }
+
+  protected formatRest(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const rest = seconds % 60;
+    return `${minutes}:${rest.toString().padStart(2, '0')}`;
+  }
+
+  protected addRest(): void {
+    this.restRemaining.update((seconds) => (seconds ?? 0) + 15);
+  }
+
+  protected skipRest(): void {
+    this.stopRest();
+    this.restRemaining.set(null);
+  }
+
+  ngOnDestroy(): void {
+    this.stopRest();
+  }
+
+  private startRest(seconds: number): void {
+    this.stopRest();
+    this.restRemaining.set(seconds);
+    this.restHandle = setInterval(() => {
+      const current = this.restRemaining();
+      if (current === null || current <= 1) {
+        this.stopRest();
+        this.restRemaining.set(null);
+      } else {
+        this.restRemaining.set(current - 1);
+      }
+    }, 1000);
+  }
+
+  private stopRest(): void {
+    if (this.restHandle) {
+      clearInterval(this.restHandle);
+      this.restHandle = null;
     }
   }
 

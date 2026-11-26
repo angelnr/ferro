@@ -248,6 +248,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `TrainingExceptionHandler`, `CatalogExceptionHandler`; tests de 404.
 - **Comprobación:** una sesión ajena devuelve 404, no 500.
 
+### L-028 · Notificar desde training sin acoplarlo a identity
+- **Fecha:** 2026-11-26
+- **Síntoma:** `TrainingMaintenanceService` importaba `EmailSender`/`Email` de `identity` y Modulith lo rechazó como dependencia de tipo no expuesto.
+- **Causa raíz:** el email es una capacidad de plataforma, no un detalle del módulo de identidad.
+- **Prevención:** interfaz pública `platform.api.EmailNotifier`; training depende de ella y el adapter de mail la implementa.
+- **Artefacto:** `EmailNotifier`, `MailEmailSender`, `TrainingMaintenanceService`; test de auto-cierre.
+- **Comprobación:** `ModulithArchitectureTest` verde y la notificación se verifica en el test.
+
 ---
 
 ## Revisión por milestone

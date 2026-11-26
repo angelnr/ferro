@@ -17,6 +17,8 @@ import com.ferro.shared.domain.UuidV7;
 import com.ferro.training.application.port.TrainingRepository;
 import com.ferro.training.domain.NewPersonalRecord;
 import com.ferro.training.domain.PrType;
+import com.ferro.training.domain.PreviousSession;
+import com.ferro.training.domain.PreviousSet;
 import com.ferro.training.domain.SessionAlreadyActiveException;
 import com.ferro.training.domain.SessionExercise;
 import com.ferro.training.domain.SessionNotFoundException;
@@ -24,6 +26,7 @@ import com.ferro.training.domain.SessionSet;
 import com.ferro.training.domain.SessionStatus;
 import com.ferro.training.domain.SetMath;
 import com.ferro.training.domain.SetType;
+import com.ferro.training.domain.StaleSession;
 import com.ferro.training.domain.WorkoutSession;
 
 @Repository
@@ -376,4 +379,190 @@ public class JdbcTrainingRepository implements TrainingRepository {
     private record SetRow(UUID id, int reps, BigDecimal weight, Instant loggedAt, SetType type) {}
 
     private record ExerciseRow(UUID id, String name) {}
+
+    @Override
+    public void updateSession(UUID sessionId, String name, String notes) {
+        jdbc.update(
+                "UPDATE workout_sessions SET name = coalesce(:name, name), notes = coalesce(:notes, notes), "
+                        + "updated_at = now() WHERE id = :id",
+                new MapSqlParameterSource()
+                        .addValue("id", sessionId)
+                        .addValue("name", name)
+                        .addValue("notes", notes));
+    }
+
+    @Override
+    public void updateExercise(UUID entryId, Integer restSeconds, Integer supersetGroup, String notes) {
+        jdbc.update(
+                """
+                UPDATE session_exercises SET
+                    rest_seconds = coalesce(:rest, rest_seconds),
+                    superset_group = coalesce(:superset, superset_group),
+                    notes = coalesce(:notes, notes)
+                WHERE id = :id
+                """,
+                new MapSqlParameterSource()
+                        .addValue("id", entryId)
+                        .addValue("rest", restSeconds)
+                        .addValue("superset", supersetGroup)
+                        .addValue("notes", notes));
+    }
+
+    @Override
+    public void deleteExercise(UUID entryId) {
+        List<UUID> sessions = jdbc.query(
+                "SELECT session_id FROM session_exercises WHERE id = :id",
+                new MapSqlParameterSource("id", entryId),
+                (rs, rowNum) -> rs.getObject("session_id", UUID.class));
+        if (sessions.isEmpty()) {
+            return;
+        }
+        UUID sessionId = sessions.getFirst();
+        jdbc.update("DELETE FROM session_exercises WHERE id = :id", new MapSqlParameterSource("id", entryId));
+        renumberExercises(sessionId);
+    }
+
+    @Override
+    public void reorderExercises(UUID sessionId, List<UUID> orderedEntryIds) {
+        jdbc.update(
+                "UPDATE session_exercises SET position = position + 1000 WHERE session_id = :sessionId",
+                new MapSqlParameterSource("sessionId", sessionId));
+        for (int i = 0; i < orderedEntryIds.size(); i++) {
+            jdbc.update(
+                    "UPDATE session_exercises SET position = :position WHERE id = :id AND session_id = :sessionId",
+                    new MapSqlParameterSource()
+                            .addValue("position", i)
+                            .addValue("id", orderedEntryIds.get(i))
+                            .addValue("sessionId", sessionId));
+        }
+    }
+
+    @Override
+    public void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir) {
+        jdbc.update(
+                """
+                UPDATE session_sets SET set_type = CAST(:type AS set_type), reps = :reps,
+                    weight = :weight, rir = :rir, updated_at = now() WHERE id = :id
+                """,
+                new MapSqlParameterSource()
+                        .addValue("id", setId)
+                        .addValue("type", type.name())
+                        .addValue("reps", reps)
+                        .addValue("weight", weight)
+                        .addValue("rir", rir));
+    }
+
+    @Override
+    public void deleteSet(UUID setId) {
+        List<UUID> entries = jdbc.query(
+                "SELECT session_exercise_id FROM session_sets WHERE id = :id",
+                new MapSqlParameterSource("id", setId),
+                (rs, rowNum) -> rs.getObject("session_exercise_id", UUID.class));
+        if (entries.isEmpty()) {
+            return;
+        }
+        UUID entryId = entries.getFirst();
+        jdbc.update("DELETE FROM session_sets WHERE id = :id", new MapSqlParameterSource("id", setId));
+        jdbc.update(
+                "UPDATE session_sets SET position = position + 1000 WHERE session_exercise_id = :id",
+                new MapSqlParameterSource("id", entryId));
+        jdbc.update("""
+                WITH ranked AS (
+                    SELECT id, row_number() OVER (ORDER BY position) - 1 AS new_position
+                    FROM session_sets WHERE session_exercise_id = :id
+                )
+                UPDATE session_sets s SET position = ranked.new_position
+                FROM ranked WHERE s.id = ranked.id
+                """, new MapSqlParameterSource("id", entryId));
+    }
+
+    @Override
+    public List<PreviousSession> previousSessions(UUID userId, UUID exerciseId, int limit) {
+        List<PreviousSession> result = new ArrayList<>();
+        List<UUID> sessionIds = jdbc.query(
+                """
+                SELECT DISTINCT ws.id, ws.started_at FROM workout_sessions ws
+                JOIN session_exercises se ON se.session_id = ws.id
+                JOIN session_sets ss ON ss.session_exercise_id = se.id
+                WHERE ws.user_id = :userId AND se.exercise_id = :exerciseId
+                  AND ws.status IN ('FINISHED', 'AUTO_CLOSED')
+                ORDER BY ws.started_at DESC LIMIT :limit
+                """,
+                new MapSqlParameterSource()
+                        .addValue("userId", userId)
+                        .addValue("exerciseId", exerciseId)
+                        .addValue("limit", Math.max(1, Math.min(limit, 10))),
+                (rs, rowNum) -> rs.getObject("id", UUID.class));
+        for (UUID sessionId : sessionIds) {
+            Instant startedAt = jdbc.queryForObject(
+                            "SELECT started_at FROM workout_sessions WHERE id = :id",
+                            new MapSqlParameterSource("id", sessionId),
+                            Timestamp.class)
+                    .toInstant();
+            List<PreviousSet> sets = jdbc.query(
+                    """
+                    SELECT ss.reps, ss.weight, ss.rir, ss.set_type, ss.logged_at
+                    FROM session_sets ss
+                    JOIN session_exercises se ON se.id = ss.session_exercise_id
+                    WHERE se.session_id = :sessionId AND se.exercise_id = :exerciseId
+                    ORDER BY se.position, ss.position
+                    """,
+                    new MapSqlParameterSource().addValue("sessionId", sessionId).addValue("exerciseId", exerciseId),
+                    (rs, rowNum) -> new PreviousSet(
+                            rs.getInt("reps"),
+                            rs.getBigDecimal("weight"),
+                            (Integer) rs.getObject("rir"),
+                            SetType.valueOf(rs.getString("set_type")),
+                            instant(rs.getTimestamp("logged_at"))));
+            result.add(new PreviousSession(sessionId, startedAt, sets));
+        }
+        return result;
+    }
+
+    @Override
+    public List<StaleSession> staleActive(Instant threshold) {
+        return jdbc.query(
+                """
+                SELECT ws.id, ws.user_id, u.email, ws.started_at,
+                    (SELECT max(ss.logged_at) FROM session_exercises se
+                     JOIN session_sets ss ON ss.session_exercise_id = se.id
+                     WHERE se.session_id = ws.id) AS last_set_at
+                FROM workout_sessions ws JOIN users u ON u.id = ws.user_id
+                WHERE ws.status = 'ACTIVE' AND ws.started_at < :threshold
+                """,
+                new MapSqlParameterSource("threshold", Timestamp.from(threshold)),
+                (rs, rowNum) -> new StaleSession(
+                        rs.getObject("id", UUID.class),
+                        rs.getObject("user_id", UUID.class),
+                        rs.getString("email"),
+                        instant(rs.getTimestamp("started_at")),
+                        instant(rs.getTimestamp("last_set_at"))));
+    }
+
+    @Override
+    public void autoClose(UUID sessionId, Instant finishedAt, int durationSeconds) {
+        jdbc.update(
+                """
+                UPDATE workout_sessions SET status = 'AUTO_CLOSED', finished_at = :finishedAt,
+                    duration_seconds = :duration, updated_at = now() WHERE id = :id
+                """,
+                new MapSqlParameterSource()
+                        .addValue("id", sessionId)
+                        .addValue("finishedAt", Timestamp.from(finishedAt))
+                        .addValue("duration", durationSeconds));
+    }
+
+    private void renumberExercises(UUID sessionId) {
+        jdbc.update(
+                "UPDATE session_exercises SET position = position + 1000 WHERE session_id = :sessionId",
+                new MapSqlParameterSource("sessionId", sessionId));
+        jdbc.update("""
+                WITH ranked AS (
+                    SELECT id, row_number() OVER (ORDER BY position) - 1 AS new_position
+                    FROM session_exercises WHERE session_id = :sessionId
+                )
+                UPDATE session_exercises s SET position = ranked.new_position
+                FROM ranked WHERE s.id = ranked.id
+                """, new MapSqlParameterSource("sessionId", sessionId));
+    }
 }

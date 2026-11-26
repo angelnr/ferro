@@ -10,10 +10,11 @@ import org.springframework.stereotype.Component;
 
 import com.ferro.identity.application.port.EmailSender;
 import com.ferro.identity.domain.Email;
+import com.ferro.platform.api.EmailNotifier;
 
 /** Envío de emails transaccionales; en dev apunta a Mailpit (localhost:1025). */
 @Component
-public class MailEmailSender implements EmailSender {
+public class MailEmailSender implements EmailSender, EmailNotifier {
 
     private static final Logger log = LoggerFactory.getLogger(MailEmailSender.class);
 
@@ -62,6 +63,14 @@ public class MailEmailSender implements EmailSender {
                 recipient,
                 "Actividad sospechosa en tu cuenta de Ferro",
                 "Se ha reutilizado un refresh token revocado. Hemos cerrado todas tus sesiones.");
+    }
+
+    @Override
+    public void sendSessionAutoClosed(String recipientEmail) {
+        send(
+                new Email(recipientEmail),
+                "Tu sesión de Ferro se ha cerrado automáticamente",
+                "Han pasado más de 24 horas desde que la iniciaste. Puedes revisarla en el historial.");
     }
 
     private void send(Email recipient, String subject, String body) {

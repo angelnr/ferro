@@ -489,6 +489,7 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
         private final List<Email> accountDeletedEmails = new CopyOnWriteArrayList<>();
         private final List<Email> welcomeEmails = new CopyOnWriteArrayList<>();
         private final List<Email> securityEmails = new CopyOnWriteArrayList<>();
+        private final List<Email> autoClosedEmails = new CopyOnWriteArrayList<>();
 
         @Override
         public void sendVerificationEmail(Email recipient, String verificationLink) {
@@ -559,6 +560,7 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
             accountDeletedEmails.clear();
             welcomeEmails.clear();
             securityEmails.clear();
+            autoClosedEmails.clear();
         }
     }
 

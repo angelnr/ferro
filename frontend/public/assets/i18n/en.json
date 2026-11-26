@@ -131,6 +131,8 @@
     "logSet": "Log set",
     "noSets": "No sets yet.",
     "back": "Back",
-    "notFound": "Could not load the session."
+    "notFound": "Could not load the session.",
+    "rest": "Rest",
+    "skipRest": "Skip"
   }
 }

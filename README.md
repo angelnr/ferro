@@ -83,9 +83,10 @@ búsqueda sin acentos en ES/EN, filtros, paginación, CRUD/archivado custom, est
 reales de detalle (PRs, volumen, e1RM y serie de 52 semanas), combobox accesible con debounce
 y creación inline.
 
-**M3 en curso:** sesión en vivo con creación, ejercicios, series inmediatas, volumen, e1RM,
-PRs, descarte y primera UI de entrenamiento. Faltan temporizador, reordenación/supersets,
-auto-cierre 24 h e historial.
+**M3 en curso:** sesión en vivo con creación, ejercicios, series inmediatas, edición/borrado,
+reordenación, descanso, volumen/e1RM, PRs, descarte, performance anterior, auto-cierre 24 h y
+temporizador de descanso en la UI. Faltan supersets completos, series objetivo (M4), historial
+visual y pulido mobile-first.
 
 ## Desarrollo local y verificación
 

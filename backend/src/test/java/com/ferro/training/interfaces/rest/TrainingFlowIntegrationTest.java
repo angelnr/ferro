@@ -3,6 +3,7 @@ package com.ferro.training.interfaces.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -114,6 +115,95 @@ class TrainingFlowIntegrationTest extends AbstractPostgresIntegrationTest {
                 .andExpect(status().isNoContent());
         mockMvc.perform(get("/api/v1/workout-sessions/active").header("Authorization", bearer(token)))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void edits_and_deletes_active_sets_and_exercises() throws Exception {
+        String sessionId = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions").header("Authorization", bearer(token)))
+                        .andExpect(status().isCreated())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.id");
+        String entryId = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises")
+                                .header("Authorization", bearer(token))
+                                .contentType(APPLICATION_JSON)
+                                .content("{\"exerciseId\":\"" + exerciseId + "\"}"))
+                        .andExpect(status().isCreated())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.exercises[0].id");
+        String setId = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId + "/sets")
+                                .header("Authorization", bearer(token))
+                                .contentType(APPLICATION_JSON)
+                                .content("{\"reps\":8,\"weight\":80}"))
+                        .andExpect(status().isCreated())
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.id");
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId)
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"restSeconds\":120,\"notes\":\"Subir carga\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises[0].restSeconds").value(120));
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId + "/sets/" + setId)
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"reps\":10,\"weight\":90}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises[0].sets[0].volume").value(900.0));
+
+        mockMvc.perform(delete("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId + "/sets/" + setId)
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises[0].sets.length()").value(0));
+
+        mockMvc.perform(delete("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId)
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises.length()").value(0));
+    }
+
+    @Test
+    void history_returns_previous_finished_sets() throws Exception {
+        String sessionId = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions").header("Authorization", bearer(token)))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.id");
+        String entryId = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises")
+                                .header("Authorization", bearer(token))
+                                .contentType(APPLICATION_JSON)
+                                .content("{\"exerciseId\":\"" + exerciseId + "\"}"))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.exercises[0].id");
+        mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises/" + entryId + "/sets")
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"reps\":8,\"weight\":80}"))
+                .andExpect(status().isCreated());
+        mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/finish")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/v1/exercises/" + exerciseId + "/history")
+                        .param("limit", "3")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].sessionId").value(sessionId))
+                .andExpect(jsonPath("$[0].sets[0].reps").value(8));
     }
 
     private String register(String prefix) throws Exception {

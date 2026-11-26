@@ -7,8 +7,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.ferro.training.domain.NewPersonalRecord;
+import com.ferro.training.domain.PreviousSession;
 import com.ferro.training.domain.SessionSet;
 import com.ferro.training.domain.SetType;
+import com.ferro.training.domain.StaleSession;
 import com.ferro.training.domain.WorkoutSession;
 
 public interface TrainingRepository {
@@ -45,6 +47,24 @@ public interface TrainingRepository {
     List<NewPersonalRecord> recalculatePersonalRecords(UUID userId, UUID sessionId, Instant now);
 
     Optional<ExerciseInfo> exercise(UUID exerciseId);
+
+    void updateSession(UUID sessionId, String name, String notes);
+
+    void updateExercise(UUID entryId, Integer restSeconds, Integer supersetGroup, String notes);
+
+    void deleteExercise(UUID entryId);
+
+    void reorderExercises(UUID sessionId, List<UUID> orderedEntryIds);
+
+    void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir);
+
+    void deleteSet(UUID setId);
+
+    List<PreviousSession> previousSessions(UUID userId, UUID exerciseId, int limit);
+
+    List<StaleSession> staleActive(Instant threshold);
+
+    void autoClose(UUID sessionId, Instant finishedAt, int durationSeconds);
 
     record ExerciseInfo(UUID id, String name, boolean bodyweight, boolean custom, UUID ownerId) {}
 }

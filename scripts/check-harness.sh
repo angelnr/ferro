@@ -57,6 +57,9 @@ for f in \
   backend/src/main/java/com/ferro/training/application/TrainingService.java \
   backend/src/main/java/com/ferro/training/infrastructure/JdbcTrainingRepository.java \
   backend/src/test/java/com/ferro/training/interfaces/rest/TrainingFlowIntegrationTest.java \
+  backend/src/test/java/com/ferro/training/interfaces/rest/TrainingMaintenanceIntegrationTest.java \
+  backend/src/main/java/com/ferro/training/application/TrainingMaintenanceService.java \
+  backend/src/main/java/com/ferro/platform/api/EmailNotifier.java \
   backend/src/main/java/com/ferro/catalog/application/ExerciseCatalogService.java \
   backend/src/main/java/com/ferro/identity/application/PasswordResetService.java \
   backend/src/main/java/com/ferro/platform/api/RateLimiter.java \
@@ -94,6 +97,7 @@ for f in \
   frontend/src/app/features/catalog/exercise-picker/exercise-picker.ts \
   frontend/src/app/features/catalog/exercise-detail/exercise-detail.page.ts \
   frontend/src/app/features/training/training.page.ts \
+  frontend/src/app/features/training/training.page.spec.ts \
   frontend/src/app/features/training/training.api.ts \
   frontend/e2e/auth.spec.ts \
   frontend/playwright.config.ts \
@@ -156,6 +160,8 @@ need_grep frontend/src/app/features/catalog/exercise-picker/exercise-picker.ts '
 need_grep backend/src/main/java/com/ferro/training/interfaces/rest/TrainingController.java '/api/v1/workout-sessions' 'contrato de training'
 need_grep backend/src/main/java/com/ferro/training/domain/SetMath.java 'e1rm' 'cálculo e1RM'
 need_grep frontend/src/app/features/training/training.page.ts 'training.finish' 'UI de sesión en vivo'
+need_grep frontend/src/app/features/training/training.page.ts 'restRemaining' 'temporizador de descanso'
+need_grep backend/src/main/java/com/ferro/training/application/TrainingMaintenanceService.java 'autoCloseStaleSessions' 'auto-cierre 24 h'
 need_grep backend/src/main/resources/application.yml 'rate-limit' 'configuración de rate limit'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityHeadersFilter.java 'Content-Security-Policy' 'cabecera CSP'
 need_grep frontend/vercel.json 'Content-Security-Policy' 'CSP del frontend'
