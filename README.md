@@ -72,11 +72,10 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 
 ## Estado del proyecto
 
-**🚧 M0 en curso (noviembre 2026).** Esqueleto backend/frontend, esquema Flyway `V1–V5`,
-infraestructura local, Dockerfile/Compose de producción (borrador), CI y harness ya
-funcionan. Antes de M1 falta cerrar el DoD de M0: demostración desde cero y tag `v0.1.0`.
-El resto del alcance y los criterios de aceptación están en
-[docs/07-roadmap.md](./docs/07-roadmap.md).
+**✅ M0 completado (26-nov-2026, tag `v0.1.0`).** Esqueleto backend/frontend, esquema
+Flyway `V1–V5`, infraestructura local, Dockerfile/Compose de producción (borrador), CI y
+harness funcionan. Siguiente: **M1 · identidad**. El alcance y los criterios de aceptación
+están en [docs/07-roadmap.md](./docs/07-roadmap.md).
 
 ## Desarrollo local y verificación
 

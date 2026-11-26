@@ -18,20 +18,22 @@ Principios de trabajo durante toda la ejecución:
 
 **Objetivo:** esqueleto completo ejecutable con calidad desde el día 1.
 
+**Estado:** ✅ completado · tag `v0.1.0` (2026-11-26)
+
 Entregables:
-- [ ] `backend/`: Maven + Spring Boot 4.1.x + Java 21; paquetes por módulo (§4 doc 04)
+- [x] `backend/`: Maven + Spring Boot 4.1.x + Java 21; paquetes por módulo (§4 doc 04)
       con `shared` mínimo; `FerroApplication` con Modulith.
-- [ ] `frontend/`: Angular 22 (standalone + signals + zoneless + Vitest), Tailwind 4,
+- [x] `frontend/`: Angular 22 (standalone + signals + zoneless + Vitest), Tailwind 4,
       ESLint/Prettier, estructura por features, SignalStore instalado, i18n base.
-- [ ] `infra/docker-compose.dev.yml`: postgres 18 (127.0.0.1:5432), mailpit
+- [x] `infra/docker-compose.dev.yml`: postgres 18 (127.0.0.1:5432), mailpit
       (8025/1025), prometheus (9090), grafana (3003) + dashboard provisioning.
-- [ ] Flyway V1–V5 (esquema completo de doc 05, sin seeds de ejercicios aún).
-- [ ] Reglas ArchUnit (doc 04 §4) + test de verificación Modulith + `mvn verify` verde.
-- [ ] CI GitHub Actions: backend (build+test+checkstyle+gitleaks), frontend
+- [x] Flyway V1–V5 (esquema completo de doc 05, sin seeds de ejercicios aún).
+- [x] Reglas ArchUnit (doc 04 §4) + test de verificación Modulith + `mvn verify` verde.
+- [x] CI GitHub Actions: backend (build+test+checkstyle+gitleaks), frontend
       (build+test+lint), en paralelo; badge en README.
-- [ ] `Dockerfile` multi-stage + `infra/docker-compose.prod.yml` (borrador funcional).
-- [ ] README: quickstart real (`docker compose up -d && mvn spring-boot:run`).
-- [ ] Registro del puerto 3003 en `~/srv/PUERTOS.md` del servidor de desarrollo.
+- [x] `Dockerfile` multi-stage + `infra/docker-compose.prod.yml` (borrador funcional).
+- [x] README: quickstart real (`docker compose up -d && mvn spring-boot:run`).
+- [x] Registro del puerto 3003 en `~/srv/PUERTOS.md` del servidor de desarrollo.
 
 **DoD:** desde cero: `docker compose -f infra/docker-compose.dev.yml up -d`,
 `mvn spring-boot:run` (health 200), `ng serve` (página base), CI verde, `git tag v0.1.0`.
