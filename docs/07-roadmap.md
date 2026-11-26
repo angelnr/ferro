@@ -44,8 +44,8 @@ Entregables:
 **Objetivo:** entrar, registrarse (email+OAuth), tener sesión segura.
 
 **Estado:** 🚧 en curso · registro, login, refresh con rotación, logout, `/auth/me`,
-verificación de email, Swagger, perfil, cambio/recuperación de contraseña, borrado de cuenta
-y contraseñas comunes implementados. Faltan OAuth, rate limit, CSP y la UI/E2E.
+verificación de email, Swagger, perfil, contraseñas, borrado de cuenta, rate limiting y CSP
+implementados. Faltan OAuth y la UI/E2E.
 
 Entregables:
 - [ ] RF-001…011 completos (registro, login, refresh+rotación, logout, verificación,

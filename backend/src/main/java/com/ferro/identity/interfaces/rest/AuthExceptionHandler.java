@@ -32,6 +32,7 @@ import com.ferro.identity.domain.PasswordResetInvalidException;
 import com.ferro.identity.domain.RefreshInvalidException;
 import com.ferro.identity.domain.VerificationInvalidException;
 import com.ferro.shared.domain.DomainException;
+import com.ferro.shared.domain.RateLimitExceededException;
 
 /** Traduce excepciones a RFC 7807 con un `code` estable para la UI y los tests. */
 @RestControllerAdvice
@@ -90,6 +91,15 @@ public class AuthExceptionHandler {
     @ExceptionHandler(PasswordResetInvalidException.class)
     ResponseEntity<ProblemDetail> passwordResetInvalid(PasswordResetInvalidException exception) {
         return response(problem(HttpStatus.BAD_REQUEST, "PASSWORD_RESET_INVALID", exception.getMessage()));
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    ResponseEntity<ProblemDetail> rateLimited(RateLimitExceededException exception) {
+        ProblemDetail problem = problem(HttpStatus.TOO_MANY_REQUESTS, "RATE_LIMITED", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header("Retry-After", Long.toString(exception.retryAfterSeconds()))
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+                .body(problem);
     }
 
     @ExceptionHandler(AccountLockedException.class)

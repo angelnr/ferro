@@ -160,6 +160,22 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `ChangePasswordService`; `revokeAllForUserExcept`; test `changes_password_and_revokes_other_sessions`.
 - **Comprobación:** el refresh de la sesión actual sigue funcionando y el de otro dispositivo devuelve 401.
 
+### L-018 · Los tests funcionales no pueden compartir los límites de producción
+- **Fecha:** 2026-11-26
+- **Síntoma:** el registro de 5/h por IP habría hecho fallar la suite de integración, que crea decenas de usuarios desde la misma IP.
+- **Causa raíz:** el rate limiter se activa por defecto y los tests funcionales no son tráfico real.
+- **Prevención:** `ferro.rate-limit.enabled=false` en tests de flujo y una clase dedicada con el límite activo para probar el 429.
+- **Artefacto:** `RateLimitIntegrationTest`; propiedad en `AuthFlowIntegrationTest`.
+- **Comprobación:** la suite normal pasa y el test de rate limit verifica `429 + Retry-After: 60`.
+
+### L-019 · La CSP global rompe Swagger UI
+- **Fecha:** 2026-11-26
+- **Síntoma:** al aplicar `default-src 'self'` a todas las respuestas, la UI de Swagger dejaba de cargar sus recursos.
+- **Causa raíz:** la UI de springdoc necesita scripts/estilos propios y no sigue la CSP pensada para la API JSON.
+- **Prevención:** aplicar CSP a la API y excluir `/api/docs` y `/api/api-docs`; la CSP del frontend se define aparte en `vercel.json`.
+- **Artefacto:** `SecurityHeadersFilter`; `frontend/vercel.json`; test de cabeceras.
+- **Comprobación:** health devuelve las cabeceras y Swagger sigue respondiendo.
+
 ---
 
 ## Revisión por milestone

@@ -33,7 +33,7 @@ import com.jayway.jsonpath.JsonPath;
 
 import jakarta.servlet.http.Cookie;
 
-@SpringBootTest
+@SpringBootTest(properties = "ferro.rate-limit.enabled=false")
 @AutoConfigureMockMvc
 @Import(AuthFlowIntegrationTest.EmailTestConfig.class)
 class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {

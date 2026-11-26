@@ -32,10 +32,12 @@ import com.ferro.identity.application.RegisterCommand;
 import com.ferro.identity.application.RegisterUserService;
 import com.ferro.identity.domain.InvalidCredentialsException;
 import com.ferro.identity.domain.InvalidOriginException;
+import com.ferro.platform.api.RateLimiter;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -49,6 +51,7 @@ public class AuthController {
     private final LogoutService logoutService;
     private final GetCurrentUserService getCurrentUserService;
     private final RefreshProperties refreshProperties;
+    private final RateLimiter rateLimiter;
     private final Set<String> allowedOrigins;
 
     public AuthController(
@@ -58,6 +61,7 @@ public class AuthController {
             LogoutService logoutService,
             GetCurrentUserService getCurrentUserService,
             RefreshProperties refreshProperties,
+            RateLimiter rateLimiter,
             @Value("${ferro.security.cors.allowed-origins:http://localhost:4200}") String allowedOrigins) {
         this.registerUserService = registerUserService;
         this.loginService = loginService;
@@ -65,6 +69,7 @@ public class AuthController {
         this.logoutService = logoutService;
         this.getCurrentUserService = getCurrentUserService;
         this.refreshProperties = refreshProperties;
+        this.rateLimiter = rateLimiter;
         this.allowedOrigins = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(origin -> !origin.isEmpty())
@@ -75,7 +80,9 @@ public class AuthController {
     @Operation(summary = "Registra una cuenta email+contraseña")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request,
-            @RequestHeader(value = "Origin", required = false) String origin) {
+            @RequestHeader(value = "Origin", required = false) String origin,
+            HttpServletRequest httpRequest) {
+        rateLimiter.checkRegister(httpRequest.getRemoteAddr());
         validateOrigin(origin);
         AuthResult result = registerUserService.register(new RegisterCommand(
                 request.displayName(),
@@ -95,7 +102,9 @@ public class AuthController {
     @Operation(summary = "Inicia sesión con email+contraseña")
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest request,
-            @RequestHeader(value = "Origin", required = false) String origin) {
+            @RequestHeader(value = "Origin", required = false) String origin,
+            HttpServletRequest httpRequest) {
+        rateLimiter.checkLogin(httpRequest.getRemoteAddr(), request.email());
         validateOrigin(origin);
         AuthResult result = loginService.login(new LoginCommand(request.email(), request.password()));
         return ResponseEntity.ok()
@@ -109,7 +118,9 @@ public class AuthController {
     @Operation(summary = "Rota el refresh token de la cookie")
     public ResponseEntity<AuthResponse> refresh(
             @CookieValue(name = RefreshProperties.COOKIE_NAME, required = false) String refreshToken,
-            @RequestHeader(value = "Origin", required = false) String origin) {
+            @RequestHeader(value = "Origin", required = false) String origin,
+            HttpServletRequest httpRequest) {
+        rateLimiter.checkRefresh(httpRequest.getRemoteAddr());
         validateOrigin(origin);
         AuthResult result = refreshService.refresh(refreshToken);
         return ResponseEntity.ok()

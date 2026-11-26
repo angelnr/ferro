@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ferro.identity.application.PasswordResetService;
+import com.ferro.platform.api.RateLimiter;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,14 +22,17 @@ import jakarta.validation.constraints.Size;
 public class PasswordResetController {
 
     private final PasswordResetService passwordResetService;
+    private final RateLimiter rateLimiter;
 
-    public PasswordResetController(PasswordResetService passwordResetService) {
+    public PasswordResetController(PasswordResetService passwordResetService, RateLimiter rateLimiter) {
         this.passwordResetService = passwordResetService;
+        this.rateLimiter = rateLimiter;
     }
 
     @PostMapping("/request")
     @Operation(summary = "Solicita un enlace de recuperación (siempre 202)")
     public ResponseEntity<Void> request(@Valid @RequestBody ResetRequest request) {
+        rateLimiter.checkPasswordReset(request.email());
         passwordResetService.request(request.email());
         return ResponseEntity.accepted().build();
     }
