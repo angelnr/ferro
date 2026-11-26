@@ -7,15 +7,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.net.URI;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import com.ferro.identity.application.port.EmailSender;
+import com.ferro.identity.domain.Email;
 import com.ferro.support.AbstractPostgresIntegrationTest;
 import com.jayway.jsonpath.JsonPath;
 
@@ -23,12 +33,21 @@ import jakarta.servlet.http.Cookie;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(AuthFlowIntegrationTest.EmailTestConfig.class)
 class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
 
     private static final String PASSWORD = "Ferro12345";
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private CapturingEmailSender emailSender;
+
+    @BeforeEach
+    void clearEmails() {
+        emailSender.clear();
+    }
 
     @Test
     void register_returns_user_token_and_refresh_cookie() throws Exception {
@@ -169,6 +188,72 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
                 .andExpect(jsonPath("$.code").value("ACCOUNT_LOCKED"));
     }
 
+    @Test
+    void register_sends_verification_email_and_confirm_activates_user() throws Exception {
+        Registered registered = register(uniqueEmail());
+
+        assertThat(emailSender.emails()).hasSize(1);
+        String token = tokenFrom(emailSender.last().link());
+
+        mockMvc.perform(post("/api/v1/auth/email-verification/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content(confirmBody(token)))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + registered.accessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user.status").value("ACTIVE"));
+
+        mockMvc.perform(post("/api/v1/auth/email-verification/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content(confirmBody(token)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VERIFICATION_INVALID"));
+    }
+
+    @Test
+    void resend_invalidates_the_previous_token() throws Exception {
+        Registered registered = register(uniqueEmail());
+        String firstToken = tokenFrom(emailSender.last().link());
+
+        mockMvc.perform(post("/api/v1/auth/email-verification/resend")
+                        .header("Authorization", "Bearer " + registered.accessToken()))
+                .andExpect(status().isAccepted());
+
+        assertThat(emailSender.emails()).hasSize(2);
+        String secondToken = tokenFrom(emailSender.last().link());
+        assertThat(secondToken).isNotEqualTo(firstToken);
+
+        mockMvc.perform(post("/api/v1/auth/email-verification/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content(confirmBody(firstToken)))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(post("/api/v1/auth/email-verification/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content(confirmBody(secondToken)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void invalid_verification_token_is_rejected() throws Exception {
+        mockMvc.perform(post("/api/v1/auth/email-verification/confirm")
+                        .contentType(APPLICATION_JSON)
+                        .content(confirmBody("not-a-real-token")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VERIFICATION_INVALID"));
+    }
+
+    @Test
+    void openapi_docs_are_public_and_include_auth_paths() throws Exception {
+        mockMvc.perform(get("/api/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.info.title").value("Ferro API"))
+                .andExpect(jsonPath("$.paths['/api/v1/auth/register']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/auth/email-verification/confirm']")
+                        .exists());
+    }
+
     private Registered register(String email) throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(APPLICATION_JSON)
@@ -205,5 +290,53 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
         return "u" + UUID.randomUUID().toString().replace("-", "") + "@ferro.dev";
     }
 
+    private String confirmBody(String token) {
+        return "{\"token\": \"%s\"}".formatted(token);
+    }
+
+    private String tokenFrom(String link) {
+        String query = URI.create(link).getRawQuery();
+        for (String parameter : query.split("&")) {
+            if (parameter.startsWith("token=")) {
+                return parameter.substring("token=".length());
+            }
+        }
+        throw new IllegalStateException("El enlace no contiene token: " + link);
+    }
+
     private record Registered(String email, String accessToken, Cookie cookie) {}
+
+    @TestConfiguration
+    static class EmailTestConfig {
+
+        @Bean
+        @Primary
+        CapturingEmailSender capturingEmailSender() {
+            return new CapturingEmailSender();
+        }
+    }
+
+    static class CapturingEmailSender implements EmailSender {
+
+        private final List<SentEmail> emails = new CopyOnWriteArrayList<>();
+
+        @Override
+        public void sendVerificationEmail(Email recipient, String verificationLink) {
+            emails.add(new SentEmail(recipient, verificationLink));
+        }
+
+        List<SentEmail> emails() {
+            return List.copyOf(emails);
+        }
+
+        SentEmail last() {
+            return emails.get(emails.size() - 1);
+        }
+
+        void clear() {
+            emails.clear();
+        }
+    }
+
+    record SentEmail(Email recipient, String link) {}
 }

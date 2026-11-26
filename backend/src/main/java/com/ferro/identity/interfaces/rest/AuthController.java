@@ -33,10 +33,14 @@ import com.ferro.identity.application.RegisterUserService;
 import com.ferro.identity.domain.InvalidCredentialsException;
 import com.ferro.identity.domain.InvalidOriginException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Auth")
 public class AuthController {
 
     private final RegisterUserService registerUserService;
@@ -68,6 +72,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Registra una cuenta email+contraseña")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request,
             @RequestHeader(value = "Origin", required = false) String origin) {
@@ -87,6 +92,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Inicia sesión con email+contraseña")
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest request,
             @RequestHeader(value = "Origin", required = false) String origin) {
@@ -100,6 +106,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
+    @Operation(summary = "Rota el refresh token de la cookie")
     public ResponseEntity<AuthResponse> refresh(
             @CookieValue(name = RefreshProperties.COOKIE_NAME, required = false) String refreshToken,
             @RequestHeader(value = "Origin", required = false) String origin) {
@@ -113,6 +120,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "Revoca el refresh token actual")
     public ResponseEntity<Void> logout(
             @CookieValue(name = RefreshProperties.COOKIE_NAME, required = false) String refreshToken,
             @RequestHeader(value = "Origin", required = false) String origin) {
@@ -124,6 +132,8 @@ public class AuthController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Devuelve el usuario y sus preferencias")
+    @SecurityRequirement(name = "bearerAuth")
     public MeResponse me(@AuthenticationPrincipal Jwt jwt) {
         UUID userId;
         try {

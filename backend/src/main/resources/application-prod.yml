@@ -13,6 +13,18 @@ ferro:
     cors:
       allowed-origins: ${CORS_ALLOWED_ORIGINS:https://ferro.vercel.app}
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+spring:
+  mail:
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 management:
   endpoints:
     web:

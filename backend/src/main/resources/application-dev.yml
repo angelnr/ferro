@@ -8,6 +8,14 @@ ferro:
     refresh:
       cookie-secure: false
       cookie-same-site: Lax
+  mail:
+    from: no-reply@ferro.local
+
+spring:
+  mail:
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
 
 management:
   endpoint:

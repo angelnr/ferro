@@ -136,6 +136,22 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `LoginService`, `RefreshService`; tests `account_locks_after_five_consecutive_failures` y `refresh_rotates_and_reusing_a_revoked_token_revokes_the_family`.
 - **Comprobación:** 5 fallos consecutivos bloquean la cuenta y reutilizar un refresh invalida también el nuevo.
 
+### L-015 · El health de SMTP tumba `/actuator/health`
+- **Fecha:** 2026-11-26
+- **Síntoma:** todos los tests de contexto pasaban, pero `healthEndpointIsUpWithoutAuthentication` devolvía 503 al añadir `spring-boot-starter-mail`.
+- **Causa raíz:** el indicador `mail` de Actuator intenta conectar con SMTP y marca la salud global como DOWN si Mailpit no está disponible (CI no lo levanta).
+- **Prevención:** `management.health.mail.enabled=false`; la readiness depende de la BD, no del proveedor de email. Los fallos de envío se loguean y el usuario puede reenviar.
+- **Artefacto:** `application.yml`; `MailEmailSender` captura `MailException`; test de health.
+- **Comprobación:** `mvn verify` pasa con y sin SMTP disponible.
+
+### L-016 · Gitleaks marca los placeholders de secretos
+- **Fecha:** 2026-11-26
+- **Síntoma:** el pre-commit bloqueó el commit por `JWT_SECRET=cambia-este-secreto...` en `infra/.env.example`.
+- **Causa raíz:** la regla `generic-api-key` detecta alta entropía aunque sea un placeholder.
+- **Prevención:** dejar el valor vacío en el ejemplo y explicar cómo generarlo; el compose exige la variable en tiempo de arranque.
+- **Artefacto:** `infra/.env.example`; gitleaks en pre-commit/CI.
+- **Comprobación:** `gitleaks git --staged` sin hallazgos y `docker compose config` falla si falta `JWT_SECRET`.
+
 ---
 
 ## Revisión por milestone

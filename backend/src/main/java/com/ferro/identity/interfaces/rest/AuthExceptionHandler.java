@@ -28,6 +28,7 @@ import com.ferro.identity.domain.InvalidOriginException;
 import com.ferro.identity.domain.InvalidPasswordException;
 import com.ferro.identity.domain.InvalidUnitSystemException;
 import com.ferro.identity.domain.RefreshInvalidException;
+import com.ferro.identity.domain.VerificationInvalidException;
 import com.ferro.shared.domain.DomainException;
 
 /** Traduce excepciones a RFC 7807 con un `code` estable para la UI y los tests. */
@@ -76,6 +77,11 @@ public class AuthExceptionHandler {
     @ExceptionHandler(RefreshInvalidException.class)
     ResponseEntity<ProblemDetail> refreshInvalid(RefreshInvalidException exception) {
         return response(problem(HttpStatus.UNAUTHORIZED, "REFRESH_INVALID", exception.getMessage()));
+    }
+
+    @ExceptionHandler(VerificationInvalidException.class)
+    ResponseEntity<ProblemDetail> verificationInvalid(VerificationInvalidException exception) {
+        return response(problem(HttpStatus.BAD_REQUEST, "VERIFICATION_INVALID", exception.getMessage()));
     }
 
     @ExceptionHandler(AccountLockedException.class)

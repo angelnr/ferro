@@ -74,9 +74,9 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 
 **✅ M0 completado (26-nov-2026, tag `v0.1.0`).** Esqueleto backend/frontend, esquema
 Flyway `V1–V5`, infraestructura local, Dockerfile/Compose de producción (borrador), CI y
-harness funcionan. **M1 en curso:** registro, login, refresh con rotación, logout y `/auth/me`
-ya implementados con Argon2id, JWT y cookie httpOnly. Faltan verificación de email, OAuth,
-rate limiting, perfil, recuperación de contraseña, OpenAPI y la UI de autenticación.
+harness funcionan. **M1 en curso:** registro, login, refresh con rotación, logout, `/auth/me`,
+verificación de email y Swagger ya implementados. Faltan OAuth, rate limiting, perfil,
+recuperación de contraseña, borrado de cuenta y la UI de autenticación.
 
 ## Desarrollo local y verificación
 
@@ -96,7 +96,7 @@ Servicios de desarrollo:
 | Servicio | URL | Credenciales |
 |---|---|---|
 | API | http://localhost:8080/actuator/health | — |
-| Swagger (M1) | http://localhost:8080/api/docs | — |
+| Swagger | http://localhost:8080/api/docs | — |
 | Mailpit | http://localhost:8025 | — |
 | Prometheus | http://localhost:9090 | — |
 | Grafana | http://localhost:3003 | `admin` / `ferro` |

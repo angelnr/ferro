@@ -34,6 +34,10 @@ for f in \
   backend/src/test/java/com/ferro/infrastructure/FlywayMigrationsTest.java \
   backend/src/test/java/com/ferro/infrastructure/FlywaySpringIntegrationTest.java \
   backend/src/test/java/com/ferro/identity/interfaces/rest/AuthFlowIntegrationTest.java \
+  backend/src/main/java/com/ferro/identity/interfaces/rest/EmailVerificationController.java \
+  backend/src/main/java/com/ferro/identity/application/EmailVerificationService.java \
+  backend/src/main/java/com/ferro/identity/infrastructure/mail/MailEmailSender.java \
+  backend/src/main/java/com/ferro/platform/security/OpenApiConfig.java \
   backend/src/main/resources/db/migration/V1__identity_and_extensions.sql \
   backend/src/main/resources/db/migration/V2__catalog.sql \
   backend/src/main/resources/db/migration/V3__training.sql \
@@ -74,6 +78,11 @@ need_grep backend/pom.xml 'testcontainers-postgresql' 'Testcontainers PostgreSQL
 need_grep backend/pom.xml 'spring-boot-starter-flyway' 'autoconfiguración de Flyway de Boot 4'
 need_grep backend/pom.xml 'spring-boot-starter-oauth2-resource-server' 'resource server JWT'
 need_grep backend/pom.xml 'bcprov-jdk18on' 'BouncyCastle para Argon2id'
+need_grep backend/pom.xml 'springdoc-openapi-starter-webmvc-ui' 'OpenAPI/Swagger'
+need_grep backend/pom.xml 'spring-boot-starter-mail' 'envío de emails'
+need_grep backend/src/main/resources/application.yml 'api-docs' 'ruta de OpenAPI'
+need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'email-verification/confirm' 'confirmación pública'
+need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java '/api/api-docs' 'OpenAPI público'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'anyRequest\(\)' 'regla de autenticación global'
 need_grep backend/src/main/java/com/ferro/platform/security/SecurityConfig.java 'SessionCreationPolicy.STATELESS' 'API stateless'
 need_grep backend/src/main/java/com/ferro/identity/interfaces/rest/AuthController.java '/api/v1/auth' 'contrato de auth'

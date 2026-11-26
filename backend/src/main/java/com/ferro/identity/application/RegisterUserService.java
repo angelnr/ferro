@@ -25,13 +25,19 @@ public class RegisterUserService {
     private final UserRepository users;
     private final PasswordHasher passwordHasher;
     private final SessionIssuer sessions;
+    private final EmailVerificationService emailVerifications;
     private final Clock clock;
 
     public RegisterUserService(
-            UserRepository users, PasswordHasher passwordHasher, SessionIssuer sessions, Clock clock) {
+            UserRepository users,
+            PasswordHasher passwordHasher,
+            SessionIssuer sessions,
+            EmailVerificationService emailVerifications,
+            Clock clock) {
         this.users = users;
         this.passwordHasher = passwordHasher;
         this.sessions = sessions;
+        this.emailVerifications = emailVerifications;
         this.clock = clock;
     }
 
@@ -61,6 +67,7 @@ public class RegisterUserService {
         } catch (DataIntegrityViolationException exception) {
             throw new EmailTakenException();
         }
+        emailVerifications.issueFor(user);
         return sessions.issue(user);
     }
 

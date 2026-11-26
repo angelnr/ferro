@@ -43,10 +43,9 @@ Entregables:
 
 **Objetivo:** entrar, registrarse (email+OAuth), tener sesión segura.
 
-**Estado:** 🚧 en curso · registro, login, refresh con rotación, logout y `/auth/me`
-implementados con Argon2id, JWT y cookie httpOnly; también bloqueo progresivo y
-revocación por reutilización. Faltan emails, OAuth, rate limit, perfil, recuperación,
-OpenAPI y la UI de autenticación.
+**Estado:** 🚧 en curso · registro, login, refresh con rotación, logout, `/auth/me`,
+verificación de email y Swagger implementados. Faltan OAuth, rate limit, perfil,
+recuperación, borrado y la UI de autenticación.
 
 Entregables:
 - [ ] RF-001…011 completos (registro, login, refresh+rotación, logout, verificación,
