@@ -10,9 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.ferro.support.AbstractPostgresIntegrationTest;
+
 @SpringBootTest
 @AutoConfigureMockMvc
-class HealthEndpointTest {
+class HealthEndpointTest extends AbstractPostgresIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -22,5 +24,10 @@ class HealthEndpointTest {
         mockMvc.perform(get("/actuator/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("UP"));
+    }
+
+    @Test
+    void prometheusEndpointIsExposed() throws Exception {
+        mockMvc.perform(get("/actuator/prometheus")).andExpect(status().isOk());
     }
 }

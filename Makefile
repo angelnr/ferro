@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 
-.PHONY: help doctor hooks bootstrap install fmt lint test verify verify-fast verify-backend verify-frontend secrets docs e2e baseline clean
+.PHONY: help doctor hooks bootstrap install fmt lint test verify verify-fast verify-backend verify-frontend secrets docs e2e baseline clean dev-up dev-down dev-logs dev-ps run-backend
 
 help: ## Muestra esta ayuda
 	@awk 'BEGIN {FS = ":.*##"; printf "\nFerro · comandos del harness\n\n"} /^[a-zA-Z_-]+:.*?##/ {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -55,6 +55,21 @@ docs: ## Comprueba enlaces relativos de README y docs
 e2e: ## E2E con Playwright (se configura en M1; hoy falla a propósito)
 	@echo "E2E no configurado todavía (M1). No hay victoria que declarar aquí." >&2
 	@exit 2
+
+dev-up: ## Levanta Postgres 18, Mailpit, Prometheus y Grafana
+	@docker compose -f infra/docker-compose.dev.yml up -d
+
+dev-down: ## Para los servicios de desarrollo (conserva volúmenes)
+	@docker compose -f infra/docker-compose.dev.yml down
+
+dev-logs: ## Logs de los servicios de desarrollo
+	@docker compose -f infra/docker-compose.dev.yml logs -f --tail=100
+
+dev-ps: ## Estado de los servicios de desarrollo
+	@docker compose -f infra/docker-compose.dev.yml ps
+
+run-backend: ## Arranca la API en Docker contra infra/docker-compose.dev.yml
+	@scripts/backend.sh run
 
 baseline: ## Actualiza el baseline de tests tras añadir tests (revisa el diff)
 	@scripts/update-baseline.sh

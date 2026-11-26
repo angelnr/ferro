@@ -59,6 +59,8 @@ El host puede no tener JDK ni Node: **todo se ejecuta en Docker** con versiones 
 | `make verify` | **Gate completo**: harness, secretos, docs, backend (`mvn verify`), frontend (formato, lint, tests con cobertura, build) | **Antes de declarar terminado** |
 | `make verify-fast` | Lint + secretos; **no válido como evidencia** | Pre-commit manual |
 | `make verify-backend` / `make verify-frontend` | Verificación de una sola parte | Debug |
+| `make dev-up` / `make dev-down` | Postgres 18, Mailpit, Prometheus y Grafana | Desarrollo local |
+| `make run-backend` | API en Docker contra la infra local (`SERVER_PORT=8082` si 8080 está ocupado) | Probar la app |
 | `make secrets` | gitleaks sobre el historial | Auditoría |
 | `make baseline` | Actualiza el baseline tras **añadir** tests | Solo con tests nuevos |
 | `make e2e` | Playwright (M1). Hoy falla a propósito | M1+ |
@@ -125,6 +127,8 @@ scripts/check-docs.py            enlaces relativos de README/docs
 scripts/backend.sh|frontend.sh   ejecución Docker con versiones fijas
 .githooks/                       pre-commit, commit-msg, pre-push
 .github/workflows/ci.yml         misma verificación en CI
+infra/docker-compose.dev.yml    Postgres 18, Mailpit, Prometheus y Grafana
+backend/src/main/resources/db/migration/  migraciones Flyway (V1 identity por ahora)
 docs/harness/lessons.md          lecciones → reglas/tests/hooks
 docs/harness/test-baseline.json  mínimo de tests exigido
 backend/src/test/.../Postgres18ContainerTest.java  humo de integración con PostgreSQL 18 real

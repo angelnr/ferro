@@ -88,6 +88,30 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `backend/pom.xml`; invariante en `scripts/check-harness.sh`.
 - **Comprobación:** `Postgres18ContainerTest` arranca `postgres:18-alpine` y consulta su versión.
 
+### L-009 · PostgreSQL 18 cambia el punto de montaje del volumen
+- **Fecha:** 2026-11-26
+- **Síntoma:** el contenedor `postgres:18-alpine` entraba en bucle de reinicio con «data in /var/lib/postgresql/data (unused mount/volume)».
+- **Causa raíz:** desde la imagen 18 el volumen debe montarse en `/var/lib/postgresql`; los datos viven en un subdirectorio versionado para permitir `pg_upgrade`.
+- **Prevención:** montar el volumen en `/var/lib/postgresql` y arrancar el contenedor con healthcheck.
+- **Artefacto:** `infra/docker-compose.dev.yml`; invariante en `scripts/check-harness.sh`.
+- **Comprobación:** `make dev-up` deja `ferro-postgres` en `healthy` y `pg_isready` responde.
+
+### L-010 · `citext` no normaliza a minúsculas
+- **Fecha:** 2026-11-26
+- **Síntoma:** un test esperaba que insertar `Test@Ferro.dev` devolviese `test@ferro.dev`; `citext` devolvía el texto original.
+- **Causa raíz:** `citext` hace comparaciones y unicidad case-insensitive, pero **conserva** el valor tal cual se insertó.
+- **Prevención:** la normalización NFKC + trim + minúsculas es responsabilidad del VO `Email` (docs/05 §6.5); la BD solo garantiza unicidad case-insensitive.
+- **Artefacto:** `backend/src/main/java/com/ferro/identity/domain/Email.java`; `FlywayMigrationsTest` comprueba ambos comportamientos.
+- **Comprobación:** `EmailTest` y el test de migraciones pasan con el caso mixto y el duplicado.
+
+### L-011 · Boot 4 modulariza la autoconfiguración de Flyway
+- **Fecha:** 2026-11-26
+- **Síntoma:** la API arrancaba sin errores contra Postgres, pero no existía `flyway_schema_history` ni se aplicaba `V1`.
+- **Causa raíz:** en Boot 4 la autoconfiguración vive en módulos separados; `flyway-core` aporta la librería, pero no `spring-boot-flyway`. Sin ese módulo, Flyway simplemente no se ejecuta (fallo silencioso).
+- **Prevención:** usar `spring-boot-starter-flyway` y verificar en un test que el bean `Flyway` existe y que hay migraciones aplicadas.
+- **Artefacto:** `backend/pom.xml`; `FlywaySpringIntegrationTest`; invariante en `scripts/check-harness.sh`.
+- **Comprobación:** `mvn verify` falla si se quita el starter o si Flyway no aplica `V1` en el contexto Spring.
+
 ---
 
 ## Revisión por milestone

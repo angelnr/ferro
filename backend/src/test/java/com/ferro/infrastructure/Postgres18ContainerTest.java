@@ -8,10 +8,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
+
+import com.ferro.support.AbstractPostgresIntegrationTest;
 
 /**
  * Humo del harness de integración: PostgreSQL real 18 en Testcontainers.
@@ -20,12 +18,7 @@ import org.testcontainers.utility.DockerImageName;
  * distinto. Este test demuestra que Docker-in-Docker y el driver funcionan antes de escribir
  * los repositorios de M1.
  */
-@Testcontainers
-class Postgres18ContainerTest {
-
-    @Container
-    static final PostgreSQLContainer<?> POSTGRES =
-            new PostgreSQLContainer<>(DockerImageName.parse("postgres:18-alpine"));
+class Postgres18ContainerTest extends AbstractPostgresIntegrationTest {
 
     @Test
     void postgres_is_reachable_and_runs_major_version_18() throws Exception {

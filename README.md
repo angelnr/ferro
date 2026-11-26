@@ -79,32 +79,46 @@ decisión técnica tiene su ADR.
 ## Desarrollo local y verificación
 
 El harness **no necesita JDK ni Node en el host**: ejecuta versiones fijas en Docker
-(Java 21 + Maven 3.9, Node 24). Primera vez en un clon:
+(Java 21 + Maven 3.9, Node 24).
 
 ```bash
-make bootstrap   # diagnóstico del entorno + instalación de git hooks
-make verify      # gate completo + bloque de evidencia
+make bootstrap    # diagnóstico del entorno + instalación de git hooks
+make dev-up       # Postgres 18 + Mailpit + Prometheus + Grafana
+make run-backend  # API en http://localhost:8080 (Spring Boot + Flyway)
+make verify       # gate completo + bloque de evidencia
 ```
+
+Servicios de desarrollo:
+
+| Servicio | URL | Credenciales |
+|---|---|---|
+| API | http://localhost:8080/actuator/health | — |
+| Swagger (M1) | http://localhost:8080/api/docs | — |
+| Mailpit | http://localhost:8025 | — |
+| Prometheus | http://localhost:9090 | — |
+| Grafana | http://localhost:3003 | `admin` / `ferro` |
+
+Si el 8080 está ocupado: `SERVER_PORT=8082 make run-backend` (y ajusta el target de
+Prometheus en `infra/prometheus/prometheus.yml` si quieres scrapear ese puerto). Las
+migraciones Flyway se aplican solas al arrancar; para resetear la BD en local usa
+`docker compose -f infra/docker-compose.dev.yml down -v`.
 
 | Comando | Para qué |
 |---|---|
 | `make doctor` | Comprueba Docker, hooks, cachés, red y puertos |
 | `make fmt` | Aplica Spotless (Java) y Prettier (Angular) |
-| `make test` | Tests unitarios rápidos de backend y frontend |
-| `make verify` | **Definition of Done**: backend `mvn clean verify` (tests, Checkstyle, Spotless, ArchUnit, Modulith), frontend (formato, ESLint, Vitest con cobertura, build), gitleaks, enlaces de docs e invariantes del harness |
+| `make test` | Tests unitarios e integración (Testcontainers) |
+| `make verify` | **Definition of Done**: backend `mvn clean verify`, frontend completo, gitleaks, docs e invariantes del harness |
 | `make verify-backend` / `make verify-frontend` | Verificación de una sola parte |
+| `make dev-up` / `make dev-down` | Levanta/para la infraestructura local |
 
 `make verify` sale 0 **solo** si todos los gates pasan, deja la evidencia en
-`.harness/last-verify.txt` y la imprime. El protocolo completo (reglas anti-victoria
-prematura, lessons learned y cómo añadir gates) está en [AGENTS.md](./AGENTS.md).
+`.harness/last-verify.txt` y la imprime. El protocolo completo está en [AGENTS.md](./AGENTS.md).
 
-```bash
-# Servicios de desarrollo (se añaden en M0; aún no existen)
-docker compose -f infra/docker-compose.dev.yml up -d
-```
+Estado actual: **M0 en curso**. Ya existen esqueleto backend/frontend, harness, CI,
+infraestructura local y Flyway `V1` (identity + extensiones). Faltan `V2–V5`, Dockerfile,
+compose de producción y el resto de fundaciones de M0.
 
-Estado actual: documentación v1.0 cerrada y **esqueleto inicial ejecutable** con gates
-desde el día 1. M0 sigue en curso: todavía no hay endpoints de negocio ni persistencia.
 
 
 ## Licencia

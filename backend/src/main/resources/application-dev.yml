@@ -1,0 +1,9 @@
+logging:
+  level:
+    com.ferro: debug
+    org.flywaydb: info
+
+management:
+  endpoint:
+    health:
+      show-details: always
