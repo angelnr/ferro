@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ferro.platform.api.LocalizedProblemTranslator;
 import com.ferro.training.domain.InvalidSessionStateException;
 import com.ferro.training.domain.InvalidTrainingException;
 import com.ferro.training.domain.RoutineNameTakenException;
@@ -21,6 +22,11 @@ import com.ferro.training.domain.SessionNotFoundException;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class TrainingExceptionHandler {
+    private final LocalizedProblemTranslator messages;
+
+    public TrainingExceptionHandler(LocalizedProblemTranslator messages) {
+        this.messages = messages;
+    }
 
     @ExceptionHandler(SessionAlreadyActiveException.class)
     ResponseEntity<ProblemDetail> alreadyActive(SessionAlreadyActiveException exception) {
@@ -33,7 +39,7 @@ public class TrainingExceptionHandler {
         }
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(RoutineNotFoundException.class)
@@ -59,7 +65,7 @@ public class TrainingExceptionHandler {
         problem.setProperty("code", "NOT_FOUND");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(InvalidSessionStateException.class)
@@ -70,7 +76,7 @@ public class TrainingExceptionHandler {
         problem.setProperty("code", "INVALID_SESSION_STATE");
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     private ResponseEntity<ProblemDetail> problem(
@@ -81,7 +87,7 @@ public class TrainingExceptionHandler {
         problem.setProperty("code", code);
         return ResponseEntity.status(status)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(InvalidTrainingException.class)
@@ -93,6 +99,6 @@ public class TrainingExceptionHandler {
         problem.setProperty("code", "VALIDATION_FAILED");
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 }

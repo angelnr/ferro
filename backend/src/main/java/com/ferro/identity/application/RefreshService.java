@@ -54,7 +54,9 @@ public class RefreshService {
 
         if (token.revokedAt() != null) {
             refreshTokens.revokeAllForUser(token.userId(), now);
-            users.findById(token.userId()).ifPresent(user -> emailSender.sendSecurityAlertEmail(user.email()));
+            users.findById(token.userId())
+                    .ifPresent(user -> emailSender.sendSecurityAlertEmail(
+                            user.email(), user.locale().code()));
             throw new RefreshInvalidException();
         }
         if (!token.isActive(now)) {

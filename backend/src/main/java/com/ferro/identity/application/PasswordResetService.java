@@ -90,7 +90,7 @@ public class PasswordResetService {
         users.save(user);
         tokens.save(token);
         refreshTokens.revokeAllForUser(user.id(), now);
-        emailSender.sendPasswordChangedEmail(user.email());
+        emailSender.sendPasswordChangedEmail(user.email(), user.locale().code());
     }
 
     private void issueFor(User user) {
@@ -100,6 +100,6 @@ public class PasswordResetService {
         tokens.save(issued.token());
         String link =
                 appProperties.frontendUrl().replaceAll("/+$", "") + "/auth/reset-password?token=" + issued.rawToken();
-        emailSender.sendPasswordResetEmail(user.email(), link);
+        emailSender.sendPasswordResetEmail(user.email(), user.locale().code(), link);
     }
 }

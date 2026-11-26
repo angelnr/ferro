@@ -11,11 +11,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ferro.platform.api.LocalizedProblemTranslator;
 import com.ferro.progress.domain.ProgressNotFoundException;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ProgressExceptionHandler {
+    private final LocalizedProblemTranslator messages;
+
+    public ProgressExceptionHandler(LocalizedProblemTranslator messages) {
+        this.messages = messages;
+    }
 
     @ExceptionHandler(ProgressNotFoundException.class)
     ResponseEntity<ProblemDetail> notFound(ProgressNotFoundException exception) {
@@ -25,6 +31,6 @@ public class ProgressExceptionHandler {
         problem.setProperty("code", "NOT_FOUND");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 }

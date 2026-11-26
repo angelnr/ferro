@@ -27,50 +27,94 @@ public class MailEmailSender implements EmailSender, EmailNotifier {
     }
 
     @Override
-    public void sendVerificationEmail(Email recipient, String verificationLink) {
-        send(
-                recipient,
-                "Verifica tu email en Ferro",
-                "Confirma tu cuenta de Ferro abriendo este enlace (válido 24 h):\n\n" + verificationLink);
+    public void sendVerificationEmail(Email recipient, String locale, String verificationLink) {
+        if (english(locale)) {
+            send(
+                    recipient,
+                    "Verify your email for Ferro",
+                    "Confirm your Ferro account by opening this link (valid 24 h):\n\n" + verificationLink);
+        } else {
+            send(
+                    recipient,
+                    "Verifica tu email en Ferro",
+                    "Confirma tu cuenta de Ferro abriendo este enlace (válido 24 h):\n\n" + verificationLink);
+        }
     }
 
     @Override
-    public void sendPasswordResetEmail(Email recipient, String resetLink) {
-        send(
-                recipient,
-                "Recupera tu contraseña de Ferro",
-                "Restablece tu contraseña abriendo este enlace (válido 30 min):\n\n" + resetLink);
+    public void sendPasswordResetEmail(Email recipient, String locale, String resetLink) {
+        if (english(locale)) {
+            send(
+                    recipient,
+                    "Reset your Ferro password",
+                    "Reset your password by opening this link (valid 30 min):\n\n" + resetLink);
+        } else {
+            send(
+                    recipient,
+                    "Recupera tu contraseña de Ferro",
+                    "Restablece tu contraseña abriendo este enlace (válido 30 min):\n\n" + resetLink);
+        }
     }
 
     @Override
-    public void sendPasswordChangedEmail(Email recipient) {
-        send(recipient, "Tu contraseña de Ferro ha cambiado", "Si no reconoces este cambio, contacta con soporte.");
+    public void sendPasswordChangedEmail(Email recipient, String locale) {
+        if (english(locale)) {
+            send(recipient, "Your Ferro password has changed", "If you do not recognise this change, contact support.");
+        } else {
+            send(recipient, "Tu contraseña de Ferro ha cambiado", "Si no reconoces este cambio, contacta con soporte.");
+        }
     }
 
     @Override
-    public void sendAccountDeletedEmail(Email recipient) {
-        send(recipient, "Tu cuenta de Ferro ha sido eliminada", "Todos tus datos han sido borrados.");
+    public void sendAccountDeletedEmail(Email recipient, String locale) {
+        if (english(locale)) {
+            send(recipient, "Your Ferro account has been deleted", "All your data has been erased.");
+        } else {
+            send(recipient, "Tu cuenta de Ferro ha sido eliminada", "Todos tus datos han sido borrados.");
+        }
     }
 
     @Override
-    public void sendWelcomeEmail(Email recipient) {
-        send(recipient, "Bienvenido a Ferro", "Tu cuenta está creada. Verifica tu email y empieza a entrenar.");
+    public void sendWelcomeEmail(Email recipient, String locale) {
+        if (english(locale)) {
+            send(recipient, "Welcome to Ferro", "Your account is ready. Verify your email and start training.");
+        } else {
+            send(recipient, "Bienvenido a Ferro", "Tu cuenta está creada. Verifica tu email y empieza a entrenar.");
+        }
     }
 
     @Override
-    public void sendSecurityAlertEmail(Email recipient) {
-        send(
-                recipient,
-                "Actividad sospechosa en tu cuenta de Ferro",
-                "Se ha reutilizado un refresh token revocado. Hemos cerrado todas tus sesiones.");
+    public void sendSecurityAlertEmail(Email recipient, String locale) {
+        if (english(locale)) {
+            send(
+                    recipient,
+                    "Suspicious activity on your Ferro account",
+                    "A revoked refresh token was reused. We closed all your sessions.");
+        } else {
+            send(
+                    recipient,
+                    "Actividad sospechosa en tu cuenta de Ferro",
+                    "Se ha reutilizado un refresh token revocado. Hemos cerrado todas tus sesiones.");
+        }
     }
 
     @Override
-    public void sendSessionAutoClosed(String recipientEmail) {
-        send(
-                new Email(recipientEmail),
-                "Tu sesión de Ferro se ha cerrado automáticamente",
-                "Han pasado más de 24 horas desde que la iniciaste. Puedes revisarla en el historial.");
+    public void sendSessionAutoClosed(String recipientEmail, String locale) {
+        if (english(locale)) {
+            send(
+                    new Email(recipientEmail),
+                    "Your Ferro session was closed automatically",
+                    "More than 24 hours have passed since you started it. You can review it in history.");
+        } else {
+            send(
+                    new Email(recipientEmail),
+                    "Tu sesión de Ferro se ha cerrado automáticamente",
+                    "Han pasado más de 24 horas desde que la iniciaste. Puedes revisarla en el historial.");
+        }
+    }
+
+    private boolean english(String locale) {
+        return locale != null && locale.toLowerCase(java.util.Locale.ROOT).startsWith("en");
     }
 
     private void send(Email recipient, String subject, String body) {

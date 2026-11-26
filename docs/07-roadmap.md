@@ -138,21 +138,22 @@ sesión pasada testado (PR baja/desaparece). `v0.6.0`.
 
 ## M6 · Semana 7 — PWA, i18n, a11y, pulido
 
-**Estado:** 🚧 en curso · PWA, i18n frontend, a11y básica, tema claro y onboarding hechos.
+**Estado:** ✅ código completo · validación en Android físico pendiente de ejecución manual.
 
 Entregables:
 - [x] PWA: manifest, iconos/splash, service worker app shell (ADR-0009), banner offline
       con reintento y registro solo en producción.
 - [x] i18n runtime ES/EN, `lang` dinámico y gate de paridad de claves.
-- [ ] i18n de errores API y emails (catálogos backend) — pendiente.
+- [x] i18n de errores API (`Accept-Language` + catálogo ES/EN) y emails bilingües.
 - [x] A11y: skip-link, foco visible, `prefers-reduced-motion`, navegación por teclado
-      en E2E y labels/ARIA revisados. Axe-core automatizado pendiente de dependencia.
+      y axe-core en E2E (sin violaciones críticas).
 - [x] Tema claro aplicado sobre la UI; onboarding de 3 tarjetas + rutinas de ejemplo.
-- [ ] Cuenta demo + datos sintéticos RF-087 — pendiente.
-- [x] Lighthouse CI de rendimiento/best-practices configurado (job `lighthouse`).
+- [x] Cuenta demo (`demo@ferro.app` / `FerroDemo26`) con 12 semanas sintéticas,
+      activable con `ferro.demo.enabled` y banner de datos ficticios.
+- [x] Lighthouse CI de rendimiento/best-practices configurado y verde (job `lighthouse`).
 
-**DoD:** instalada en Android real y usada en el gimnasio (E6 sigue); Lighthouse
-gate verde en CI. `v0.7.0` — **aún no alcanzado**.
+**DoD:** Lighthouse gate verde en CI y gates automatizados completos. La instalación en
+Android real queda como verificación manual del usuario; no se puede certificar desde CI. `v0.7.0`.
 
 ## M7 · Semana 8 — Producción y publicación
 

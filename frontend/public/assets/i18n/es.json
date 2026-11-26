@@ -3,7 +3,8 @@
     "tagline": "Registra. Progresa. Repite.",
     "subtitle": "Tracker de entrenamientos de fuerza",
     "offline": "Sin conexión. Los datos no se pueden guardar hasta que vuelvas a estar online.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "demoBanner": "Cuenta demo · los datos son ficticios"
   },
   "nav": {
     "home": "Inicio",

@@ -36,12 +36,18 @@ import com.ferro.identity.domain.OAuthNotConfiguredException;
 import com.ferro.identity.domain.PasswordResetInvalidException;
 import com.ferro.identity.domain.RefreshInvalidException;
 import com.ferro.identity.domain.VerificationInvalidException;
+import com.ferro.platform.api.LocalizedProblemTranslator;
 import com.ferro.shared.domain.DomainException;
 import com.ferro.shared.domain.RateLimitExceededException;
 
 /** Traduce excepciones a RFC 7807 con un `code` estable para la UI y los tests. */
 @RestControllerAdvice
 public class AuthExceptionHandler {
+    private final LocalizedProblemTranslator messages;
+
+    public AuthExceptionHandler(LocalizedProblemTranslator messages) {
+        this.messages = messages;
+    }
 
     private static final Logger log = LoggerFactory.getLogger(AuthExceptionHandler.class);
 
@@ -106,7 +112,7 @@ public class AuthExceptionHandler {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                 .header("Retry-After", Long.toString(exception.retryAfterSeconds()))
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(OAuthLoginException.class)
@@ -182,6 +188,6 @@ public class AuthExceptionHandler {
     private ResponseEntity<ProblemDetail> response(ProblemDetail problem) {
         return ResponseEntity.status(problem.getStatus())
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 }

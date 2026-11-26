@@ -3,7 +3,8 @@
     "tagline": "Log it. Progress. Repeat.",
     "subtitle": "Strength training tracker",
     "offline": "Offline. Your data cannot be saved until you are back online.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "demoBanner": "Demo account · data is fictional"
   },
   "nav": {
     "home": "Home",

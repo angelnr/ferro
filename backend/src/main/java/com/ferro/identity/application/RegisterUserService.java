@@ -80,7 +80,7 @@ public class RegisterUserService {
             throw new EmailTakenException();
         }
         emailVerifications.issueFor(user);
-        emailSender.sendWelcomeEmail(user.email());
+        emailSender.sendWelcomeEmail(user.email(), user.locale().code());
         return sessions.issue(user);
     }
 

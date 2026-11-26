@@ -63,6 +63,6 @@ public class ChangePasswordService {
         } else {
             refreshTokens.revokeAllForUser(userId, clock.instant());
         }
-        emailSender.sendPasswordChangedEmail(user.email());
+        emailSender.sendPasswordChangedEmail(user.email(), user.locale().code());
     }
 }

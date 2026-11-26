@@ -47,7 +47,7 @@ public class EmailVerificationService {
         EmailVerificationTokenFactory.IssuedVerificationToken issued = tokenFactory.create(user.id(), now);
         tokens.save(issued.token());
         String link = appProperties.frontendUrl().replaceAll("/+$", "") + "/auth/verify?token=" + issued.rawToken();
-        emailSender.sendVerificationEmail(user.email(), link);
+        emailSender.sendVerificationEmail(user.email(), user.locale().code(), link);
     }
 
     @Transactional

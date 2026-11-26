@@ -16,11 +16,17 @@ import com.ferro.catalog.domain.ExerciseLimitReachedException;
 import com.ferro.catalog.domain.ExerciseNotFoundException;
 import com.ferro.catalog.domain.InvalidExerciseException;
 import com.ferro.catalog.domain.InvalidFilterException;
+import com.ferro.platform.api.LocalizedProblemTranslator;
 import com.ferro.shared.domain.InvalidPrincipalException;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CatalogExceptionHandler {
+    private final LocalizedProblemTranslator messages;
+
+    public CatalogExceptionHandler(LocalizedProblemTranslator messages) {
+        this.messages = messages;
+    }
 
     @ExceptionHandler(InvalidPrincipalException.class)
     ResponseEntity<ProblemDetail> invalidPrincipal(InvalidPrincipalException exception) {
@@ -30,7 +36,7 @@ public class CatalogExceptionHandler {
         problem.setProperty("code", "UNAUTHORIZED");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(ExerciseNotFoundException.class)
@@ -41,7 +47,7 @@ public class CatalogExceptionHandler {
         problem.setProperty("code", "NOT_FOUND");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(ExerciseInUseException.class)
@@ -52,7 +58,7 @@ public class CatalogExceptionHandler {
         problem.setProperty("code", "EXERCISE_IN_USE");
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(ExerciseLimitReachedException.class)
@@ -64,7 +70,7 @@ public class CatalogExceptionHandler {
         problem.setProperty("code", "LIMIT_REACHED");
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(InvalidExerciseException.class)
@@ -76,7 +82,7 @@ public class CatalogExceptionHandler {
         problem.setProperty("code", "VALIDATION_FAILED");
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(InvalidFilterException.class)
@@ -87,6 +93,6 @@ public class CatalogExceptionHandler {
         problem.setProperty("code", "INVALID_FILTER");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 }

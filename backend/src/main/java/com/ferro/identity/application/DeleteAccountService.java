@@ -42,6 +42,6 @@ public class DeleteAccountService {
 
         Email email = user.email();
         users.delete(user);
-        emailSender.sendAccountDeletedEmail(email);
+        emailSender.sendAccountDeletedEmail(email, user.locale().code());
     }
 }

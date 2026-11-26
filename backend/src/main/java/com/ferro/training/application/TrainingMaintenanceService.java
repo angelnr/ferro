@@ -41,7 +41,7 @@ public class TrainingMaintenanceService {
             int duration =
                     (int) Math.max(0, Duration.between(session.startedAt(), end).toSeconds());
             sessions.autoClose(session.sessionId(), end, duration);
-            emailNotifier.sendSessionAutoClosed(session.userEmail());
+            emailNotifier.sendSessionAutoClosed(session.userEmail(), session.locale());
         }
         return stale.size();
     }

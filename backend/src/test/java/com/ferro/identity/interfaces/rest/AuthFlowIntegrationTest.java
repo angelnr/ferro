@@ -117,6 +117,21 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
     }
 
     @Test
+    void localizes_api_errors_from_accept_language() throws Exception {
+        String email = uniqueEmail();
+        register(email);
+
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .header("Accept-Language", "en")
+                        .contentType(APPLICATION_JSON)
+                        .content(loginBody(email, "WrongPass123")))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("INVALID_CREDENTIALS"))
+                .andExpect(jsonPath("$.detail").value("Incorrect email or password"))
+                .andExpect(jsonPath("$.title").value("Invalid credentials"));
+    }
+
+    @Test
     void refresh_rotates_and_reusing_a_revoked_token_revokes_the_family() throws Exception {
         Registered registered = register(uniqueEmail());
 
@@ -492,32 +507,32 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
         private final List<Email> autoClosedEmails = new CopyOnWriteArrayList<>();
 
         @Override
-        public void sendVerificationEmail(Email recipient, String verificationLink) {
+        public void sendVerificationEmail(Email recipient, String locale, String verificationLink) {
             emails.add(new SentEmail(recipient, verificationLink));
         }
 
         @Override
-        public void sendPasswordResetEmail(Email recipient, String resetLink) {
+        public void sendPasswordResetEmail(Email recipient, String locale, String resetLink) {
             resetEmails.add(new SentEmail(recipient, resetLink));
         }
 
         @Override
-        public void sendPasswordChangedEmail(Email recipient) {
+        public void sendPasswordChangedEmail(Email recipient, String locale) {
             passwordChangedEmails.add(recipient);
         }
 
         @Override
-        public void sendAccountDeletedEmail(Email recipient) {
+        public void sendAccountDeletedEmail(Email recipient, String locale) {
             accountDeletedEmails.add(recipient);
         }
 
         @Override
-        public void sendWelcomeEmail(Email recipient) {
+        public void sendWelcomeEmail(Email recipient, String locale) {
             welcomeEmails.add(recipient);
         }
 
         @Override
-        public void sendSecurityAlertEmail(Email recipient) {
+        public void sendSecurityAlertEmail(Email recipient, String locale) {
             securityEmails.add(recipient);
         }
 

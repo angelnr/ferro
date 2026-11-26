@@ -39,6 +39,8 @@ springdoc:
     operations-sorter: method
 
 ferro:
+  demo:
+    enabled: ${FERRO_DEMO_ENABLED:false}
   app:
     frontend-url: ${APP_FRONTEND_URL:http://localhost:4200}
   email-verification:

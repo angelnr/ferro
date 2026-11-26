@@ -99,7 +99,7 @@ class TrainingMaintenanceIntegrationTest extends AbstractPostgresIntegrationTest
         private final java.util.List<String> sent = new java.util.concurrent.CopyOnWriteArrayList<>();
 
         @Override
-        public void sendSessionAutoClosed(String recipientEmail) {
+        public void sendSessionAutoClosed(String recipientEmail, String locale) {
             sent.add(recipientEmail);
         }
 

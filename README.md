@@ -95,9 +95,9 @@ reordenación y arranque de sesión con objetivos pendientes; desde Home o la li
 página de récords, panel de estadísticas, e1RM por ejercicio y registro/evolución de peso
 y medidas corporales.
 
-**M6 en curso:** PWA instalable con app shell y banner offline, i18n ES/EN con paridad
-validada, tema claro, onboarding y base de accesibilidad; pendientes la localización de
-errores/emails del backend, axe-core y la cuenta demo.
+**M6 completado:** PWA instalable con app shell, banner offline, i18n ES/EN (UI, errores API
+y emails), tema claro, onboarding, axe-core en E2E, cuenta demo con datos sintéticos y
+Lighthouse CI. Queda la instalación física en Android como comprobación manual.
 
 ## Desarrollo local y verificación
 

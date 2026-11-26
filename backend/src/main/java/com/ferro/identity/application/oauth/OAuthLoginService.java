@@ -90,7 +90,7 @@ public class OAuthLoginService {
         users.save(user);
         accounts.save(OAuthAccount.link(user.id(), provider, onboarding.providerSubject(), email, clock.instant()));
         emailVerifications.issueFor(user);
-        emailSender.sendWelcomeEmail(user.email());
+        emailSender.sendWelcomeEmail(user.email(), user.locale().code());
         return sessions.issue(user);
     }
 

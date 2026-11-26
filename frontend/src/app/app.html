@@ -5,6 +5,11 @@
   >
     Saltar al contenido
   </a>
+  @if (session.user()?.email === 'demo@ferro.app') {
+    <div role="status" class="bg-sky-700 px-4 py-2 text-center text-sm font-semibold text-white">
+      {{ 'app.demoBanner' | translate }}
+    </div>
+  }
   @if (offline()) {
     <div
       role="status"

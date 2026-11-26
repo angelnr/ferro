@@ -6,10 +6,14 @@ import { SessionStore } from './session.store';
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const session = inject(SessionStore);
   const token = session.accessToken();
-  return next(
-    request.clone({
-      withCredentials: true,
-      setHeaders: token ? { Authorization: `Bearer ${token}` } : {},
-    }),
-  );
+  const locale =
+    session.user()?.locale ??
+    (typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('en')
+      ? 'en'
+      : 'es');
+  const headers: Record<string, string> = { 'Accept-Language': locale };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return next(request.clone({ withCredentials: true, setHeaders: headers }));
 };

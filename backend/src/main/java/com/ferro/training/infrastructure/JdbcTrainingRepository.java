@@ -681,7 +681,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
     public List<StaleSession> staleActive(Instant threshold) {
         return jdbc.query(
                 """
-                SELECT ws.id, ws.user_id, u.email, ws.started_at,
+                SELECT ws.id, ws.user_id, u.email, u.locale, ws.started_at,
                     (SELECT max(ss.logged_at) FROM session_exercises se
                      JOIN session_sets ss ON ss.session_exercise_id = se.id
                      WHERE se.session_id = ws.id) AS last_set_at
@@ -693,6 +693,7 @@ public class JdbcTrainingRepository implements TrainingRepository {
                         rs.getObject("id", UUID.class),
                         rs.getObject("user_id", UUID.class),
                         rs.getString("email"),
+                        rs.getString("locale"),
                         instant(rs.getTimestamp("started_at")),
                         instant(rs.getTimestamp("last_set_at"))));
     }

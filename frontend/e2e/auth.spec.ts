@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { Page, expect, test } from '@playwright/test';
 
 const USER = {
@@ -772,4 +773,25 @@ test('supports keyboard navigation with a skip link', async ({ page }) => {
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#main$/);
   await expect(page.locator('#main')).toBeFocused();
+});
+
+test('has no critical accessibility violations on the main screens', async ({ page }) => {
+  await authenticated(page);
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+  const critical = results.violations.filter((violation) => violation.impact === 'critical');
+  expect(critical, JSON.stringify(critical.map((violation) => violation.id))).toEqual([]);
+
+  await page.goto('/settings');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  const settings = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+  expect(
+    settings.violations.filter((violation) => violation.impact === 'critical'),
+    JSON.stringify(settings.violations.map((violation) => violation.id)),
+  ).toEqual([]);
 });

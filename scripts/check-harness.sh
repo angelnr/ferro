@@ -81,6 +81,10 @@ for f in \
   docs/seed-ejercicios.csv \
   scripts/validate-seed.py \
   scripts/check-i18n.py \
+  backend/src/main/resources/messages_es.properties \
+  backend/src/main/resources/messages_en.properties \
+  backend/src/main/java/com/ferro/platform/api/LocalizedProblemTranslator.java \
+  backend/src/main/java/com/ferro/identity/infrastructure/DemoDataSeeder.java \
   infra/docker-compose.dev.yml \
   infra/docker-compose.prod.yml \
   infra/caddy/Caddyfile \
@@ -208,6 +212,9 @@ need_grep frontend/src/app/app.config.ts 'provideTranslateService' 'i18n configu
 need_grep frontend/src/index.html 'manifest.webmanifest' 'manifest PWA'
 need_grep frontend/src/main.ts 'serviceWorker.register' 'registro del service worker'
 need_grep frontend/src/app/app.html 'app-onboarding' 'onboarding'
+need_grep frontend/src/app/core/auth/auth.interceptor.ts 'Accept-Language' 'idioma de errores API'
+need_grep frontend/e2e/auth.spec.ts 'AxeBuilder' 'axe-core en E2E'
+need_grep backend/src/main/java/com/ferro/identity/infrastructure/DemoDataSeeder.java 'demo@ferro.app' 'cuenta demo'
 need_grep frontend/src/app/app.config.ts 'provideAppInitializer' 'restore de sesión al arrancar'
 need_grep frontend/src/app/core/auth/auth.store.ts 'signalStore' 'AuthStore con SignalStore'
 need_grep frontend/angular.json '"coverageInclude"' 'cobertura sobre todas las fuentes de la app'

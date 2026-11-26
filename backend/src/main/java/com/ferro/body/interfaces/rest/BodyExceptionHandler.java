@@ -14,10 +14,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.ferro.body.domain.BodyNotFoundException;
 import com.ferro.body.domain.InvalidBodyException;
 import com.ferro.body.domain.MeasurementExistsException;
+import com.ferro.platform.api.LocalizedProblemTranslator;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BodyExceptionHandler {
+    private final LocalizedProblemTranslator messages;
+
+    public BodyExceptionHandler(LocalizedProblemTranslator messages) {
+        this.messages = messages;
+    }
 
     @ExceptionHandler(BodyNotFoundException.class)
     ResponseEntity<ProblemDetail> notFound(BodyNotFoundException exception) {
@@ -33,7 +39,7 @@ public class BodyExceptionHandler {
         problem.setProperty("measurementId", exception.measurementId().toString());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 
     @ExceptionHandler(InvalidBodyException.class)
@@ -54,6 +60,6 @@ public class BodyExceptionHandler {
         problem.setProperty("code", code);
         return ResponseEntity.status(status)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
-                .body(problem);
+                .body(messages.translate(problem));
     }
 }
