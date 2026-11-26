@@ -33,3 +33,19 @@ docker compose -f infra/docker-compose.dev.yml up -d postgres
 
 Las migraciones viven en `backend/src/main/resources/db/migration/` y las aplica el
 backend al arrancar (o el test de Testcontainers en CI).
+
+## Producción (borrador M0)
+
+```bash
+cp infra/.env.example infra/.env
+# edita infra/.env: POSTGRES_PASSWORD, FERRO_DOMAIN e IMAGE_TAG
+docker compose -f infra/docker-compose.prod.yml up -d --build
+```
+
+- `api`: imagen multi-stage de `backend/Dockerfile` (JRE 21, usuario no root, healthcheck).
+- `postgres`: Postgres 18 sin puerto publicado; solo accesible por la red de Compose.
+- `caddy`: TLS automático y reverse proxy a `api:8080`.
+- El frontend se despliega aparte en Vercel (ADR-0009); este compose no lo sirve.
+
+Es un borrador funcional, no el runbook final de M7: faltan backups, métricas de
+producción, límites de recursos y pruebas de restore.

@@ -1,0 +1,61 @@
+name: ferro-prod
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ferro}
+      POSTGRES_USER: ${POSTGRES_USER:-ferro}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en infra/.env}
+    volumes:
+      - ferro_pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ferro} -d ${POSTGRES_DB:-ferro}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    image: ghcr.io/angelnr/ferro-api:${IMAGE_TAG:-latest}
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SERVER_PORT: 8080
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ferro}
+      DB_USER: ${POSTGRES_USER:-ferro}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en infra/.env}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/actuator/health/readiness >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      start_period: 45s
+      retries: 3
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.11.9
+    environment:
+      FERRO_DOMAIN: ${FERRO_DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ferro_caddy_data:/data
+      - ferro_caddy_config:/config
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  ferro_pgdata:
+  ferro_caddy_data:
+  ferro_caddy_config:

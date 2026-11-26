@@ -61,6 +61,7 @@ El host puede no tener JDK ni Node: **todo se ejecuta en Docker** con versiones 
 | `make verify-backend` / `make verify-frontend` | Verificación de una sola parte | Debug |
 | `make dev-up` / `make dev-down` | Postgres 18, Mailpit, Prometheus y Grafana | Desarrollo local |
 | `make run-backend` | API en Docker contra la infra local (`SERVER_PORT=8082` si 8080 está ocupado) | Probar la app |
+| `make run-frontend` | Angular en Docker en http://localhost:4200 | Probar la UI |
 | `make secrets` | gitleaks sobre el historial | Auditoría |
 | `make baseline` | Actualiza el baseline tras **añadir** tests | Solo con tests nuevos |
 | `make e2e` | Playwright (M1). Hoy falla a propósito | M1+ |
@@ -128,6 +129,8 @@ scripts/backend.sh|frontend.sh   ejecución Docker con versiones fijas
 .githooks/                       pre-commit, commit-msg, pre-push
 .github/workflows/ci.yml         misma verificación en CI
 infra/docker-compose.dev.yml    Postgres 18, Mailpit, Prometheus y Grafana
+infra/docker-compose.prod.yml   API + Postgres + Caddy (borrador M0)
+backend/Dockerfile              imagen multi-stage JRE 21, usuario no root
 backend/src/main/resources/db/migration/  migraciones Flyway (V1–V5, esquema completo)
 docs/harness/lessons.md          lecciones → reglas/tests/hooks
 docs/harness/test-baseline.json  mínimo de tests exigido

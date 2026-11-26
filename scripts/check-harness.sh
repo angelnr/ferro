@@ -26,6 +26,8 @@ for f in \
   AGENTS.md \
   Makefile \
   backend/pom.xml \
+  backend/Dockerfile \
+  backend/.dockerignore \
   backend/config/maven/settings-ci.xml \
   backend/src/test/java/com/ferro/infrastructure/Postgres18ContainerTest.java \
   backend/src/test/java/com/ferro/support/AbstractPostgresIntegrationTest.java \
@@ -37,8 +39,15 @@ for f in \
   backend/src/main/resources/db/migration/V4__progress_and_body.sql \
   backend/src/main/resources/db/migration/V5__feature_flags.sql \
   infra/docker-compose.dev.yml \
+  infra/docker-compose.prod.yml \
+  infra/caddy/Caddyfile \
+  infra/.env.example \
   frontend/package.json \
   frontend/angular.json \
+  frontend/src/app/core/store/ui.store.ts \
+  frontend/src/app/features/README.md \
+  frontend/public/assets/i18n/es.json \
+  frontend/public/assets/i18n/en.json \
   docs/harness/lessons.md \
   docs/harness/test-baseline.json \
   .githooks/pre-commit \
@@ -67,11 +76,17 @@ need_grep backend/src/test/java/com/ferro/support/AbstractPostgresIntegrationTes
 need_grep infra/docker-compose.dev.yml 'postgres:18-alpine' 'Postgres 18 en Compose'
 need_grep infra/docker-compose.dev.yml 'ferro_pgdata:/var/lib/postgresql' 'volumen de Postgres 18 en /var/lib/postgresql'
 need_grep backend/src/main/resources/db/migration/V3__training.sql 'weight BETWEEN -1000 AND 1000' 'peso negativo para RN-13'
+need_grep backend/Dockerfile 'USER ferro' 'imagen backend sin root'
+need_grep backend/Dockerfile 'actuator/health/readiness' 'healthcheck de la imagen backend'
+need_grep infra/docker-compose.prod.yml 'condition: service_healthy' 'arranque ordenado de Postgres/API'
 need_grep backend/pom.xml 'maven-enforcer-plugin' 'enforcer'
 need_grep backend/pom.xml '<java.version>21</java.version>' 'Java 21'
 need_grep frontend/package.json '"test:coverage"' 'script test:coverage'
 need_grep frontend/package.json '"format:check"' 'script format:check'
 need_grep frontend/package.json '"lint"' 'script lint'
+need_grep frontend/package.json '@ngrx/signals' 'SignalStore'
+need_grep frontend/package.json '@ngx-translate/core' 'i18n runtime'
+need_grep frontend/src/app/app.config.ts 'provideTranslateService' 'i18n configurado'
 need_grep frontend/angular.json '"coverageThresholds"' 'umbrales de cobertura'
 
 python3 - "$ROOT/frontend/angular.json" <<'PY'

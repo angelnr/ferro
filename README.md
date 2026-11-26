@@ -4,9 +4,9 @@
 > progresiones y convierte cada serie en datos. Una alternativa open source a
 > [Hevy](https://hevyapp.com), construida como proyecto de portfolio de nivel profesional.
 
-[![CI](https://img.shields.io/badge/CI-pendiente%20M0-lightgrey)](./docs/07-roadmap.md)
+[![CI](https://github.com/angelnr/ferro/actions/workflows/ci.yml/badge.svg)](https://github.com/angelnr/ferro/actions/workflows/ci.yml)
 [![Licencia](https://img.shields.io/badge/licencia-MIT-blue)](./LICENSE)
-[![Estado](https://img.shields.io/badge/estado-fase%20de%20requisitos-orange)](./docs/07-roadmap.md)
+[![Estado](https://img.shields.io/badge/estado-M0%20en%20curso-orange)](./docs/07-roadmap.md)
 
 ---
 
@@ -66,15 +66,17 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 | [08 · Backlog v2](./docs/08-backlog-v2.md) | Funcionalidad deliberadamente fuera del MVP |
 | [09 · Glosario](./docs/09-glosario.md) | Lenguaje ubicuo ES↔EN del dominio |
 | [AGENTS.md](./AGENTS.md) | Harness: reglas de trabajo, gates y protocolo de evidencia |
+| [infra/README.md](./infra/README.md) | Servicios locales, Compose de producción y operación |
 | [Lecciones del harness](./docs/harness/lessons.md) | Errores → artefactos que impiden repetirlos |
 | [ADR-0001…0009](./docs/adr/) | Decisiones de arquitectura justificadas |
 
 ## Estado del proyecto
 
-**📋 Fase de ingeniería de requisitos (noviembre 2026).** El código empieza en el
-milestone **M0** (semana 1) siguiendo [docs/07-roadmap.md](./docs/07-roadmap.md).
-Nada de lo que hay hoy es ambiguo: cada historia tiene criterios de aceptación y cada
-decisión técnica tiene su ADR.
+**🚧 M0 en curso (noviembre 2026).** Esqueleto backend/frontend, esquema Flyway `V1–V5`,
+infraestructura local, Dockerfile/Compose de producción (borrador), CI y harness ya
+funcionan. Antes de M1 falta cerrar el DoD de M0: demostración desde cero y tag `v0.1.0`.
+El resto del alcance y los criterios de aceptación están en
+[docs/07-roadmap.md](./docs/07-roadmap.md).
 
 ## Desarrollo local y verificación
 
@@ -85,6 +87,7 @@ El harness **no necesita JDK ni Node en el host**: ejecuta versiones fijas en Do
 make bootstrap    # diagnóstico del entorno + instalación de git hooks
 make dev-up       # Postgres 18 + Mailpit + Prometheus + Grafana
 make run-backend  # API en http://localhost:8080 (Spring Boot + Flyway)
+make run-frontend # Angular en http://localhost:4200
 make verify       # gate completo + bloque de evidencia
 ```
 
@@ -111,14 +114,14 @@ migraciones Flyway se aplican solas al arrancar; para resetear la BD en local us
 | `make verify` | **Definition of Done**: backend `mvn clean verify`, frontend completo, gitleaks, docs e invariantes del harness |
 | `make verify-backend` / `make verify-frontend` | Verificación de una sola parte |
 | `make dev-up` / `make dev-down` | Levanta/para la infraestructura local |
+| `make run-frontend` | Angular en Docker (http://localhost:4200) |
 
 `make verify` sale 0 **solo** si todos los gates pasan, deja la evidencia en
 `.harness/last-verify.txt` y la imprime. El protocolo completo está en [AGENTS.md](./AGENTS.md).
 
 Estado actual: **M0 en curso**. Ya existen esqueleto backend/frontend, harness, CI,
-infraestructura local y el esquema Flyway completo `V1–V5` (identity, catalog, training,
-progress/body y feature flags). Faltan Dockerfile, compose de producción, SignalStore/i18n
-base y el resto de fundaciones de M0.
+infraestructura local, esquema Flyway completo `V1–V5` y Dockerfile/Compose de producción
+(borrador). Faltan SignalStore/i18n base, registro de puertos y el tag `v0.1.0`.
 
 
 

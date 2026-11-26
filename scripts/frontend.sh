@@ -14,6 +14,19 @@ case "${1:-}" in
     mkdir -p "$NPM_CACHE"
     exec docker run -it "${DOCKER_COMMON[@]}" -v "$NPM_CACHE:/tmp/.npm" -w /workspace/frontend "$NODE_IMAGE" sh
     ;;
+  serve)
+    require_docker
+    ensure_image "$NODE_IMAGE"
+    mkdir -p "$NPM_CACHE"
+    tty_args=()
+    if [[ -t 0 && -t 1 ]]; then tty_args=(-it); fi
+    exec docker run --rm "${tty_args[@]}" -p 127.0.0.1:4200:4200 "${DOCKER_COMMON[@]}" \
+      -e NG_CLI_ANALYTICS=false \
+      -v "$NPM_CACHE:/tmp/.npm" \
+      -w /workspace/frontend \
+      "$NODE_IMAGE" \
+      npm start -- --host 0.0.0.0 --port 4200
+    ;;
   "")
     die "Uso: scripts/frontend.sh install|shell|run <script>|<args npm…>"
     ;;
