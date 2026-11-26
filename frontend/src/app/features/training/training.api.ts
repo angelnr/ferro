@@ -30,6 +30,23 @@ export class TrainingApi {
     return this.http.post<SessionSet>(`${this.base}/${id}/exercises/${entryId}/sets`, payload);
   }
 
+  updateExercise(
+    id: string,
+    entryId: string,
+    payload: {
+      position?: number;
+      restSeconds?: number | null;
+      supersetGroup?: number | null;
+      notes?: string | null;
+    },
+  ): Observable<WorkoutSession> {
+    return this.http.patch<WorkoutSession>(`${this.base}/${id}/exercises/${entryId}`, payload);
+  }
+
+  groupSuperset(id: string, entryIds: string[], group: number | null): Observable<WorkoutSession> {
+    return this.http.patch<WorkoutSession>(`${this.base}/${id}/supersets`, { entryIds, group });
+  }
+
   finish(id: string): Observable<FinishSessionResponse> {
     return this.http.post<FinishSessionResponse>(`${this.base}/${id}/finish`, {});
   }

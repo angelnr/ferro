@@ -24,7 +24,7 @@ import { TrainingApi } from './training.api';
             <h1 class="mt-1 text-3xl font-black">{{ current.name }}</h1>
             <p class="text-sm text-zinc-400">
               {{ current.exercises.length }} {{ 'training.exercises' | translate }} ·
-              {{ current.totalVolume }} kg
+              {{ current.totalVolume }} kg · {{ formatRest(elapsed()) }}
             </p>
           </div>
           <div class="flex gap-2">
@@ -153,10 +153,63 @@ import { TrainingApi } from './training.api';
           </div>
         }
 
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            (click)="groupSelected()"
+            [disabled]="selectedEntries().size < 2"
+            class="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm disabled:opacity-40"
+          >
+            {{ 'training.group' | translate }}
+          </button>
+          <button
+            type="button"
+            (click)="ungroupSelected()"
+            [disabled]="!selectedEntries().size"
+            class="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm disabled:opacity-40"
+          >
+            {{ 'training.ungroup' | translate }}
+          </button>
+        </div>
+
         <div class="space-y-4">
           @for (entry of current.exercises; track entry.id) {
             <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
-              <h2 class="font-semibold">{{ entry.name }}</h2>
+              <div class="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  [checked]="selectedEntries().has(entry.id)"
+                  (change)="toggleEntry(entry.id)"
+                  class="accent-emerald-500"
+                  [attr.aria-label]="'training.select' | translate"
+                />
+                <h2 class="font-semibold">{{ entry.name }}</h2>
+                <div class="ml-auto flex gap-1">
+                  <button
+                    type="button"
+                    (click)="move(entry.id, -1)"
+                    [disabled]="entry.position === 0"
+                    class="rounded border border-zinc-700 px-1.5 text-xs disabled:opacity-30"
+                    [attr.aria-label]="'training.moveUp' | translate"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    (click)="move(entry.id, 1)"
+                    [disabled]="entry.position === current.exercises.length - 1"
+                    class="rounded border border-zinc-700 px-1.5 text-xs disabled:opacity-30"
+                    [attr.aria-label]="'training.moveDown' | translate"
+                  >
+                    ↓
+                  </button>
+                </div>
+                @if (entry.supersetGroup !== null) {
+                  <span class="rounded bg-sky-950 px-2 py-0.5 text-xs text-sky-300">
+                    {{ 'training.superset' | translate }} {{ entry.supersetGroup }}
+                  </span>
+                }
+              </div>
               @if (!entry.sets.length) {
                 <p class="mt-2 text-sm text-zinc-500">{{ 'training.noSets' | translate }}</p>
               } @else {
@@ -193,7 +246,10 @@ export class TrainingPage implements OnDestroy {
   protected readonly finishing = signal(false);
   protected readonly newPrs = signal<NewPersonalRecord[]>([]);
   protected readonly restRemaining = signal<number | null>(null);
+  protected readonly elapsed = signal(0);
+  protected readonly selectedEntries = signal<Set<string>>(new Set());
   private restHandle: ReturnType<typeof setInterval> | null = null;
+  private elapsedHandle: ReturnType<typeof setInterval> | null = null;
 
   protected readonly setForm = this.formBuilder.nonNullable.group({
     entryId: ['', [Validators.required]],
@@ -276,6 +332,76 @@ export class TrainingPage implements OnDestroy {
     }
   }
 
+  protected async move(entryId: string, delta: number): Promise<void> {
+    const session = this.session();
+    if (!session) {
+      return;
+    }
+    const current = session.exercises.find((entry) => entry.id === entryId);
+    if (!current) {
+      return;
+    }
+    const target = current.position + delta;
+    if (target < 0 || target >= session.exercises.length) {
+      return;
+    }
+    try {
+      this.session.set(
+        await firstValueFrom(this.api.updateExercise(session.id, entryId, { position: target })),
+      );
+    } catch {
+      this.error.set(true);
+    }
+  }
+
+  protected toggleEntry(id: string): void {
+    this.selectedEntries.update((current) => {
+      const next = new Set(current);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  protected async groupSelected(): Promise<void> {
+    const session = this.session();
+    if (!session || this.selectedEntries().size < 2) {
+      return;
+    }
+    const group =
+      session.exercises.reduce((max, entry) => Math.max(max, entry.supersetGroup ?? 0), 0) + 1;
+    try {
+      this.session.set(
+        await firstValueFrom(
+          this.api.groupSuperset(session.id, Array.from(this.selectedEntries()), group),
+        ),
+      );
+      this.selectedEntries.set(new Set());
+    } catch {
+      this.error.set(true);
+    }
+  }
+
+  protected async ungroupSelected(): Promise<void> {
+    const session = this.session();
+    if (!session || !this.selectedEntries().size) {
+      return;
+    }
+    try {
+      this.session.set(
+        await firstValueFrom(
+          this.api.groupSuperset(session.id, Array.from(this.selectedEntries()), null),
+        ),
+      );
+      this.selectedEntries.set(new Set());
+    } catch {
+      this.error.set(true);
+    }
+  }
+
   protected formatRest(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
     const rest = seconds % 60;
@@ -293,6 +419,22 @@ export class TrainingPage implements OnDestroy {
 
   ngOnDestroy(): void {
     this.stopRest();
+    if (this.elapsedHandle) {
+      clearInterval(this.elapsedHandle);
+      this.elapsedHandle = null;
+    }
+  }
+
+  private startElapsed(session: WorkoutSession): void {
+    if (this.elapsedHandle) {
+      clearInterval(this.elapsedHandle);
+    }
+    const started = new Date(session.startedAt).getTime();
+    const tick = (): void => {
+      this.elapsed.set(Math.max(0, Math.floor((Date.now() - started) / 1000)));
+    };
+    tick();
+    this.elapsedHandle = setInterval(tick, 1000);
   }
 
   private startRest(seconds: number): void {
@@ -325,6 +467,7 @@ export class TrainingPage implements OnDestroy {
     try {
       const session = await firstValueFrom(this.api.get(id));
       this.session.set(session);
+      this.startElapsed(session);
       if (session.exercises.length) {
         this.setForm.patchValue({ entryId: session.exercises[0].id });
       }

@@ -133,6 +133,12 @@
     "back": "Volver",
     "notFound": "No se pudo cargar la sesión.",
     "rest": "Descanso",
-    "skipRest": "Saltar"
+    "skipRest": "Saltar",
+    "group": "Agrupar superset",
+    "ungroup": "Desagrupar",
+    "select": "Seleccionar ejercicio",
+    "superset": "Superset",
+    "moveUp": "Subir ejercicio",
+    "moveDown": "Bajar ejercicio"
   }
 }

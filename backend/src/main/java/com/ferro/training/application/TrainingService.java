@@ -169,6 +169,35 @@ public class TrainingService {
     }
 
     @Transactional
+    public WorkoutSession groupSuperset(UUID userId, UUID sessionId, List<UUID> entryIds, Integer group) {
+        WorkoutSession session = activeFor(userId, sessionId);
+        List<UUID> distinct = entryIds.stream().distinct().toList();
+        if (group != null) {
+            if (distinct.size() < 2 || distinct.size() > 5) {
+                throw new InvalidTrainingException("Un superset debe agrupar entre 2 y 5 ejercicios");
+            }
+            if (group < 1) {
+                throw new InvalidTrainingException("Grupo de superset no válido");
+            }
+            List<Integer> positions = session.exercises().stream()
+                    .filter(entry -> distinct.contains(entry.id()))
+                    .map(SessionExercise::position)
+                    .sorted()
+                    .toList();
+            if (positions.size() != distinct.size()) {
+                throw new SessionNotFoundException();
+            }
+            for (int i = 1; i < positions.size(); i++) {
+                if (positions.get(i) != positions.get(i - 1) + 1) {
+                    throw new InvalidTrainingException("El superset debe agrupar ejercicios adyacentes");
+                }
+            }
+        }
+        sessions.setSupersetGroup(sessionId, distinct, group);
+        return get(userId, sessionId);
+    }
+
+    @Transactional
     public WorkoutSession updateSet(
             UUID userId,
             UUID sessionId,

@@ -438,6 +438,19 @@ public class JdbcTrainingRepository implements TrainingRepository {
     }
 
     @Override
+    public void setSupersetGroup(UUID sessionId, List<UUID> entryIds, Integer group) {
+        for (UUID entryId : entryIds) {
+            jdbc.update(
+                    "UPDATE session_exercises SET superset_group = :group "
+                            + "WHERE id = :id AND session_id = :sessionId",
+                    new MapSqlParameterSource()
+                            .addValue("group", group)
+                            .addValue("id", entryId)
+                            .addValue("sessionId", sessionId));
+        }
+    }
+
+    @Override
     public void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir) {
         jdbc.update(
                 """

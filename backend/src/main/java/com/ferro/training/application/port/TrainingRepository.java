@@ -56,6 +56,8 @@ public interface TrainingRepository {
 
     void reorderExercises(UUID sessionId, List<UUID> orderedEntryIds);
 
+    void setSupersetGroup(UUID sessionId, List<UUID> entryIds, Integer group);
+
     void updateSet(UUID setId, SetType type, int reps, BigDecimal weight, Integer rir);
 
     void deleteSet(UUID setId);

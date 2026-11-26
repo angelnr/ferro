@@ -173,6 +173,55 @@ class TrainingFlowIntegrationTest extends AbstractPostgresIntegrationTest {
     }
 
     @Test
+    void groups_only_adjacent_exercises_into_a_superset() throws Exception {
+        String secondExercise = jdbc.queryForObject(
+                "SELECT id::text FROM exercises WHERE name_es = 'Sentadilla trasera con barra'", String.class);
+        String sessionId = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions").header("Authorization", bearer(token)))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.id");
+        String first = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises")
+                                .header("Authorization", bearer(token))
+                                .contentType(APPLICATION_JSON)
+                                .content("{\"exerciseId\":\"" + exerciseId + "\"}"))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.exercises[0].id");
+        String second = JsonPath.read(
+                mockMvc.perform(post("/api/v1/workout-sessions/" + sessionId + "/exercises")
+                                .header("Authorization", bearer(token))
+                                .contentType(APPLICATION_JSON)
+                                .content("{\"exerciseId\":\"" + secondExercise + "\"}"))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                "$.exercises[1].id");
+        jdbc.update(
+                "UPDATE session_exercises SET position = position + 1000 WHERE session_id = ?",
+                UUID.fromString(sessionId));
+        jdbc.update("UPDATE session_exercises SET position = 0 WHERE id = ?", UUID.fromString(first));
+        jdbc.update("UPDATE session_exercises SET position = 1 WHERE id = ?", UUID.fromString(second));
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId + "/supersets")
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"entryIds\":[\"" + first + "\",\"" + second + "\"],\"group\":1}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exercises[0].supersetGroup").value(1))
+                .andExpect(jsonPath("$.exercises[1].supersetGroup").value(1));
+
+        mockMvc.perform(patch("/api/v1/workout-sessions/" + sessionId + "/supersets")
+                        .header("Authorization", bearer(token))
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"entryIds\":[\"" + first + "\"],\"group\":1}"))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void history_returns_previous_finished_sets() throws Exception {
         String sessionId = JsonPath.read(
                 mockMvc.perform(post("/api/v1/workout-sessions").header("Authorization", bearer(token)))

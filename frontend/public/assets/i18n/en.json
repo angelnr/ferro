@@ -133,6 +133,12 @@
     "back": "Back",
     "notFound": "Could not load the session.",
     "rest": "Rest",
-    "skipRest": "Skip"
+    "skipRest": "Skip",
+    "group": "Group superset",
+    "ungroup": "Ungroup",
+    "select": "Select exercise",
+    "superset": "Superset",
+    "moveUp": "Move exercise up",
+    "moveDown": "Move exercise down"
   }
 }

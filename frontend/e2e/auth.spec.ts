@@ -269,10 +269,52 @@ test('starts a live training session', async ({ page }) => {
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) }),
   );
 
+  await page.route('**/api/v1/workout-sessions/session-1/exercises/entry-1/sets', (route) =>
+    route.fulfill({
+      status: 201,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        id: 'set-1',
+        position: 0,
+        setType: 'NORMAL',
+        reps: 8,
+        weight: 80,
+        rir: null,
+        volume: 640,
+        e1rm: 101.33,
+        loggedAt: '2026-11-26T10:05:00Z',
+      }),
+    }),
+  );
+  await page.route('**/api/v1/workout-sessions/session-1/finish', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        session: { ...session, status: 'FINISHED', totalVolume: 640 },
+        newPersonalRecords: [
+          {
+            exerciseId: 'exercise-1',
+            exerciseName: 'Press de banca con barra',
+            prType: 'MAX_WEIGHT',
+            value: 80,
+            previousValue: null,
+            achievedAt: '2026-11-26T10:10:00Z',
+          },
+        ],
+      }),
+    }),
+  );
+
   await page.goto('/');
   await page.getByRole('button', { name: 'Empezar a entrenar' }).click();
 
   await expect(page).toHaveURL(/\/training\/session-1/);
   await expect(page.getByRole('heading', { name: 'Sesión del 2026-11-26' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Press de banca con barra' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Registrar serie' }).click();
+  await page.getByRole('button', { name: 'Finalizar' }).click();
+
+  await expect(page.getByText('MAX_WEIGHT')).toBeVisible();
 });

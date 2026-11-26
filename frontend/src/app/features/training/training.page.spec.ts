@@ -77,6 +77,38 @@ describe('TrainingPage', () => {
     expect(fixture.nativeElement.textContent).toContain('640');
   });
 
+  it('groups and ungroups selected exercises', async () => {
+    const fixture = TestBed.createComponent(TrainingPage);
+    fixture.detectChanges();
+    http.expectOne(`${environment.apiBaseUrl}/workout-sessions/session-1`).flush(SESSION);
+    await fixture.whenStable();
+    const page = fixture.componentInstance as unknown as {
+      selectedEntries: { set(value: Set<string>): void; (): Set<string> };
+      toggleEntry(id: string): void;
+      groupSelected(): Promise<void>;
+      ungroupSelected(): Promise<void>;
+      move(entryId: string, delta: number): Promise<void>;
+    };
+
+    page.toggleEntry('entry-1');
+    expect(page.selectedEntries().has('entry-1')).toBe(true);
+    page.selectedEntries.set(new Set(['entry-1', 'entry-2']));
+    const grouping = page.groupSelected();
+    const groupRequest = http.expectOne(
+      `${environment.apiBaseUrl}/workout-sessions/session-1/supersets`,
+    );
+    expect(groupRequest.request.method).toBe('PATCH');
+    expect(groupRequest.request.body).toMatchObject({ group: 1 });
+    groupRequest.flush(SESSION);
+    await grouping;
+
+    await page.move('entry-1', 1);
+    page.selectedEntries.set(new Set(['entry-1']));
+    const ungrouping = page.ungroupSelected();
+    http.expectOne(`${environment.apiBaseUrl}/workout-sessions/session-1/supersets`).flush(SESSION);
+    await ungrouping;
+  });
+
   it('formats and controls the rest timer', () => {
     const fixture = TestBed.createComponent(TrainingPage);
     fixture.detectChanges();

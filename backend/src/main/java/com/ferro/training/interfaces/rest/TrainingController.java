@@ -112,6 +112,14 @@ public class TrainingController {
         return WorkoutSessionResponse.from(training.deleteExercise(userId(jwt), id, entryId));
     }
 
+    @PatchMapping("/{id}/supersets")
+    @Operation(summary = "Agrupa o desagrupa ejercicios adyacentes en un superset")
+    public WorkoutSessionResponse groupSuperset(
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID id, @Valid @RequestBody GroupSupersetRequest request) {
+        return WorkoutSessionResponse.from(
+                training.groupSuperset(userId(jwt), id, request.entryIds(), request.group()));
+    }
+
     @PatchMapping("/{id}/exercises/{entryId}/sets/{setId}")
     @Operation(summary = "Edita una serie")
     public WorkoutSessionResponse updateSet(
