@@ -120,6 +120,14 @@ en un artefacto**: regla en `AGENTS.md`, test, script, hook o paso de CI que imp
 - **Artefacto:** `backend/config/maven/settings-ci.xml`; `FERRO_MAVEN_SETTINGS` en `scripts/lib.sh` y `.github/workflows/ci.yml`; invariante en `scripts/check-harness.sh`.
 - **Comprobación:** `gh run watch` del workflow CI; resolución de dependencias con un repositorio Maven vacío.
 
+### L-013 · Contradicción entre RN-13 y el CHECK de `session_sets.weight`
+- **Fecha:** 2026-11-26
+- **Síntoma:** doc 05 limitaba `weight` a 0..1000, pero RN-13 admite lastre negativo en bodyweight (asistencia).
+- **Causa raíz:** la tabla del modelo no reflejaba la regla de negocio; un CHECK 0..1000 habría roto dominadas asistidas.
+- **Prevención:** permitir `-1000..1000` y validar por ejercicio en la aplicación; doc 05 actualizado.
+- **Artefacto:** `V3__training.sql`; invariante en `scripts/check-harness.sh`; test de migraciones.
+- **Comprobación:** las migraciones aplican y el test de esquema pasa con el CHECK nuevo.
+
 ---
 
 ## Revisión por milestone

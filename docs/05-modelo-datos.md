@@ -191,7 +191,7 @@ UNIQUE `(routine_exercise_id, position)`.
 | position | smallint | ≥ 0, UNIQUE `(session_exercise_id, position)` |
 | set_type | set_type | NOT NULL default `NORMAL` |
 | reps | smallint | NOT NULL 1..1000 |
-| weight | numeric(6,2) | NOT NULL 0..1000 (kg; en bodyweight = lastre, RN-13) |
+| weight | numeric(6,2) | NOT NULL -1000..1000 (kg; negativo = asistencia en bodyweight, RN-13) |
 | rir | smallint | NULL 0..10 |
 | notes | varchar(500) | NULL |
 | logged_at | timestamptz | NOT NULL default now() |

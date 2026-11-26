@@ -116,8 +116,9 @@ migraciones Flyway se aplican solas al arrancar; para resetear la BD en local us
 `.harness/last-verify.txt` y la imprime. El protocolo completo está en [AGENTS.md](./AGENTS.md).
 
 Estado actual: **M0 en curso**. Ya existen esqueleto backend/frontend, harness, CI,
-infraestructura local y Flyway `V1` (identity + extensiones). Faltan `V2–V5`, Dockerfile,
-compose de producción y el resto de fundaciones de M0.
+infraestructura local y el esquema Flyway completo `V1–V5` (identity, catalog, training,
+progress/body y feature flags). Faltan Dockerfile, compose de producción, SignalStore/i18n
+base y el resto de fundaciones de M0.
 
 
 

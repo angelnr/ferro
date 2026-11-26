@@ -32,6 +32,10 @@ for f in \
   backend/src/test/java/com/ferro/infrastructure/FlywayMigrationsTest.java \
   backend/src/test/java/com/ferro/infrastructure/FlywaySpringIntegrationTest.java \
   backend/src/main/resources/db/migration/V1__identity_and_extensions.sql \
+  backend/src/main/resources/db/migration/V2__catalog.sql \
+  backend/src/main/resources/db/migration/V3__training.sql \
+  backend/src/main/resources/db/migration/V4__progress_and_body.sql \
+  backend/src/main/resources/db/migration/V5__feature_flags.sql \
   infra/docker-compose.dev.yml \
   frontend/package.json \
   frontend/angular.json \
@@ -62,6 +66,7 @@ need_grep backend/pom.xml 'flyway-database-postgresql' 'módulo Flyway PostgreSQ
 need_grep backend/src/test/java/com/ferro/support/AbstractPostgresIntegrationTest.java 'postgres:18-alpine' 'PostgreSQL real 18 (no H2)'
 need_grep infra/docker-compose.dev.yml 'postgres:18-alpine' 'Postgres 18 en Compose'
 need_grep infra/docker-compose.dev.yml 'ferro_pgdata:/var/lib/postgresql' 'volumen de Postgres 18 en /var/lib/postgresql'
+need_grep backend/src/main/resources/db/migration/V3__training.sql 'weight BETWEEN -1000 AND 1000' 'peso negativo para RN-13'
 need_grep backend/pom.xml 'maven-enforcer-plugin' 'enforcer'
 need_grep backend/pom.xml '<java.version>21</java.version>' 'Java 21'
 need_grep frontend/package.json '"test:coverage"' 'script test:coverage'

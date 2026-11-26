@@ -128,7 +128,7 @@ scripts/backend.sh|frontend.sh   ejecución Docker con versiones fijas
 .githooks/                       pre-commit, commit-msg, pre-push
 .github/workflows/ci.yml         misma verificación en CI
 infra/docker-compose.dev.yml    Postgres 18, Mailpit, Prometheus y Grafana
-backend/src/main/resources/db/migration/  migraciones Flyway (V1 identity por ahora)
+backend/src/main/resources/db/migration/  migraciones Flyway (V1–V5, esquema completo)
 docs/harness/lessons.md          lecciones → reglas/tests/hooks
 docs/harness/test-baseline.json  mínimo de tests exigido
 backend/src/test/.../Postgres18ContainerTest.java  humo de integración con PostgreSQL 18 real
