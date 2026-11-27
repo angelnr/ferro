@@ -549,6 +549,7 @@ describe('TrainingPage', () => {
       setForm: { setValue(value: object): void };
       logSet(): Promise<void>;
       finish(): Promise<void>;
+      session: () => unknown;
     };
     page.setForm.setValue({
       entryId: 'entry-1',
@@ -560,6 +561,10 @@ describe('TrainingPage', () => {
       targetSetId: '',
     });
     const logging = page.logSet();
+    const optimistic = page.session() as unknown as {
+      exercises: { sets: { id: string }[] }[];
+    };
+    expect(optimistic.exercises[0].sets.some((set) => set.id.startsWith('pending-'))).toBe(true);
 
     const post = http.expectOne(
       `${environment.apiBaseUrl}/workout-sessions/session-1/exercises/entry-1/sets`,

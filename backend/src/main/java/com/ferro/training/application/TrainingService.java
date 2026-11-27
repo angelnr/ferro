@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ferro.platform.api.FerroMetrics;
 import com.ferro.shared.domain.UuidV7;
 import com.ferro.training.application.port.RoutineRepository;
 import com.ferro.training.application.port.TrainingRepository;
@@ -48,19 +47,13 @@ public class TrainingService {
     private final TrainingRepository sessions;
     private final RoutineRepository routines;
     private final Clock clock;
-    private final FerroMetrics metrics;
     private final ApplicationEventPublisher events;
 
     public TrainingService(
-            TrainingRepository sessions,
-            RoutineRepository routines,
-            Clock clock,
-            FerroMetrics metrics,
-            ApplicationEventPublisher events) {
+            TrainingRepository sessions, RoutineRepository routines, Clock clock, ApplicationEventPublisher events) {
         this.sessions = sessions;
         this.routines = routines;
         this.clock = clock;
-        this.metrics = metrics;
         this.events = events;
     }
 
@@ -72,7 +65,6 @@ public class TrainingService {
                         .withZone(ZoneId.of("Europe/Madrid"))
                         .format(now);
         WorkoutSession session = sessions.create(userId, UuidV7.generate(), name, null, now);
-        metrics.sessionStarted();
         events.publishEvent(new SessionStarted(session.id(), userId, session.startedAt()));
         return session;
     }
@@ -82,7 +74,6 @@ public class TrainingService {
         Routine routine = routines.find(userId, routineId).orElseThrow(RoutineNotFoundException::new);
         Instant now = clock.instant();
         WorkoutSession session = sessions.create(userId, UuidV7.generate(), routine.name(), routine.id(), now);
-        metrics.sessionStarted();
         events.publishEvent(new SessionStarted(session.id(), userId, session.startedAt()));
         for (RoutineExercise exercise : routine.exercises()) {
             UUID entryId = UuidV7.generate();
@@ -186,7 +177,6 @@ public class TrainingService {
         if (targetSetId != null) {
             sessions.deleteTargetSet(targetSetId);
         }
-        metrics.setLogged();
         events.publishEvent(new SetLogged(sessionId, userId, created.id(), created.loggedAt()));
         return created;
     }
@@ -339,8 +329,6 @@ public class TrainingService {
         BigDecimal volume = sessions.totalVolume(sessionId);
         sessions.finish(sessionId, now, duration, volume);
         List<NewPersonalRecord> records = sessions.recalculatePersonalRecords(userId, sessionId, now);
-        metrics.sessionFinished();
-        records.forEach(record -> metrics.personalRecord());
         events.publishEvent(new SessionCompleted(sessionId, userId, now, records.size()));
         return new FinishResult(get(userId, sessionId), records);
     }

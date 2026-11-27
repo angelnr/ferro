@@ -80,3 +80,13 @@ html[data-theme='light'] textarea {
 html[data-theme='light'] .divide-zinc-800 > :not([hidden]) ~ :not([hidden]) {
   border-color: #e4e4e7;
 }
+
+/* Contraste WCAG AA sobre el tema oscuro: zinc-500 se queda corto en fondos zinc-900. */
+html[data-theme='dark'] .text-zinc-500,
+html[data-theme='dark'] .text-zinc-600 {
+  color: #a1a1aa;
+}
+
+html[data-theme='dark'] .bg-emerald-600 {
+  background-color: #047857;
+}

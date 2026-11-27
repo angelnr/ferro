@@ -775,14 +775,18 @@ test('supports keyboard navigation with a skip link', async ({ page }) => {
   await expect(page.locator('#main')).toBeFocused();
 });
 
-test('has no critical accessibility violations on the main screens', async ({ page }) => {
+test('has no critical or serious accessibility violations on the main screens', async ({
+  page,
+}) => {
   await authenticated(page);
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();
-  const critical = results.violations.filter((violation) => violation.impact === 'critical');
+  const critical = results.violations.filter((violation) =>
+    ['critical', 'serious'].includes(violation.impact ?? ''),
+  );
   expect(critical, JSON.stringify(critical.map((violation) => violation.id))).toEqual([]);
 
   await page.goto('/settings');
@@ -791,7 +795,9 @@ test('has no critical accessibility violations on the main screens', async ({ pa
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();
   expect(
-    settings.violations.filter((violation) => violation.impact === 'critical'),
+    settings.violations.filter((violation) =>
+      ['critical', 'serious'].includes(violation.impact ?? ''),
+    ),
     JSON.stringify(settings.violations.map((violation) => violation.id)),
   ).toEqual([]);
 });

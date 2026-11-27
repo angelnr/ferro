@@ -163,7 +163,8 @@ run_frontend_tests() {
 }
 
 run_frontend_build() {
-  run_frontend npm run build
+  run_frontend npm run build || return 1
+  "$ROOT/scripts/check-bundle-size.sh"
 }
 
 run_frontend_lint() {

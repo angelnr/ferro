@@ -31,6 +31,7 @@ if [[ "${1:-}" == "run" ]]; then
     --name ferro-api-dev \
     -e SERVER_PORT="${SERVER_PORT:-8080}" \
     -e FERRO_DEMO_ENABLED="${FERRO_DEMO_ENABLED:-false}" \
+    -e RATE_LIMIT_ENABLED="${RATE_LIMIT_ENABLED:-true}" \
     -e CORS_ALLOWED_ORIGINS="$cors_origins" \
     -e APP_FRONTEND_URL="${APP_FRONTEND_URL:-http://localhost:4200}" \
     -e GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID:-}" \

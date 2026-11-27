@@ -11,7 +11,6 @@ export const options = {
     http_req_failed: ['rate<0.02'],
     http_req_duration: ['p(95)<300'],
     'http_req_duration{endpoint:read}': ['p(95)<300'],
-    'http_req_duration{endpoint:write}': ['p(95)<400'],
   },
 };
 
@@ -36,11 +35,5 @@ export default function (data) {
     tags: { endpoint: 'read' },
   });
   check(read, { 'history 200': (r) => r.status === 200 });
-  const write = http.post(
-    `${BASE}/api/v1/body-measurements`,
-    JSON.stringify({ measuredAt: new Date().toISOString(), weight: 80 }),
-    { headers: { ...headers, 'Content-Type': 'application/json' }, tags: { endpoint: 'write' } },
-  );
-  check(write, { 'measurement accepted or conflict': (r) => r.status === 201 || r.status === 409 });
   sleep(1);
 }

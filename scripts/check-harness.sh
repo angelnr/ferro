@@ -84,6 +84,7 @@ for f in \
   docs/seed-ejercicios.csv \
   scripts/validate-seed.py \
   scripts/check-i18n.py \
+  scripts/check-bundle-size.sh \
   backend/src/main/resources/messages_es.properties \
   backend/src/main/resources/messages_en.properties \
   backend/src/main/java/com/ferro/platform/api/LocalizedProblemTranslator.java \
@@ -233,6 +234,7 @@ need_grep backend/src/main/java/com/ferro/platform/interfaces/rest/FeatureFlagCo
 need_grep backend/src/main/java/com/ferro/progress/application/WeeklySummaryService.java 'sendWeeklySummary' 'resumen semanal'
 need_grep backend/src/main/java/com/ferro/training/application/TrainingService.java 'SessionCompleted' 'eventos de dominio'
 need_grep backend/src/main/java/com/ferro/catalog/application/CatalogQueryCache.java 'expireAfterWrite' 'caché de catálogo'
+need_grep scripts/verify.sh 'check-bundle-size' 'gate de bundle'
 need_grep frontend/src/app/core/units/units.pipes.ts 'KG_TO_LB' 'presentación kg/lb'
 need_grep backend/src/main/resources/application-prod.yml 'logstash' 'logs JSON'
 need_grep infra/RUNBOOK.md 'restore' 'runbook de producción'

@@ -618,8 +618,34 @@ export class TrainingPage implements OnDestroy {
       return;
     }
     this.logging.set(true);
+    const value = this.setForm.getRawValue();
+    const entry = session.exercises.find((candidate) => candidate.id === value.entryId);
+    if (!entry) {
+      this.logging.set(false);
+      return;
+    }
+    const optimisticSet: SessionSet = {
+      id: `pending-${Date.now()}`,
+      position: entry.sets.length,
+      setType: value.setType,
+      reps: value.reps,
+      weight: value.weight,
+      rir: value.rir,
+      volume: value.reps * value.weight,
+      e1rm: null,
+      loggedAt: new Date().toISOString(),
+      notes: value.notes || null,
+    };
+    const optimisticSession: WorkoutSession = {
+      ...session,
+      exercises: session.exercises.map((candidate) =>
+        candidate.id === entry.id
+          ? { ...candidate, sets: [...candidate.sets, optimisticSet] }
+          : candidate,
+      ),
+    };
+    this.session.set(optimisticSession);
     try {
-      const value = this.setForm.getRawValue();
       await firstValueFrom(
         this.api.logSet(session.id, value.entryId, {
           reps: value.reps,
@@ -640,11 +666,12 @@ export class TrainingPage implements OnDestroy {
         setType: 'NORMAL',
         targetSetId: '',
       });
-      const entry = updated.exercises.find((candidate) => candidate.id === value.entryId);
-      if (entry) {
-        this.startRest(this.nextRestSeconds(entry, updated));
+      const updatedEntry = updated.exercises.find((candidate) => candidate.id === value.entryId);
+      if (updatedEntry) {
+        this.startRest(this.nextRestSeconds(updatedEntry, updated));
       }
     } catch {
+      this.session.set(session);
       this.error.set(true);
     } finally {
       this.logging.set(false);
