@@ -2,6 +2,9 @@ server:
   forward-headers-strategy: framework
 
 logging:
+  structured:
+    format:
+      console: logstash
   level:
     root: info
     com.ferro: info
@@ -18,9 +21,9 @@ ferro:
 
 springdoc:
   api-docs:
-    enabled: false
+    enabled: true
   swagger-ui:
-    enabled: false
+    enabled: true
 
 spring:
   mail:

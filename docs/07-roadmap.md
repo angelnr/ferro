@@ -157,14 +157,20 @@ Android real queda como verificación manual del usuario; no se puede certificar
 
 ## M7 · Semana 8 — Producción y publicación
 
+**Estado:** 🚧 en curso · plataforma y artefactos listos; deploy/restore reales pendientes.
+
 Entregables:
-- [ ] VM Oracle (eu-madrid-1) + DuckDNS + Caddy TLS + compose prod + runbook
-      `infra/RUNBOOK.md` (setup, restore backup, upgrade, rollback).
+- [x] Runbook `infra/RUNBOOK.md`, compose prod con Caddy/Prometheus/Grafana, backups
+      `infra/backup.sh`/`restore.sh` y workflow de deploy multiarch GHCR.
+- [ ] VM Oracle (eu-madrid-1) + DNS + TLS reales — **externo, pendiente de credenciales**.
 - [ ] GitHub Actions deploy: imagen GHCR (multi-arch amd64/arm64) + SSH deploy +
       migraciones automáticas; secretos GitHub configurados.
 - [ ] Prometheus/Grafana en prod con dashboards provisionados; UptimeRobot.
-- [ ] Backups: cron pg_dump diario + semanal Object Storage + **prueba real de
-      restore** (RNF-11) documentada con tiempos.
+- [x] Backups: script pg_dump diario + retención; restore destructivo documentado.
+- [ ] Prueba real de restore en VM (RNF-11) — **pendiente**.
+- [x] Flags públicas, Swagger `/api/docs`, health, métricas de negocio, logs JSON con
+      correlationId, resumen semanal opt-in y smoke k6.
+- [x] Workflow PIT semanal (reporte blando; RNF-43).
 - [ ] Resumen semanal email (RF-066) + job PIT semanal (RNF-43) + smoke k6 (RNF-01/02).
 - [ ] README final: capturas/gif del flujo completo, arquitectura, badges reales,
       enlace demo + cuenta demo; ADR post-mortem «lecciones» opcional.

@@ -8,6 +8,8 @@ export interface User {
   theme: 'DARK' | 'LIGHT';
   timeZone: string;
   defaultRestSeconds: number;
+  timerSound?: boolean;
+  emailWeeklySummary?: boolean;
 }
 
 export interface Preferences {
@@ -65,4 +67,6 @@ export interface UpdateProfilePayload {
   unitSystem?: 'KG' | 'LB';
   theme?: 'DARK' | 'LIGHT';
   defaultRestSeconds?: number;
+  timerSound?: boolean;
+  emailWeeklySummary?: boolean;
 }

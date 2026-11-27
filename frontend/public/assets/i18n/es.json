@@ -91,7 +91,9 @@
     "rest": "Descanso por defecto (segundos)",
     "timeZone": "Zona horaria (solo lectura)",
     "saved": "Preferencias guardadas.",
-    "save": "Guardar cambios"
+    "save": "Guardar cambios",
+    "timerSound": "Sonido del temporizador",
+    "weeklySummary": "Recibir resumen semanal por email"
   },
   "catalog": {
     "title": "Catálogo",

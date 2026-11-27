@@ -279,6 +279,8 @@ describe('auth pages', () => {
       unitSystem: 'LB',
       theme: 'LIGHT',
       defaultRestSeconds: 120,
+      timerSound: true,
+      emailWeeklySummary: false,
     });
     await page.submit();
 
@@ -288,6 +290,8 @@ describe('auth pages', () => {
       unitSystem: 'LB',
       theme: 'LIGHT',
       defaultRestSeconds: 120,
+      timerSound: true,
+      emailWeeklySummary: false,
     });
   });
 

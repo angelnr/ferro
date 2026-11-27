@@ -1061,6 +1061,9 @@ export class TrainingPage implements OnDestroy {
 
   private notifyRestFinished(): void {
     navigator.vibrate?.(200);
+    if (this.sessionStore.user()?.timerSound === false) {
+      return;
+    }
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('Descanso terminado', { body: 'Siguiente serie' });
     }

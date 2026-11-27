@@ -32,5 +32,13 @@ public interface ProgressRepository {
 
     List<ProgressSummary.MuscleSlice> muscleDistribution(UUID userId, Instant from, Instant to);
 
+    int personalRecordsBetween(UUID userId, Instant from, Instant to);
+
+    boolean weeklySummaryEnabled();
+
+    List<WeeklyRecipient> weeklyRecipients();
+
     List<VolumePoint> volume(UUID userId, Instant from, Instant to, String zone, String granularity);
+
+    record WeeklyRecipient(UUID userId, String email, String locale, String zone) {}
 }

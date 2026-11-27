@@ -60,7 +60,9 @@ public class UserController {
                         request.locale(),
                         request.unitSystem(),
                         request.theme(),
-                        request.defaultRestSeconds()));
+                        request.defaultRestSeconds(),
+                        request.timerSound(),
+                        request.emailWeeklySummary()));
         return ResponseEntity.noContent().build();
     }
 

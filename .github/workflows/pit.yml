@@ -1,0 +1,33 @@
+name: PIT · dominio
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      FERRO_MAVEN_SETTINGS: config/maven/settings-ci.xml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ferro/m2
+          key: m2-pit-${{ hashFiles('backend/pom.xml') }}
+          restore-keys: m2-
+      - name: PIT
+        run: ./scripts/pit.sh
+      - name: Subir reporte PIT
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pit-report
+          path: backend/target/pit-reports/
+          if-no-files-found: warn

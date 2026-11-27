@@ -39,6 +39,8 @@ springdoc:
     operations-sorter: method
 
 ferro:
+  openapi:
+    server-url: ${OPENAPI_SERVER_URL:http://localhost:8082}
   demo:
     enabled: ${FERRO_DEMO_ENABLED:false}
   app:

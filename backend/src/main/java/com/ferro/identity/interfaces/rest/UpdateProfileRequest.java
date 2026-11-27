@@ -17,4 +17,6 @@ public record UpdateProfileRequest(
         @Pattern(regexp = "DARK|LIGHT", message = "theme debe ser DARK o LIGHT")
         String theme,
 
-        @Min(15) @Max(600) Integer defaultRestSeconds) {}
+        @Min(15) @Max(600) Integer defaultRestSeconds,
+        Boolean timerSound,
+        Boolean emailWeeklySummary) {}

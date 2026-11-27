@@ -12,7 +12,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import com.ferro.identity.domain.Email;
+import com.ferro.platform.api.FerroMetrics;
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.mail.internet.MimeMessage;
 
 class MailEmailSenderTest {
@@ -20,7 +22,8 @@ class MailEmailSenderTest {
     @Test
     void sends_english_and_spanish_templates() {
         CapturingMailSender mail = new CapturingMailSender();
-        MailEmailSender sender = new MailEmailSender(mail, "no-reply@ferro.dev");
+        MailEmailSender sender =
+                new MailEmailSender(mail, "no-reply@ferro.dev", new FerroMetrics(new SimpleMeterRegistry()));
 
         sender.sendVerificationEmail(new Email("en@ferro.dev"), "en", "https://ferro.dev/v");
         sender.sendWelcomeEmail(new Email("es@ferro.dev"), "es");

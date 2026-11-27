@@ -35,6 +35,8 @@ public class UpdateProfileService {
                 parseUnitSystem(command.unitSystem()),
                 parseTheme(command.theme()),
                 command.defaultRestSeconds(),
+                command.timerSound(),
+                command.emailWeeklySummary(),
                 clock.instant());
         users.save(user);
     }

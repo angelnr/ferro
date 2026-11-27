@@ -28,6 +28,7 @@ public final class User {
     private String timeZone;
     private int defaultRestSeconds;
     private boolean timerSound;
+    private boolean emailWeeklySummary;
     private Instant emailVerifiedAt;
     private final Instant healthConsentAt;
     private int failedLoginCount;
@@ -47,6 +48,7 @@ public final class User {
             String timeZone,
             int defaultRestSeconds,
             boolean timerSound,
+            boolean emailWeeklySummary,
             Instant emailVerifiedAt,
             Instant healthConsentAt,
             int failedLoginCount,
@@ -64,6 +66,7 @@ public final class User {
         this.timeZone = timeZone;
         this.defaultRestSeconds = defaultRestSeconds;
         this.timerSound = timerSound;
+        this.emailWeeklySummary = emailWeeklySummary;
         this.emailVerifiedAt = emailVerifiedAt;
         this.healthConsentAt = healthConsentAt;
         this.failedLoginCount = failedLoginCount;
@@ -91,6 +94,7 @@ public final class User {
                 "Europe/Madrid",
                 90,
                 true,
+                false,
                 null,
                 now,
                 0,
@@ -112,6 +116,7 @@ public final class User {
                 "Europe/Madrid",
                 90,
                 true,
+                false,
                 emailVerified ? now : null,
                 now,
                 0,
@@ -132,6 +137,7 @@ public final class User {
             String timeZone,
             int defaultRestSeconds,
             boolean timerSound,
+            boolean emailWeeklySummary,
             Instant emailVerifiedAt,
             Instant healthConsentAt,
             int failedLoginCount,
@@ -150,6 +156,7 @@ public final class User {
                 timeZone,
                 defaultRestSeconds,
                 timerSound,
+                emailWeeklySummary,
                 emailVerifiedAt,
                 healthConsentAt,
                 failedLoginCount,
@@ -206,12 +213,16 @@ public final class User {
             UnitSystem newUnitSystem,
             Theme newTheme,
             Integer newDefaultRestSeconds,
+            Boolean newTimerSound,
+            Boolean newEmailWeeklySummary,
             Instant now) {
         if (newDisplayName == null
                 && newLocale == null
                 && newUnitSystem == null
                 && newTheme == null
-                && newDefaultRestSeconds == null) {
+                && newDefaultRestSeconds == null
+                && newTimerSound == null
+                && newEmailWeeklySummary == null) {
             throw new InvalidProfileException("No hay cambios que aplicar");
         }
         if (newDefaultRestSeconds != null && (newDefaultRestSeconds < 15 || newDefaultRestSeconds > 600)) {
@@ -231,6 +242,12 @@ public final class User {
         }
         if (newDefaultRestSeconds != null) {
             defaultRestSeconds = newDefaultRestSeconds;
+        }
+        if (newTimerSound != null) {
+            timerSound = newTimerSound;
+        }
+        if (newEmailWeeklySummary != null) {
+            emailWeeklySummary = newEmailWeeklySummary;
         }
         updatedAt = now;
     }
@@ -286,6 +303,10 @@ public final class User {
 
     public boolean timerSound() {
         return timerSound;
+    }
+
+    public boolean emailWeeklySummary() {
+        return emailWeeklySummary;
     }
 
     public Instant emailVerifiedAt() {

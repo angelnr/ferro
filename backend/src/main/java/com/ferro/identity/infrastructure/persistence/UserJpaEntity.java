@@ -64,6 +64,9 @@ public class UserJpaEntity {
     @Column(name = "timer_sound", nullable = false)
     private boolean timerSound;
 
+    @Column(name = "email_weekly_summary", nullable = false)
+    private boolean emailWeeklySummary;
+
     @Column(name = "email_verified_at")
     private Instant emailVerifiedAt;
 
@@ -96,6 +99,7 @@ public class UserJpaEntity {
         this.timeZone = user.timeZone();
         this.defaultRestSeconds = user.defaultRestSeconds();
         this.timerSound = user.timerSound();
+        this.emailWeeklySummary = user.emailWeeklySummary();
         this.emailVerifiedAt = user.emailVerifiedAt();
         this.healthConsentAt = user.healthConsentAt();
         this.failedLoginCount = user.failedLoginCount();
@@ -121,6 +125,7 @@ public class UserJpaEntity {
                 timeZone,
                 defaultRestSeconds,
                 timerSound,
+                emailWeeklySummary,
                 emailVerifiedAt,
                 healthConsentAt,
                 failedLoginCount,

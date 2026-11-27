@@ -91,7 +91,9 @@
     "rest": "Default rest (seconds)",
     "timeZone": "Time zone (read-only)",
     "saved": "Preferences saved.",
-    "save": "Save changes"
+    "save": "Save changes",
+    "timerSound": "Timer sound",
+    "weeklySummary": "Receive a weekly summary by email"
   },
   "catalog": {
     "title": "Catalog",

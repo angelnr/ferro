@@ -3,7 +3,13 @@ package com.ferro.identity.interfaces.rest;
 import com.ferro.identity.domain.User;
 
 public record PreferencesResponse(
-        String locale, String unitSystem, String theme, String timeZone, int defaultRestSeconds, boolean timerSound) {
+        String locale,
+        String unitSystem,
+        String theme,
+        String timeZone,
+        int defaultRestSeconds,
+        boolean timerSound,
+        boolean emailWeeklySummary) {
 
     public static PreferencesResponse from(User user) {
         return new PreferencesResponse(
@@ -12,6 +18,7 @@ public record PreferencesResponse(
                 user.theme().name(),
                 user.timeZone(),
                 user.defaultRestSeconds(),
-                user.timerSound());
+                user.timerSound(),
+                user.emailWeeklySummary());
     }
 }

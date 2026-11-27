@@ -99,6 +99,11 @@ y medidas corporales.
 y emails), tema claro, onboarding, axe-core en E2E, cuenta demo con datos sintéticos y
 Lighthouse CI. Queda la instalación física en Android como comprobación manual.
 
+**M7 en curso:** platform listo para producción: flags públicas, Swagger en `/api/docs`,
+métricas de negocio y logs JSON con `X-Correlation-Id`, resumen semanal opt-in, backups,
+runbook, compose con Prometheus/Grafana, workflows de deploy multiarch y smoke k6. El
+despliegue real en la VM y la prueba de restore quedan pendientes de credenciales externas.
+
 ## Desarrollo local y verificación
 
 El harness **no necesita JDK ni Node en el host**: ejecuta versiones fijas en Docker

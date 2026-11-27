@@ -335,6 +335,45 @@ public class JdbcProgressRepository implements ProgressRepository {
     }
 
     @Override
+    public int personalRecordsBetween(UUID userId, Instant from, Instant to) {
+        Integer count = jdbc.queryForObject(
+                """
+                SELECT count(*) FROM personal_records
+                WHERE user_id = :userId AND achieved_at >= :from AND achieved_at < :to
+                """,
+                new MapSqlParameterSource()
+                        .addValue("userId", userId)
+                        .addValue("from", Timestamp.from(from))
+                        .addValue("to", Timestamp.from(to)),
+                Integer.class);
+        return count == null ? 0 : count;
+    }
+
+    @Override
+    public boolean weeklySummaryEnabled() {
+        Boolean enabled = jdbc.queryForObject(
+                "SELECT enabled FROM feature_flags WHERE key = 'email.weekly-summary'",
+                new MapSqlParameterSource(),
+                Boolean.class);
+        return Boolean.TRUE.equals(enabled);
+    }
+
+    @Override
+    public List<WeeklyRecipient> weeklyRecipients() {
+        return jdbc.query(
+                """
+                SELECT id, email, locale, time_zone FROM users
+                WHERE email_weekly_summary = true AND status = 'ACTIVE'
+                """,
+                new MapSqlParameterSource(),
+                (rs, rowNum) -> new WeeklyRecipient(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("email"),
+                        rs.getString("locale"),
+                        rs.getString("time_zone")));
+    }
+
+    @Override
     public List<VolumePoint> volume(UUID userId, Instant from, Instant to, String zone, String granularity) {
         String trunc = switch (granularity) {
             case "day" -> "day";

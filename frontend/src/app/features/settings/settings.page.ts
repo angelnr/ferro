@@ -77,6 +77,26 @@ import { UiStore } from '../../core/store/ui.store';
             />
           </label>
 
+          <label class="flex items-center gap-2 text-sm text-zinc-300 sm:col-span-2">
+            <input
+              id="timerSound"
+              type="checkbox"
+              formControlName="timerSound"
+              class="h-4 w-4 accent-emerald-500"
+            />
+            {{ 'settings.timerSound' | translate }}
+          </label>
+
+          <label class="flex items-center gap-2 text-sm text-zinc-300 sm:col-span-2">
+            <input
+              id="emailWeeklySummary"
+              type="checkbox"
+              formControlName="emailWeeklySummary"
+              class="h-4 w-4 accent-emerald-500"
+            />
+            {{ 'settings.weeklySummary' | translate }}
+          </label>
+
           <p class="text-xs text-zinc-500 sm:col-span-2">
             {{ 'settings.timeZone' | translate }}: {{ user.timeZone }}
           </p>
@@ -121,6 +141,8 @@ export class SettingsPage {
     unitSystem: ['KG' as 'KG' | 'LB'],
     theme: ['DARK' as 'DARK' | 'LIGHT'],
     defaultRestSeconds: [90, [Validators.min(15), Validators.max(600)]],
+    timerSound: [true],
+    emailWeeklySummary: [false],
   });
 
   constructor() {
@@ -134,6 +156,8 @@ export class SettingsPage {
             unitSystem: user.unitSystem,
             theme: user.theme,
             defaultRestSeconds: user.defaultRestSeconds,
+            timerSound: user.timerSound ?? true,
+            emailWeeklySummary: user.emailWeeklySummary ?? false,
           },
           { emitEvent: false },
         );

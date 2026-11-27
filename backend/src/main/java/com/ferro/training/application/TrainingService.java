@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ferro.platform.api.FerroMetrics;
 import com.ferro.shared.domain.UuidV7;
 import com.ferro.training.application.port.RoutineRepository;
 import com.ferro.training.application.port.TrainingRepository;
@@ -42,11 +43,13 @@ public class TrainingService {
     private final TrainingRepository sessions;
     private final RoutineRepository routines;
     private final Clock clock;
+    private final FerroMetrics metrics;
 
-    public TrainingService(TrainingRepository sessions, RoutineRepository routines, Clock clock) {
+    public TrainingService(TrainingRepository sessions, RoutineRepository routines, Clock clock, FerroMetrics metrics) {
         this.sessions = sessions;
         this.routines = routines;
         this.clock = clock;
+        this.metrics = metrics;
     }
 
     @Transactional
@@ -56,7 +59,9 @@ public class TrainingService {
                 + DateTimeFormatter.ofPattern("yyyy-MM-dd")
                         .withZone(ZoneId.of("Europe/Madrid"))
                         .format(now);
-        return sessions.create(userId, UuidV7.generate(), name, null, now);
+        WorkoutSession session = sessions.create(userId, UuidV7.generate(), name, null, now);
+        metrics.sessionStarted();
+        return session;
     }
 
     @Transactional
@@ -64,6 +69,7 @@ public class TrainingService {
         Routine routine = routines.find(userId, routineId).orElseThrow(RoutineNotFoundException::new);
         Instant now = clock.instant();
         WorkoutSession session = sessions.create(userId, UuidV7.generate(), routine.name(), routine.id(), now);
+        metrics.sessionStarted();
         for (RoutineExercise exercise : routine.exercises()) {
             UUID entryId = UuidV7.generate();
             sessions.addExercise(
@@ -166,6 +172,7 @@ public class TrainingService {
         if (targetSetId != null) {
             sessions.deleteTargetSet(targetSetId);
         }
+        metrics.setLogged();
         return created;
     }
 
@@ -317,6 +324,8 @@ public class TrainingService {
         BigDecimal volume = sessions.totalVolume(sessionId);
         sessions.finish(sessionId, now, duration, volume);
         List<NewPersonalRecord> records = sessions.recalculatePersonalRecords(userId, sessionId, now);
+        metrics.sessionFinished();
+        records.forEach(record -> metrics.personalRecord());
         return new FinishResult(get(userId, sessionId), records);
     }
 

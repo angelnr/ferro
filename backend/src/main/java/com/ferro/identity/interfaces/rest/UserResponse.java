@@ -11,7 +11,9 @@ public record UserResponse(
         String unitSystem,
         String theme,
         String timeZone,
-        int defaultRestSeconds) {
+        int defaultRestSeconds,
+        boolean timerSound,
+        boolean emailWeeklySummary) {
 
     public static UserResponse from(User user) {
         return new UserResponse(
@@ -23,6 +25,8 @@ public record UserResponse(
                 user.unitSystem().name(),
                 user.theme().name(),
                 user.timeZone(),
-                user.defaultRestSeconds());
+                user.defaultRestSeconds(),
+                user.timerSound(),
+                user.emailWeeklySummary());
     }
 }

@@ -103,6 +103,17 @@ class TrainingMaintenanceIntegrationTest extends AbstractPostgresIntegrationTest
             sent.add(recipientEmail);
         }
 
+        @Override
+        public void sendWeeklySummary(
+                String recipientEmail,
+                String locale,
+                int sessions,
+                java.math.BigDecimal volume,
+                int personalRecords,
+                int streak) {
+            sent.add(recipientEmail);
+        }
+
         java.util.List<String> sent() {
             return java.util.List.copyOf(sent);
         }

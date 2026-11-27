@@ -85,6 +85,14 @@ for f in \
   backend/src/main/resources/messages_en.properties \
   backend/src/main/java/com/ferro/platform/api/LocalizedProblemTranslator.java \
   backend/src/main/java/com/ferro/identity/infrastructure/DemoDataSeeder.java \
+  backend/src/main/java/com/ferro/progress/application/WeeklySummaryService.java \
+  backend/src/main/java/com/ferro/platform/security/CorrelationIdFilter.java \
+  infra/RUNBOOK.md \
+  infra/backup.sh \
+  infra/restore.sh \
+  infra/k6/smoke.js \
+  .github/workflows/deploy.yml \
+  .github/workflows/pit.yml \
   infra/docker-compose.dev.yml \
   infra/docker-compose.prod.yml \
   infra/caddy/Caddyfile \
@@ -215,6 +223,11 @@ need_grep frontend/src/app/app.html 'app-onboarding' 'onboarding'
 need_grep frontend/src/app/core/auth/auth.interceptor.ts 'Accept-Language' 'idioma de errores API'
 need_grep frontend/e2e/auth.spec.ts 'AxeBuilder' 'axe-core en E2E'
 need_grep backend/src/main/java/com/ferro/identity/infrastructure/DemoDataSeeder.java 'demo@ferro.app' 'cuenta demo'
+need_grep backend/src/main/java/com/ferro/platform/interfaces/rest/FeatureFlagController.java 'feature_flags' 'flags públicas'
+need_grep backend/src/main/java/com/ferro/progress/application/WeeklySummaryService.java 'sendWeeklySummary' 'resumen semanal'
+need_grep backend/src/main/resources/application-prod.yml 'logstash' 'logs JSON'
+need_grep infra/RUNBOOK.md 'restore' 'runbook de producción'
+need_grep .github/workflows/deploy.yml 'ferro-api' 'deploy GHCR'
 need_grep frontend/src/app/app.config.ts 'provideAppInitializer' 'restore de sesión al arrancar'
 need_grep frontend/src/app/core/auth/auth.store.ts 'signalStore' 'AuthStore con SignalStore'
 need_grep frontend/angular.json '"coverageInclude"' 'cobertura sobre todas las fuentes de la app'

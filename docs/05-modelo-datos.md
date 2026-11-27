@@ -54,6 +54,7 @@ erDiagram
 | time_zone | varchar(64) | NOT NULL default `Europe/Madrid` |
 | default_rest_seconds | smallint | NOT NULL default 90, CHECK 15..600 |
 | timer_sound | boolean | NOT NULL default true |
+| email_weekly_summary | boolean | NOT NULL default false (opt-in RF-066) |
 | email_verified_at | timestamptz | NULL |
 | health_consent_at | timestamptz | NOT NULL (RGPD art. 9, RF-001.1) |
 | failed_login_count / locked_until | smallint / timestamptz | bloqueo progresivo RF-002.2 |
@@ -284,7 +285,8 @@ de dominio para emails y derivados (outbox de facto — ver ADR-0002 §alternati
 | V5 | `feature_flags` + seeds de flags |
 | V6 | seed del catálogo (~200 ejercicios, `docs/seed-ejercicios.csv`) |
 | V7 | `session_target_sets`: series objetivo pendientes al iniciar desde rutina (RN-24) |
-| (M7) V8 | datos demo (cuenta demo + 12 semanas sintéticas, solo prod-demo) |
+| V8 | `users.email_weekly_summary`: opt-in del resumen semanal |
+| (runtime) | cuenta demo + 12 semanas sintéticas con `FERRO_DEMO_ENABLED=true` |
 
 ## 5 · Seed del catálogo (~200 ejercicios)
 
