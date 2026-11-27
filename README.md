@@ -73,6 +73,7 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 | [07 · Roadmap](./docs/07-roadmap.md) | Milestones M0–M7 (8 semanas) con Definition of Done |
 | [08 · Backlog v2](./docs/08-backlog-v2.md) | Funcionalidad deliberadamente fuera del MVP |
 | [09 · Glosario](./docs/09-glosario.md) | Lenguaje ubicuo ES↔EN del dominio |
+| [10 · TODO humano](./docs/10-todo-humano.md) | Checklist completo para cerrar producción, legal, Android y v1.0.0 |
 | [AGENTS.md](./AGENTS.md) | Harness: reglas de trabajo, gates y protocolo de evidencia |
 | [infra/README.md](./infra/README.md) | Servicios locales, Compose de producción y operación |
 | [Lecciones del harness](./docs/harness/lessons.md) | Errores → artefactos que impiden repetirlos |

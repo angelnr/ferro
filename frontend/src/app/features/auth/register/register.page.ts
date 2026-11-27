@@ -61,7 +61,12 @@ import { OAuthButtons } from '../oauth-buttons/oauth-buttons';
 
         <label class="flex items-start gap-3 text-sm text-zinc-300">
           <input type="checkbox" formControlName="healthConsent" class="mt-1 accent-emerald-500" />
-          <span>{{ 'auth.consent' | translate }}</span>
+          <span
+            >{{ 'auth.consent' | translate }}
+            <a routerLink="/privacy" class="text-emerald-400">{{
+              'auth.privacyLink' | translate
+            }}</a></span
+          >
         </label>
         @if (form.controls.healthConsent.touched && form.controls.healthConsent.invalid) {
           <p class="text-sm text-red-400">{{ 'auth.consentRequired' | translate }}</p>

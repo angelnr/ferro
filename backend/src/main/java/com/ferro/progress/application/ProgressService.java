@@ -28,10 +28,12 @@ public class ProgressService {
 
     private final ProgressRepository progress;
     private final Clock clock;
+    private final ProgressCache cache;
 
-    public ProgressService(ProgressRepository progress, Clock clock) {
+    public ProgressService(ProgressRepository progress, Clock clock, ProgressCache cache) {
         this.progress = progress;
         this.clock = clock;
+        this.cache = cache;
     }
 
     @Transactional(readOnly = true)
@@ -55,31 +57,36 @@ public class ProgressService {
             case 4, 12, 24 -> weeks;
             default -> 12;
         };
-        String zone = progress.timeZone(userId);
-        ZoneId zoneId = ZoneId.of(zone);
-        ZonedDateTime now = ZonedDateTime.now(clock).withZoneSameInstant(zoneId);
-        LocalDate currentWeek = now.toLocalDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        Instant periodStart =
-                currentWeek.minusWeeks(safeWeeks - 1).atStartOfDay(zoneId).toInstant();
-        Instant periodEnd = now.plusDays(1).toLocalDate().atStartOfDay(zoneId).toInstant();
-        Instant previousStart =
-                currentWeek.minusWeeks((safeWeeks * 2) - 1).atStartOfDay(zoneId).toInstant();
+        return cache.summary(userId, safeWeeks, () -> {
+            String zone = progress.timeZone(userId);
+            ZoneId zoneId = ZoneId.of(zone);
+            ZonedDateTime now = ZonedDateTime.now(clock).withZoneSameInstant(zoneId);
+            LocalDate currentWeek = now.toLocalDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            Instant periodStart =
+                    currentWeek.minusWeeks(safeWeeks - 1).atStartOfDay(zoneId).toInstant();
+            Instant periodEnd =
+                    now.plusDays(1).toLocalDate().atStartOfDay(zoneId).toInstant();
+            Instant previousStart = currentWeek
+                    .minusWeeks((safeWeeks * 2) - 1)
+                    .atStartOfDay(zoneId)
+                    .toInstant();
 
-        List<LocalDate> dates = progress.finishedDates(userId, zone);
-        int currentStreak = currentStreak(dates, now.toLocalDate());
-        int bestStreak = bestStreak(dates);
+            List<LocalDate> dates = progress.finishedDates(userId, zone);
+            int currentStreak = currentStreak(dates, now.toLocalDate());
+            int bestStreak = bestStreak(dates);
 
-        return new ProgressSummary(
-                safeWeeks,
-                progress.weeklyVolume(userId, periodStart, periodEnd, zone),
-                progress.weeklySessions(userId, periodStart, periodEnd, zone),
-                currentStreak,
-                bestStreak,
-                progress.totals(userId, periodStart, periodEnd),
-                progress.totals(userId, previousStart, periodStart),
-                progress.muscleDistribution(userId, now.minusWeeks(4).toInstant(), periodEnd),
-                periodStart,
-                periodEnd);
+            return new ProgressSummary(
+                    safeWeeks,
+                    progress.weeklyVolume(userId, periodStart, periodEnd, zone),
+                    progress.weeklySessions(userId, periodStart, periodEnd, zone),
+                    currentStreak,
+                    bestStreak,
+                    progress.totals(userId, periodStart, periodEnd),
+                    progress.totals(userId, previousStart, periodStart),
+                    progress.muscleDistribution(userId, now.minusWeeks(4).toInstant(), periodEnd),
+                    periodStart,
+                    periodEnd);
+        });
     }
 
     @Transactional(readOnly = true)

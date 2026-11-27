@@ -65,7 +65,8 @@
     "oauthError": "The provider did not return a valid account. Try again.",
     "oauthEmailTitle": "Finish your account",
     "oauthEmailHint": "GitHub did not provide a verified email. Enter one and we will send a verification link.",
-    "oauthEmailSubmit": "Continue"
+    "oauthEmailSubmit": "Continue",
+    "privacyLink": "Privacy policy"
   },
   "home": {
     "dashboard": "Dashboard",
@@ -93,7 +94,10 @@
     "saved": "Preferences saved.",
     "save": "Save changes",
     "timerSound": "Timer sound",
-    "weeklySummary": "Receive a weekly summary by email"
+    "weeklySummary": "Receive a weekly summary by email",
+    "data": "Your data",
+    "export": "Download my data",
+    "privacy": "Privacy"
   },
   "catalog": {
     "title": "Catalog",
@@ -250,5 +254,19 @@
     "start": "Start",
     "seed": "Create sample routines",
     "seedError": "Sample routines could not be created"
+  },
+  "privacy": {
+    "back": "Back",
+    "title": "Privacy and data",
+    "intro": "Ferro only stores the data needed to record your workouts and show your progress.",
+    "dataTitle": "Data we store",
+    "data": "Account, workouts, routines, sets, records, body measurements and preferences. We do not sell data or use it for advertising.",
+    "purposeTitle": "Purpose",
+    "purpose": "Provide the service, calculate statistics and send communications you have enabled.",
+    "rightsTitle": "Your rights",
+    "rights": "You can download your data from Settings and delete your account and all its data from this application.",
+    "retentionTitle": "Retention",
+    "retention": "Data is retained while the account exists. Backups rotate according to the deployment policy.",
+    "contact": "Controller contact: set the privacy email here before publishing."
   }
 }

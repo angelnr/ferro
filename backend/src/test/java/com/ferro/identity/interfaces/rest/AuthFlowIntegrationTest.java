@@ -117,6 +117,16 @@ class AuthFlowIntegrationTest extends AbstractPostgresIntegrationTest {
     }
 
     @Test
+    void exports_the_users_own_data() throws Exception {
+        Registered registered = register(uniqueEmail());
+        mockMvc.perform(get("/api/v1/users/me/export").header("Authorization", "Bearer " + registered.accessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.profile.email").value(registered.email()))
+                .andExpect(jsonPath("$.routines").isArray())
+                .andExpect(jsonPath("$.workoutSessions").isArray());
+    }
+
+    @Test
     void localizes_api_errors_from_accept_language() throws Exception {
         String email = uniqueEmail();
         register(email);

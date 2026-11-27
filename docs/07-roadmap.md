@@ -177,7 +177,7 @@ Entregables:
       enlace demo + cuenta demo; ADR post-mortem «lecciones» opcional.
 
 **DoD:** E1–E7 de la visión verificados uno a uno; deploy desde `main` en un click
-probado dos veces; `git tag v1.0.0`. **Publicación**: repo público ya (desde M0),
+probado dos veces; `git tag v1.0.0`. Checklist humano completo: [10-todo-humano](./10-todo-humano.md). **Publicación**: repo público ya (desde M0),
 ahora difusión (CV, LinkedIn, comunidades).
 
 ---

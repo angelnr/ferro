@@ -4,12 +4,14 @@ import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import com.ferro.identity.application.DeleteAccountService;
 import com.ferro.identity.application.RefreshProperties;
 import com.ferro.identity.application.UpdateProfileCommand;
 import com.ferro.identity.application.UpdateProfileService;
+import com.ferro.identity.application.UserDataExportService;
 import com.ferro.identity.domain.InvalidCredentialsException;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,16 +40,19 @@ public class UserController {
     private final ChangePasswordService changePasswordService;
     private final DeleteAccountService deleteAccountService;
     private final RefreshProperties refreshProperties;
+    private final UserDataExportService dataExportService;
 
     public UserController(
             UpdateProfileService updateProfileService,
             ChangePasswordService changePasswordService,
             DeleteAccountService deleteAccountService,
-            RefreshProperties refreshProperties) {
+            RefreshProperties refreshProperties,
+            UserDataExportService dataExportService) {
         this.updateProfileService = updateProfileService;
         this.changePasswordService = changePasswordService;
         this.deleteAccountService = deleteAccountService;
         this.refreshProperties = refreshProperties;
+        this.dataExportService = dataExportService;
     }
 
     @PatchMapping
@@ -74,6 +80,15 @@ public class UserController {
             @Valid @RequestBody ChangePasswordRequest request) {
         changePasswordService.change(userId(jwt), request.current(), request.next(), refreshToken);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/export")
+    @Operation(summary = "Exporta todos los datos del usuario (RGPD)")
+    public ResponseEntity<java.util.Map<String, Object>> export(@AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ferro-export.json")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(dataExportService.export(userId(jwt)));
     }
 
     @DeleteMapping

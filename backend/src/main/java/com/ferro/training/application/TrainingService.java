@@ -15,6 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ferro.shared.domain.UuidV7;
+import com.ferro.training.api.SessionCompleted;
+import com.ferro.training.api.SessionDiscarded;
+import com.ferro.training.api.SessionEdited;
+import com.ferro.training.api.SessionStarted;
+import com.ferro.training.api.SetLogged;
 import com.ferro.training.application.port.RoutineRepository;
 import com.ferro.training.application.port.TrainingRepository;
 import com.ferro.training.domain.InvalidSessionStateException;
@@ -25,14 +30,10 @@ import com.ferro.training.domain.Routine;
 import com.ferro.training.domain.RoutineExercise;
 import com.ferro.training.domain.RoutineNotFoundException;
 import com.ferro.training.domain.RoutineSet;
-import com.ferro.training.domain.SessionCompleted;
-import com.ferro.training.domain.SessionDiscarded;
 import com.ferro.training.domain.SessionExercise;
 import com.ferro.training.domain.SessionNotFoundException;
 import com.ferro.training.domain.SessionSet;
-import com.ferro.training.domain.SessionStarted;
 import com.ferro.training.domain.SessionStatus;
-import com.ferro.training.domain.SetLogged;
 import com.ferro.training.domain.SetMath;
 import com.ferro.training.domain.SetType;
 import com.ferro.training.domain.WorkoutSession;
@@ -191,6 +192,7 @@ public class TrainingService {
             throw new InvalidTrainingException("Las notas no pueden superar 500 caracteres");
         }
         sessions.updateSession(session.id(), name, notes);
+        events.publishEvent(new SessionEdited(sessionId, userId, clock.instant()));
         return get(userId, sessionId);
     }
 
@@ -291,6 +293,7 @@ public class TrainingService {
         }
         sessions.updateSet(setId, type, reps, weight, rir, notes);
         recalculateAfterEdit(userId, session, entry.exerciseId());
+        events.publishEvent(new SessionEdited(sessionId, userId, clock.instant()));
         return get(userId, sessionId);
     }
 
@@ -307,6 +310,7 @@ public class TrainingService {
                 .orElseThrow(SessionNotFoundException::new);
         sessions.deleteSet(setId);
         recalculateAfterEdit(userId, session, entry.exerciseId());
+        events.publishEvent(new SessionEdited(sessionId, userId, clock.instant()));
         return get(userId, sessionId);
     }
 

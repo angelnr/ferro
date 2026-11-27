@@ -98,6 +98,12 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'privacy',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/privacy/privacy.page').then((component) => component.PrivacyPage),
+  },
+  {
     path: 'catalog',
     canActivate: [authGuard],
     loadComponent: () =>

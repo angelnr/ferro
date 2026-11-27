@@ -4,9 +4,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.ferro.platform.api.FerroMetrics;
-import com.ferro.training.domain.SessionCompleted;
-import com.ferro.training.domain.SessionStarted;
-import com.ferro.training.domain.SetLogged;
+import com.ferro.training.api.SessionCompleted;
+import com.ferro.training.api.SessionStarted;
+import com.ferro.training.api.SetLogged;
 
 /** Consumidor de eventos de training para métricas (RF-085). */
 @Component

@@ -22,9 +22,9 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ferro.support.AbstractPostgresIntegrationTest;
-import com.ferro.training.domain.SessionCompleted;
-import com.ferro.training.domain.SessionStarted;
-import com.ferro.training.domain.SetLogged;
+import com.ferro.training.api.SessionCompleted;
+import com.ferro.training.api.SessionStarted;
+import com.ferro.training.api.SetLogged;
 import com.jayway.jsonpath.JsonPath;
 
 @SpringBootTest(properties = "ferro.rate-limit.enabled=false")

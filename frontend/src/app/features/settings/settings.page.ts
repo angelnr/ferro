@@ -4,10 +4,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AuthStore } from '../../core/auth/auth.store';
 import { SessionStore } from '../../core/auth/session.store';
 import { UiStore } from '../../core/store/ui.store';
+import { AuthApi } from '../../core/auth/auth.api';
+import { RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-settings-page',
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   template: `
     @if (session.user(); as user) {
       <section class="mx-auto mt-8 w-full max-w-2xl">
@@ -124,6 +127,22 @@ import { UiStore } from '../../core/store/ui.store';
             {{ (auth.loading() ? 'auth.loading' : 'settings.save') | translate }}
           </button>
         </form>
+
+        <div class="mt-6 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
+          <p class="text-sm font-medium text-zinc-300">{{ 'settings.data' | translate }}</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              (click)="downloadData()"
+              class="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm"
+            >
+              {{ 'settings.export' | translate }}
+            </button>
+            <a routerLink="/privacy" class="rounded-lg border border-zinc-700 px-3 py-1.5 text-sm">
+              {{ 'settings.privacy' | translate }}
+            </a>
+          </div>
+        </div>
       </section>
     }
   `,
@@ -133,6 +152,7 @@ export class SettingsPage {
   protected readonly session = inject(SessionStore);
   protected readonly auth = inject(AuthStore);
   private readonly ui = inject(UiStore);
+  private readonly api = inject(AuthApi);
   protected readonly saved = signal(false);
 
   protected readonly form = this.formBuilder.nonNullable.group({
@@ -163,6 +183,16 @@ export class SettingsPage {
         );
       }
     });
+  }
+
+  protected async downloadData(): Promise<void> {
+    const blob = await firstValueFrom(this.api.exportData());
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'ferro-export.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
   }
 
   protected async submit(): Promise<void> {

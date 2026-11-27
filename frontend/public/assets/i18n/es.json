@@ -65,7 +65,8 @@
     "oauthError": "El proveedor no devolvió una cuenta válida. Inténtalo de nuevo.",
     "oauthEmailTitle": "Completa tu cuenta",
     "oauthEmailHint": "GitHub no nos ha entregado un email verificado. Indícalo y te enviaremos la verificación.",
-    "oauthEmailSubmit": "Continuar"
+    "oauthEmailSubmit": "Continuar",
+    "privacyLink": "Política de privacidad"
   },
   "home": {
     "dashboard": "Panel",
@@ -93,7 +94,10 @@
     "saved": "Preferencias guardadas.",
     "save": "Guardar cambios",
     "timerSound": "Sonido del temporizador",
-    "weeklySummary": "Recibir resumen semanal por email"
+    "weeklySummary": "Recibir resumen semanal por email",
+    "data": "Tus datos",
+    "export": "Descargar mis datos",
+    "privacy": "Privacidad"
   },
   "catalog": {
     "title": "Catálogo",
@@ -250,5 +254,19 @@
     "start": "Empezar",
     "seed": "Crear rutinas de ejemplo",
     "seedError": "No se pudieron crear las rutinas de ejemplo"
+  },
+  "privacy": {
+    "back": "Volver",
+    "title": "Privacidad y datos",
+    "intro": "Ferro guarda únicamente los datos necesarios para registrar tus entrenamientos y mostrarte tu progreso.",
+    "dataTitle": "Datos que guardamos",
+    "data": "Cuenta, entrenamientos, rutinas, series, récords, medidas corporales y preferencias. No vendemos datos ni los usamos para publicidad.",
+    "purposeTitle": "Para qué",
+    "purpose": "Prestar el servicio, calcular estadísticas y enviar comunicaciones que hayas activado.",
+    "rightsTitle": "Tus derechos",
+    "rights": "Puedes descargar tus datos desde Ajustes y eliminar la cuenta con todos sus datos desde esta misma aplicación.",
+    "retentionTitle": "Conservación",
+    "retention": "Los datos se conservan mientras la cuenta exista. Las copias de seguridad se rotan según la política del despliegue.",
+    "contact": "Contacto del responsable: configura aquí el email de privacidad antes de publicar."
   }
 }

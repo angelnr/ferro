@@ -60,6 +60,10 @@ export class AuthApi {
     return this.http.post<void>(`${this.base}/password-reset/confirm`, { token, newPassword });
   }
 
+  exportData(): Observable<Blob> {
+    return this.http.get(`${environment.apiBaseUrl}/users/me/export`, { responseType: 'blob' });
+  }
+
   updateProfile(payload: UpdateProfilePayload): Observable<void> {
     return this.http.patch<void>(`${environment.apiBaseUrl}/users/me`, payload);
   }
