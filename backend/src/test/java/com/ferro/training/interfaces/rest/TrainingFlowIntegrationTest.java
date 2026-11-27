@@ -1,5 +1,6 @@
 package com.ferro.training.interfaces.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,13 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ferro.support.AbstractPostgresIntegrationTest;
+import com.ferro.training.domain.SessionCompleted;
+import com.ferro.training.domain.SessionStarted;
+import com.ferro.training.domain.SetLogged;
 import com.jayway.jsonpath.JsonPath;
 
 @SpringBootTest(properties = "ferro.rate-limit.enabled=false")
 @AutoConfigureMockMvc
+@RecordApplicationEvents
 class TrainingFlowIntegrationTest extends AbstractPostgresIntegrationTest {
 
     @Autowired
@@ -30,6 +37,9 @@ class TrainingFlowIntegrationTest extends AbstractPostgresIntegrationTest {
 
     @Autowired
     private JdbcTemplate jdbc;
+
+    @Autowired
+    private ApplicationEvents events;
 
     private String token;
     private String otherToken;
@@ -97,6 +107,10 @@ class TrainingFlowIntegrationTest extends AbstractPostgresIntegrationTest {
 
         mockMvc.perform(get("/api/v1/workout-sessions/active").header("Authorization", bearer(token)))
                 .andExpect(status().isNoContent());
+
+        assertThat(events.stream(SessionStarted.class).count()).isEqualTo(1);
+        assertThat(events.stream(SetLogged.class).count()).isEqualTo(2);
+        assertThat(events.stream(SessionCompleted.class).count()).isEqualTo(1);
     }
 
     @Test

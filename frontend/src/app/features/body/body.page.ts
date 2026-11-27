@@ -1,4 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { LengthPipe, WeightPipe } from '../../core/units/units.pipes';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,7 +13,15 @@ type Field = 'weight' | 'chest' | 'waist' | 'hip' | 'arm' | 'thigh';
 
 @Component({
   selector: 'app-body-page',
-  imports: [DatePipe, DecimalPipe, ReactiveFormsModule, RouterLink, TranslatePipe],
+  imports: [
+    DatePipe,
+    DecimalPipe,
+    ReactiveFormsModule,
+    RouterLink,
+    TranslatePipe,
+    WeightPipe,
+    LengthPipe,
+  ],
   template: `
     <section class="mx-auto mt-8 max-w-4xl space-y-6">
       <div class="flex flex-wrap items-end justify-between gap-3">
@@ -140,7 +149,7 @@ type Field = 'weight' | 'chest' | 'waist' | 'hip' | 'arm' | 'thigh';
             <span>{{ points().length }} {{ 'body.points' | translate }}</span>
             <span>
               {{ firstValue() | number: '1.0-1' }} → {{ lastValue() | number: '1.0-1' }}
-              {{ field() === 'weight' ? 'kg' : 'cm' }}
+              {{ field() === 'weight' ? ('weight' | translate) : 'cm' }}
             </span>
           </div>
         } @else {
@@ -163,11 +172,11 @@ type Field = 'weight' | 'chest' | 'waist' | 'hip' | 'arm' | 'thigh';
                   <p class="font-medium">{{ measurement.measuredAt | date: 'mediumDate' }}</p>
                   <p class="text-xs text-zinc-500">
                     @if (measurement.weight !== null) {
-                      {{ measurement.weight }} kg
+                      {{ measurement.weight | weight }}
                     }
                     @for (fieldName of fields; track fieldName) {
                       @if (measurement[fieldName] !== null && fieldName !== 'weight') {
-                        · {{ fieldName }} {{ measurement[fieldName] }} cm
+                        · {{ fieldName }} {{ measurement[fieldName] | length }}
                       }
                     }
                   </p>

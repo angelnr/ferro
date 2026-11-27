@@ -61,6 +61,12 @@ public class ProgressController {
         return progress.personalRecords(userId(jwt), exerciseId);
     }
 
+    @GetMapping("/streak")
+    @Operation(summary = "Racha actual y mejor racha")
+    public ProgressService.Streak streak(@AuthenticationPrincipal Jwt jwt) {
+        return progress.streak(userId(jwt));
+    }
+
     @GetMapping("/summary")
     @Operation(summary = "Panel de estadísticas por rango de semanas")
     public ProgressSummary summary(@AuthenticationPrincipal Jwt jwt, @RequestParam(defaultValue = "12") int weeks) {

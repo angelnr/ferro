@@ -1,4 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { WeightPipe } from '../../core/units/units.pipes';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -8,7 +9,7 @@ import { ProgressSummary } from './progress.models';
 
 @Component({
   selector: 'app-stats-page',
-  imports: [DatePipe, DecimalPipe, RouterLink, TranslatePipe],
+  imports: [DatePipe, DecimalPipe, RouterLink, TranslatePipe, WeightPipe],
   template: `
     <section class="mx-auto mt-8 max-w-5xl space-y-6">
       <div class="flex flex-wrap items-end justify-between gap-3">
@@ -49,7 +50,7 @@ import { ProgressSummary } from './progress.models';
             <p class="text-xs uppercase tracking-wider text-zinc-500">
               {{ 'progress.volume' | translate }}
             </p>
-            <p class="mt-2 text-2xl font-black">{{ data.current.volume | number }} kg</p>
+            <p class="mt-2 text-2xl font-black">{{ data.current.volume | weight }}</p>
             <p
               class="text-sm"
               [class.text-emerald-400]="delta(data.current.volume, data.previous.volume) >= 0"
@@ -88,7 +89,9 @@ import { ProgressSummary } from './progress.models';
                 <div
                   class="w-full rounded-t bg-emerald-600"
                   [style.height.%]="barHeight(point.value, maxVolume())"
-                  [attr.title]="point.value + ' kg · ' + (point.weekStart | date: 'shortDate')"
+                  [attr.title]="
+                    (point.value | weight) + ' · ' + (point.weekStart | date: 'shortDate')
+                  "
                 ></div>
                 <span class="text-[10px] text-zinc-600">{{ point.weekStart | date: 'dd/MM' }}</span>
               </div>
@@ -123,7 +126,7 @@ import { ProgressSummary } from './progress.models';
               <div>
                 <div class="flex justify-between text-xs text-zinc-400">
                   <span>{{ slice.muscleGroup }}</span>
-                  <span>{{ slice.volume | number }} kg</span>
+                  <span>{{ slice.volume | weight }}</span>
                 </div>
                 <div class="mt-1 h-2 rounded bg-zinc-800">
                   <div

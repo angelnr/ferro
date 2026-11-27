@@ -83,6 +83,16 @@ public class ProgressService {
     }
 
     @Transactional(readOnly = true)
+    public Streak streak(UUID userId) {
+        String zone = progress.timeZone(userId);
+        java.time.LocalDate today = java.time.ZonedDateTime.now(clock)
+                .withZoneSameInstant(java.time.ZoneId.of(zone))
+                .toLocalDate();
+        List<java.time.LocalDate> dates = progress.finishedDates(userId, zone);
+        return new Streak(currentStreak(dates, today), bestStreak(dates));
+    }
+
+    @Transactional(readOnly = true)
     public List<VolumePoint> volume(UUID userId, Instant from, Instant to, String granularity) {
         String zone = progress.timeZone(userId);
         Instant end = to == null ? clock.instant() : to;
@@ -90,6 +100,8 @@ public class ProgressService {
                 from == null ? end.atZone(ZoneId.of(zone)).minusWeeks(12).toInstant() : from;
         return progress.volume(userId, start, end, zone, granularity == null ? "week" : granularity);
     }
+
+    public record Streak(int current, int best) {}
 
     private int currentStreak(List<LocalDate> dates, LocalDate today) {
         if (dates.isEmpty()) {

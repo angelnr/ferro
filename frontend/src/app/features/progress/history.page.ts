@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { WeightPipe } from '../../core/units/units.pipes';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -10,7 +11,7 @@ import { HistorySession } from './progress.models';
 
 @Component({
   selector: 'app-history-page',
-  imports: [DatePipe, RouterLink, TranslatePipe, ExercisePicker],
+  imports: [DatePipe, RouterLink, TranslatePipe, ExercisePicker, WeightPipe],
   template: `
     <section class="mx-auto mt-8 max-w-4xl space-y-6">
       <div class="flex flex-wrap items-end justify-between gap-3">
@@ -90,7 +91,7 @@ import { HistorySession } from './progress.models';
                 </p>
               </div>
               <div class="text-right">
-                <p class="font-semibold">{{ session.totalVolume }} kg</p>
+                <p class="font-semibold">{{ session.totalVolume | weight }}</p>
                 <p class="text-xs text-zinc-500">{{ duration(session.durationSeconds) }}</p>
               </div>
             </div>

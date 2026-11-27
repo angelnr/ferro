@@ -16,16 +16,25 @@ import com.ferro.catalog.domain.PageResult;
 public class ExerciseSearchService {
 
     private final ExerciseRepository exercises;
+    private final CatalogQueryCache cache;
 
-    public ExerciseSearchService(ExerciseRepository exercises) {
+    public ExerciseSearchService(ExerciseRepository exercises, CatalogQueryCache cache) {
         this.exercises = exercises;
+        this.cache = cache;
     }
 
     @Transactional(readOnly = true)
     public PageResult<Exercise> search(UUID userId, String query, String muscle, String equipment, int page, int size) {
         MuscleGroup muscleGroup = parseMuscle(muscle);
         Equipment equipmentFilter = parseEquipment(equipment);
-        return exercises.search(userId, query, muscleGroup, equipmentFilter, page, size);
+        return cache.get(
+                userId,
+                query,
+                muscleGroup,
+                equipmentFilter,
+                page,
+                size,
+                () -> exercises.search(userId, query, muscleGroup, equipmentFilter, page, size));
     }
 
     private MuscleGroup parseMuscle(String value) {

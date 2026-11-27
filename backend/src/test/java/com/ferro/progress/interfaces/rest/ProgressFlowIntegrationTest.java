@@ -81,6 +81,11 @@ class ProgressFlowIntegrationTest extends AbstractPostgresIntegrationTest {
                 .andExpect(jsonPath("$.currentStreak").value(1))
                 .andExpect(jsonPath("$.muscleDistribution[0].muscleGroup").value("CHEST"));
 
+        mockMvc.perform(get("/api/v1/progress/streak").header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.current").value(1))
+                .andExpect(jsonPath("$.best").value(1));
+
         mockMvc.perform(get("/api/v1/progress/volume").header("Authorization", bearer(token)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].volume").value(1490.0));

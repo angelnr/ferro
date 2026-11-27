@@ -32,6 +32,12 @@ si están configurados `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` y `GHCR_TO
 - Logs JSON en stdout; cada petición lleva `X-Correlation-Id`.
 - Smoke: `k6 run -e FERRO_BASE_URL=https://api.<dominio> infra/k6/smoke.js`.
 
+## 3.1 · Prueba de carga
+
+```bash
+k6 run -e FERRO_BASE_URL=https://api.<dominio> infra/k6/load.js
+```
+
 ## 4 · Backups y restore
 
 ```bash

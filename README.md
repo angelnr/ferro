@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/angelnr/ferro/actions/workflows/ci.yml/badge.svg)](https://github.com/angelnr/ferro/actions/workflows/ci.yml)
 [![Licencia](https://img.shields.io/badge/licencia-MIT-blue)](./LICENSE)
-[![Estado](https://img.shields.io/badge/estado-M0%20en%20curso-orange)](./docs/07-roadmap.md)
+[![Estado](https://img.shields.io/badge/estado-M7%20en%20curso-orange)](./docs/07-roadmap.md)
 
 ---
 
@@ -68,7 +68,7 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 | [AGENTS.md](./AGENTS.md) | Harness: reglas de trabajo, gates y protocolo de evidencia |
 | [infra/README.md](./infra/README.md) | Servicios locales, Compose de producción y operación |
 | [Lecciones del harness](./docs/harness/lessons.md) | Errores → artefactos que impiden repetirlos |
-| [ADR-0001…0009](./docs/adr/) | Decisiones de arquitectura justificadas |
+| [ADR-0001…0010](./docs/adr/) | Decisiones de arquitectura justificadas |
 
 ## Estado del proyecto
 
@@ -103,6 +103,17 @@ Lighthouse CI. Queda la instalación física en Android como comprobación manua
 métricas de negocio y logs JSON con `X-Correlation-Id`, resumen semanal opt-in, backups,
 runbook, compose con Prometheus/Grafana, workflows de deploy multiarch y smoke k6. El
 despliegue real en la VM y la prueba de restore quedan pendientes de credenciales externas.
+
+## Demo local
+
+Con `make dev-up`, `make run-backend` y `make run-frontend`:
+
+- UI: `http://localhost:4200`
+- API: `http://localhost:8082` (o `8080` si está libre)
+- Cuenta demo: `demo@ferro.app` / `FerroDemo26` (activar con `FERRO_DEMO_ENABLED=true`)
+
+La demo incluye 3 rutinas y 12 semanas de sesiones sintéticas. La instalación PWA en
+Android físico sigue pendiente de validación manual.
 
 ## Desarrollo local y verificación
 
@@ -182,9 +193,9 @@ make run-backend                                # añade las IPv4 del host a COR
 `make verify` sale 0 **solo** si todos los gates pasan, deja la evidencia en
 `.harness/last-verify.txt` y la imprime. El protocolo completo está en [AGENTS.md](./AGENTS.md).
 
-Estado actual: **M0 en curso**. Ya existen esqueleto backend/frontend, harness, CI,
-infraestructura local, esquema Flyway completo `V1–V5` y Dockerfile/Compose de producción
-(borrador). Faltan SignalStore/i18n base, registro de puertos y el tag `v0.1.0`.
+Estado actual: **M7 en curso**. Código del MVP completo (M0–M6, `v0.7.0`), plataforma lista
+para producción y artefactos de despliegue preparados. Pendiente: VM/DNS reales, validación
+del restore y de la PWA en Android, y cierre del README final con demo pública.
 
 
 

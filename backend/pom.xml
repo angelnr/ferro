@@ -319,8 +319,10 @@
               </targetTests>
               <outputFormats>
                 <param>HTML</param>
+                <param>XML</param>
               </outputFormats>
               <timestampedReports>false</timestampedReports>
+              <mutationThreshold>70</mutationThreshold>
               <threads>2</threads>
             </configuration>
             <dependencies>

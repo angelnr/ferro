@@ -1,4 +1,5 @@
 import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { WeightPipe } from '../../core/units/units.pipes';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -21,7 +22,7 @@ import { TrainingApi } from './training.api';
 
 @Component({
   selector: 'app-training-page',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, ExercisePicker],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, ExercisePicker, WeightPipe],
   template: `
     <section class="mx-auto mt-8 max-w-4xl space-y-6">
       <a routerLink="/" class="text-sm text-emerald-400">{{ 'training.back' | translate }}</a>
@@ -38,7 +39,7 @@ import { TrainingApi } from './training.api';
             }
             <p class="text-sm text-zinc-400">
               {{ current.exercises.length }} {{ 'training.exercises' | translate }} ·
-              {{ current.totalVolume }} kg · {{ formatDuration(elapsed()) }}
+              {{ current.totalVolume | weight }} · {{ formatDuration(elapsed()) }}
             </p>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -119,7 +120,7 @@ import { TrainingApi } from './training.api';
             <p class="mt-1 text-sm text-zinc-300">
               {{ 'training.duration' | translate }}:
               {{ formatDuration(current.durationSeconds ?? 0) }} ·
-              {{ 'training.volume' | translate }}: {{ current.totalVolume }} kg ·
+              {{ 'training.volume' | translate }}: {{ current.totalVolume | weight }} ·
               {{ 'training.sets' | translate }}: {{ totalSets() }}
             </p>
           </div>
@@ -132,7 +133,7 @@ import { TrainingApi } from './training.api';
             </p>
             <ul class="mt-2 text-sm">
               @for (pr of newPrs(); track pr.prType + pr.exerciseId) {
-                <li>{{ pr.exerciseName }} · {{ pr.prType }}: {{ pr.value }} kg</li>
+                <li>{{ pr.exerciseName }} · {{ pr.prType }}: {{ pr.value | weight }}</li>
               }
             </ul>
           </div>
@@ -311,7 +312,7 @@ import { TrainingApi } from './training.api';
                 @if (records.length) {
                   <p class="mt-1 text-xs text-emerald-400">
                     @for (record of records; track record.type) {
-                      <span class="mr-2">PR {{ record.type }}: {{ record.value }} kg</span>
+                      <span class="mr-2">PR {{ record.type }}: {{ record.value | weight }}</span>
                     }
                   </p>
                 }
@@ -463,13 +464,13 @@ import { TrainingApi } from './training.api';
                             >
                               {{ set.setType }}
                             </span>
-                            <span class="ml-1">{{ set.reps }} × {{ set.weight }} kg</span>
+                            <span class="ml-1">{{ set.reps }} × {{ set.weight | weight }}</span>
                             @if (set.notes) {
                               <p class="text-xs text-zinc-500">{{ set.notes }}</p>
                             }
                           </div>
                           <div class="flex items-center gap-2">
-                            <span class="text-zinc-500">{{ set.volume }} kg</span>
+                            <span class="text-zinc-500">{{ set.volume | weight }}</span>
                             <button
                               type="button"
                               (click)="startSetEdit(entry.id, set)"

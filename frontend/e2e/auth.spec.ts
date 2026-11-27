@@ -665,7 +665,7 @@ test('shows workout history and statistics', async ({ page }) => {
   await expect(page.getByText('PPL cerrada')).toBeVisible();
   await page.getByRole('link', { name: 'Estadísticas' }).click();
   await expect(page).toHaveURL(/\/stats$/);
-  await expect(page.getByText('1,000 kg')).toBeVisible();
+  await expect(page.getByText('1000 kg')).toBeVisible();
   await expect(page.getByText('CHEST')).toBeVisible();
 });
 

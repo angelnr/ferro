@@ -34,7 +34,7 @@ docker compose -f infra/docker-compose.dev.yml up -d postgres
 Las migraciones viven en `backend/src/main/resources/db/migration/` y las aplica el
 backend al arrancar (o el test de Testcontainers en CI).
 
-## Producción (borrador M0)
+## Producción (M7)
 
 ```bash
 cp infra/.env.example infra/.env
@@ -47,5 +47,4 @@ docker compose -f infra/docker-compose.prod.yml up -d --build
 - `caddy`: TLS automático y reverse proxy a `api:8080`.
 - El frontend se despliega aparte en Vercel (ADR-0009); este compose no lo sirve.
 
-Es un borrador funcional, no el runbook final de M7: faltan backups, métricas de
-producción, límites de recursos y pruebas de restore.
+Runbook completo, backups, métricas de producción y restore: [`RUNBOOK.md`](./RUNBOOK.md).

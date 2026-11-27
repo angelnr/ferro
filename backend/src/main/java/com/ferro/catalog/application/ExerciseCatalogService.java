@@ -26,14 +26,17 @@ public class ExerciseCatalogService {
 
     private final ExerciseRepository exercises;
     private final ExerciseStatsRepository stats;
+    private final CatalogQueryCache cache;
     private final int customLimit;
 
     public ExerciseCatalogService(
             ExerciseRepository exercises,
             ExerciseStatsRepository stats,
+            CatalogQueryCache cache,
             @Value("${ferro.catalog.custom-limit:100}") int customLimit) {
         this.exercises = exercises;
         this.stats = stats;
+        this.cache = cache;
         this.customLimit = customLimit;
     }
 
@@ -55,7 +58,9 @@ public class ExerciseCatalogService {
                 true,
                 userId,
                 false);
-        return exercises.save(exercise);
+        Exercise saved = exercises.save(exercise);
+        cache.invalidate();
+        return saved;
     }
 
     @Transactional
@@ -94,7 +99,9 @@ public class ExerciseCatalogService {
                 current.custom(),
                 current.ownerId(),
                 command.archived() == null ? current.archived() : command.archived());
-        return exercises.save(updated);
+        Exercise saved = exercises.save(updated);
+        cache.invalidate();
+        return saved;
     }
 
     @Transactional(readOnly = true)

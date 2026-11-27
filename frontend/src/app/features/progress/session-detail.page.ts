@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { WeightPipe } from '../../core/units/units.pipes';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -10,7 +11,7 @@ import { SessionDetail, SessionExerciseDetail, SessionSetDetail } from './progre
 
 @Component({
   selector: 'app-session-detail-page',
-  imports: [DatePipe, ReactiveFormsModule, RouterLink, TranslatePipe],
+  imports: [DatePipe, ReactiveFormsModule, RouterLink, TranslatePipe, WeightPipe],
   template: `
     <section class="mx-auto mt-8 max-w-4xl space-y-6">
       <a routerLink="/history" class="text-sm text-emerald-400">{{
@@ -45,7 +46,7 @@ import { SessionDetail, SessionExerciseDetail, SessionSetDetail } from './progre
             }
             <p class="mt-1 text-sm text-zinc-500">
               {{ current.finishedAt | date: 'medium' }} · {{ sessionDuration() }} ·
-              {{ current.totalVolume }} kg
+              {{ current.totalVolume | weight }}
               @if (current.status === 'AUTO_CLOSED') {
                 · {{ 'progress.autoClosed' | translate }}
               }
@@ -97,7 +98,7 @@ import { SessionDetail, SessionExerciseDetail, SessionSetDetail } from './progre
             <article class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <h2 class="font-semibold">{{ exercise.name }}</h2>
-                <span class="text-sm text-zinc-500">{{ exercise.volume }} kg</span>
+                <span class="text-sm text-zinc-500">{{ exercise.volume | weight }}</span>
               </div>
               @if (exercise.notes) {
                 <p class="mt-1 text-xs text-zinc-500">{{ exercise.notes }}</p>
@@ -105,7 +106,7 @@ import { SessionDetail, SessionExerciseDetail, SessionSetDetail } from './progre
               @if (exercise.personalRecords.length) {
                 <p class="mt-1 text-xs text-emerald-400">
                   @for (pr of exercise.personalRecords; track pr.type) {
-                    <span class="mr-2">PR {{ pr.type }}: {{ pr.value }} kg</span>
+                    <span class="mr-2">PR {{ pr.type }}: {{ pr.value | weight }}</span>
                   }
                 </p>
               }
@@ -191,13 +192,15 @@ import { SessionDetail, SessionExerciseDetail, SessionSetDetail } from './progre
                     } @else {
                       <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
-                          <span>{{ set.setType }} · {{ set.reps }} × {{ set.weight }} kg</span>
+                          <span
+                            >{{ set.setType }} · {{ set.reps }} × {{ set.weight | weight }}</span
+                          >
                           @if (set.notes) {
                             <p class="text-xs text-zinc-500">{{ set.notes }}</p>
                           }
                         </div>
                         <div class="flex items-center gap-2">
-                          <span class="text-zinc-500">{{ set.volume }} kg</span>
+                          <span class="text-zinc-500">{{ set.volume | weight }}</span>
                           <button
                             type="button"
                             (click)="startSetEdit(exercise, set)"

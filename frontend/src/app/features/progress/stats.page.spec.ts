@@ -49,7 +49,7 @@ describe('StatsPage', () => {
     http.expectOne(`${environment.apiBaseUrl}/progress/summary?weeks=12`).flush(SUMMARY);
     await fixture.whenStable();
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('1,000');
+    expect(fixture.nativeElement.textContent).toContain('1000 kg');
     const page = fixture.componentInstance as unknown as {
       load(weeks: number): Promise<void>;
       delta(current: number, previous: number): number;

@@ -121,7 +121,7 @@ GET /api/v1/exercises?q=press banca
 |---|---|---|
 | POST `/workout-sessions` | 🔑 | RF-030/031: `{routineId?}` → 201. 409 `SESSION_ALREADY_ACTIVE` (RN-08) |
 | GET `/workout-sessions/active` | 🔑 | RF-042 → 200 sesión activa o 204 vacío |
-| GET `/workout-sessions` | 🔑 | RF-060: `from, to, exerciseId, page` |
+| GET `/workout-sessions` | 🔑 | Historial real en `GET /progress/sessions` |
 | GET `/workout-sessions/{id}` | 🔑 | RF-061 detalle completo |
 | PATCH `/workout-sessions/{id}` | 🔑 | `{name?, notes?}` (también en histórico) |
 | POST `/workout-sessions/{id}/finish` | 🔑 | RF-040 → 200 `{session, newPersonalRecords[]}` |
@@ -190,7 +190,7 @@ POST …/finish → 200 {
 | GET `/config/flags` | 🔓 | RF-082: flags públicas (sin secretos) |
 | GET `/actuator/health/liveness` · `/readiness` | 🔓 | RF-083 |
 | GET `/actuator/prometheus` | 🔒 red interna | RF-085 |
-| GET `/api/docs` (Swagger UI) · `/api/v3/api-docs` | 🔓 | RF-081 — pública como parte de la demo |
+| GET `/api/docs` (Swagger UI) · `/api/api-docs` | 🔓 | RF-081 — pública como parte de la demo |
 
 ## 8 · Códigos de error internos (`code`)
 

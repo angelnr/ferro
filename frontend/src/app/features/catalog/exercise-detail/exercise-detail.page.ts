@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { WeightPipe } from '../../../core/units/units.pipes';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -8,7 +9,7 @@ import { ExerciseDetail } from '../catalog.models';
 
 @Component({
   selector: 'app-exercise-detail-page',
-  imports: [DatePipe, RouterLink, TranslatePipe],
+  imports: [DatePipe, RouterLink, TranslatePipe, WeightPipe],
   template: `
     <section class="mx-auto mt-8 max-w-3xl space-y-6">
       <a routerLink="/catalog" class="text-sm text-emerald-400">{{ 'catalog.back' | translate }}</a>
@@ -37,7 +38,7 @@ import { ExerciseDetail } from '../catalog.models';
             <p class="text-xs uppercase tracking-wider text-zinc-500">
               {{ 'catalog.volume' | translate }}
             </p>
-            <p class="mt-2 text-2xl font-bold">{{ data.stats.totalVolume }} kg</p>
+            <p class="mt-2 text-2xl font-bold">{{ data.stats.totalVolume | weight }}</p>
           </div>
           <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
             <p class="text-xs uppercase tracking-wider text-zinc-500">
@@ -56,7 +57,7 @@ import { ExerciseDetail } from '../catalog.models';
               @for (record of data.stats.personalRecords; track record.type) {
                 <li class="flex justify-between gap-4">
                   <span>{{ record.type }}</span>
-                  <span class="font-semibold">{{ record.value }} kg</span>
+                  <span class="font-semibold">{{ record.value | weight }}</span>
                 </li>
               }
             </ul>
@@ -91,7 +92,9 @@ import { ExerciseDetail } from '../catalog.models';
             </svg>
             <div class="flex justify-between text-xs text-zinc-500">
               <span>{{ data.stats.e1rmSeries[0].date | date: 'shortDate' }}</span>
-              <span> {{ data.stats.e1rmSeries[data.stats.e1rmSeries.length - 1].value }} kg </span>
+              <span>
+                {{ data.stats.e1rmSeries[data.stats.e1rmSeries.length - 1].value | weight }}
+              </span>
             </div>
           </div>
         }

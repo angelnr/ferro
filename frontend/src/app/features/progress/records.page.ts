@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { WeightPipe } from '../../core/units/units.pipes';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -10,7 +11,7 @@ import { PersonalRecordGroup } from './progress.models';
 
 @Component({
   selector: 'app-records-page',
-  imports: [DatePipe, RouterLink, TranslatePipe, ExercisePicker],
+  imports: [DatePipe, RouterLink, TranslatePipe, ExercisePicker, WeightPipe],
   template: `
     <section class="mx-auto mt-8 max-w-4xl space-y-6">
       <div class="flex flex-wrap items-end justify-between gap-3">
@@ -57,7 +58,7 @@ import { PersonalRecordGroup } from './progress.models';
                   <p class="text-xs uppercase tracking-wider text-emerald-400">
                     {{ record.type }}
                   </p>
-                  <p class="text-2xl font-black">{{ record.value }} kg</p>
+                  <p class="text-2xl font-black">{{ record.value | weight }}</p>
                   <p class="text-xs text-zinc-500">
                     {{ record.achievedAt | date: 'mediumDate' }}
                   </p>
@@ -74,7 +75,8 @@ import { PersonalRecordGroup } from './progress.models';
                     <li class="flex justify-between gap-4">
                       <span>{{ record.type }}</span>
                       <span
-                        >{{ record.value }} kg · {{ record.achievedAt | date: 'mediumDate' }}</span
+                        >{{ record.value | weight }} ·
+                        {{ record.achievedAt | date: 'mediumDate' }}</span
                       >
                     </li>
                   }

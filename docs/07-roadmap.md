@@ -65,10 +65,10 @@ reutilización de refresh provoca revocación total (test). `git tag v0.2.0`.
 **Estado:** ✅ completado · tag `v0.3.0` (2026-11-26)
 
 Entregables:
-- [ ] `docs/seed-ejercicios.csv` (~200 filas) + validador en CI + Flyway V2 seed.
-- [ ] Búsqueda trgm + filtros + paginación; custom CRUD + archivado (RF-020…024).
-- [ ] Componente selector/combobox accesible (RF-025) con debounce y creación inline.
-- [ ] Detalle de ejercicio con stats «sin datos» + CTA.
+- [x] `docs/seed-ejercicios.csv` (~200 filas) + validador en CI + Flyway V6 seed.
+- [x] Búsqueda trgm + filtros + paginación; custom CRUD + archivado (RF-020…024).
+- [x] Componente selector/combobox accesible (RF-025) con debounce y creación inline.
+- [x] Detalle de ejercicio con stats «sin datos» + CTA.
 
 **DoD:** búsqueda «press banca»/«banca»/«BENCH» funciona (test); límite 100 custom
 testado; E2E crear-rutina-aura sin fricción. `v0.3.0`.
@@ -170,8 +170,9 @@ Entregables:
 - [ ] Prueba real de restore en VM (RNF-11) — **pendiente**.
 - [x] Flags públicas, Swagger `/api/docs`, health, métricas de negocio, logs JSON con
       correlationId, resumen semanal opt-in y smoke k6.
-- [x] Workflow PIT semanal (reporte blando; RNF-43).
-- [ ] Resumen semanal email (RF-066) + job PIT semanal (RNF-43) + smoke k6 (RNF-01/02).
+- [x] Workflow PIT semanal con umbral ≥70 % (resultado local: 85 %).
+- [x] Eventos de dominio, caché Caffeine de catálogo y presentación kg/lb.
+- [x] Resumen semanal email (RF-066), job PIT semanal (RNF-43) y smoke k6 (RNF-01/02) preparados.
 - [ ] README final: capturas/gif del flujo completo, arquitectura, badges reales,
       enlace demo + cuenta demo; ADR post-mortem «lecciones» opcional.
 

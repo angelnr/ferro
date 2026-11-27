@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +26,14 @@ import com.ferro.training.domain.Routine;
 import com.ferro.training.domain.RoutineExercise;
 import com.ferro.training.domain.RoutineNotFoundException;
 import com.ferro.training.domain.RoutineSet;
+import com.ferro.training.domain.SessionCompleted;
+import com.ferro.training.domain.SessionDiscarded;
 import com.ferro.training.domain.SessionExercise;
 import com.ferro.training.domain.SessionNotFoundException;
 import com.ferro.training.domain.SessionSet;
+import com.ferro.training.domain.SessionStarted;
 import com.ferro.training.domain.SessionStatus;
+import com.ferro.training.domain.SetLogged;
 import com.ferro.training.domain.SetMath;
 import com.ferro.training.domain.SetType;
 import com.ferro.training.domain.WorkoutSession;
@@ -44,12 +49,19 @@ public class TrainingService {
     private final RoutineRepository routines;
     private final Clock clock;
     private final FerroMetrics metrics;
+    private final ApplicationEventPublisher events;
 
-    public TrainingService(TrainingRepository sessions, RoutineRepository routines, Clock clock, FerroMetrics metrics) {
+    public TrainingService(
+            TrainingRepository sessions,
+            RoutineRepository routines,
+            Clock clock,
+            FerroMetrics metrics,
+            ApplicationEventPublisher events) {
         this.sessions = sessions;
         this.routines = routines;
         this.clock = clock;
         this.metrics = metrics;
+        this.events = events;
     }
 
     @Transactional
@@ -61,6 +73,7 @@ public class TrainingService {
                         .format(now);
         WorkoutSession session = sessions.create(userId, UuidV7.generate(), name, null, now);
         metrics.sessionStarted();
+        events.publishEvent(new SessionStarted(session.id(), userId, session.startedAt()));
         return session;
     }
 
@@ -70,6 +83,7 @@ public class TrainingService {
         Instant now = clock.instant();
         WorkoutSession session = sessions.create(userId, UuidV7.generate(), routine.name(), routine.id(), now);
         metrics.sessionStarted();
+        events.publishEvent(new SessionStarted(session.id(), userId, session.startedAt()));
         for (RoutineExercise exercise : routine.exercises()) {
             UUID entryId = UuidV7.generate();
             sessions.addExercise(
@@ -173,6 +187,7 @@ public class TrainingService {
             sessions.deleteTargetSet(targetSetId);
         }
         metrics.setLogged();
+        events.publishEvent(new SetLogged(sessionId, userId, created.id(), created.loggedAt()));
         return created;
     }
 
@@ -326,6 +341,7 @@ public class TrainingService {
         List<NewPersonalRecord> records = sessions.recalculatePersonalRecords(userId, sessionId, now);
         metrics.sessionFinished();
         records.forEach(record -> metrics.personalRecord());
+        events.publishEvent(new SessionCompleted(sessionId, userId, now, records.size()));
         return new FinishResult(get(userId, sessionId), records);
     }
 
@@ -333,6 +349,7 @@ public class TrainingService {
     public void discard(UUID userId, UUID sessionId) {
         activeFor(userId, sessionId);
         sessions.discard(sessionId, clock.instant());
+        events.publishEvent(new SessionDiscarded(sessionId, userId, clock.instant()));
     }
 
     @Transactional
@@ -345,7 +362,9 @@ public class TrainingService {
                 .map(SessionExercise::exerciseId)
                 .distinct()
                 .toList();
-        sessions.discard(sessionId, clock.instant());
+        Instant discardedAt = clock.instant();
+        sessions.discard(sessionId, discardedAt);
+        events.publishEvent(new SessionDiscarded(sessionId, userId, discardedAt));
         if (session.status() != SessionStatus.ACTIVE) {
             exerciseIds.forEach(exerciseId -> sessions.rebuildPersonalRecords(userId, exerciseId));
         }
