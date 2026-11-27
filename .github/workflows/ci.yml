@@ -84,6 +84,7 @@ jobs:
       options: --ipc=host
     env:
       CI: 1
+      HOME: /root
     steps:
       - uses: actions/checkout@v4
 
