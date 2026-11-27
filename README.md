@@ -22,6 +22,14 @@ progreso y mediciones corporales. Sin red social: el foco es el dominio.
 | **Usuario final** | Cualquier persona que entrene con pesas y quiera registrar y analizar su progreso |
 | **Reclutador técnico** | Puede leer la documentación, la arquitectura y el código como muestra de ingeniería |
 
+## Capturas
+
+| Inicio | Historial | Estadísticas |
+|---|---|---|
+| ![Inicio](docs/screenshots/home.png) | ![Historial](docs/screenshots/history.png) | ![Estadísticas](docs/screenshots/stats.png) |
+
+Capturas generadas contra la cuenta demo local con datos sintéticos.
+
 ## Stack (decisión cerrada — ver [ADRs](./docs/adr/))
 
 | Capa | Tecnología |
@@ -114,6 +122,18 @@ Con `make dev-up`, `make run-backend` y `make run-frontend`:
 
 La demo incluye 3 rutinas y 12 semanas de sesiones sintéticas. La instalación PWA en
 Android físico sigue pendiente de validación manual.
+
+## Estado de los criterios E1–E7
+
+| Criterio | Estado |
+|---|---|
+| E1 · MVP público | ⏳ pendiente de VM/DNS |
+| E2 · RF MUST + E2E | ✅ automatizado; OAuth/Android real pendientes |
+| E3 · cobertura core ≥ 80 % | ✅ |
+| E4 · PIT ≥ 70 % dominio | ✅ 85 % local |
+| E5 · 0 violaciones ArchUnit | ✅ |
+| E6 · dogfooding 4 semanas | ⏳ pendiente de uso real |
+| E7 · README que vende | 🟡 capturas y demo local; falta URL pública |
 
 ## Desarrollo local y verificación
 

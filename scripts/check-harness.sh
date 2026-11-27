@@ -70,6 +70,9 @@ for f in \
   frontend/public/sw.js \
   frontend/public/icons/icon-192.png \
   frontend/public/icons/icon-512.png \
+  docs/screenshots/home.png \
+  docs/screenshots/history.png \
+  docs/screenshots/stats.png \
   frontend/vercel.json \
   backend/src/main/resources/security/common-passwords.txt \
   backend/src/main/resources/db/migration/V1__identity_and_extensions.sql \
@@ -124,6 +127,9 @@ for f in \
   frontend/public/sw.js \
   frontend/public/icons/icon-192.png \
   frontend/public/icons/icon-512.png \
+  docs/screenshots/home.png \
+  docs/screenshots/history.png \
+  docs/screenshots/stats.png \
   frontend/vercel.json \
   frontend/src/app/features/README.md \
   frontend/public/assets/i18n/es.json \
