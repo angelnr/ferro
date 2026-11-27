@@ -36,6 +36,7 @@ si están configurados `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` y `GHCR_TO
 
 ```bash
 k6 run -e FERRO_BASE_URL=https://api.<dominio> infra/k6/load.js
+k6 run -e FERRO_BASE_URL=https://api.<dominio> infra/k6/write.js
 ```
 
 ## 4 · Backups y restore
