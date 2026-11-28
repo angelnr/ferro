@@ -9,6 +9,7 @@ public enum MuscleGroup {
     QUADS,
     HAMSTRINGS,
     GLUTES,
+    ADDUCTORS,
     CALVES,
     CORE,
     FOREARMS,

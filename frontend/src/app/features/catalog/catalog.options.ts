@@ -7,6 +7,7 @@ export const MUSCLES = [
   'QUADS',
   'HAMSTRINGS',
   'GLUTES',
+  'ADDUCTORS',
   'CALVES',
   'CORE',
   'FOREARMS',

@@ -141,7 +141,8 @@
       "CORE": "Core",
       "FOREARMS": "Antebrazo",
       "NECK": "Cuello",
-      "FULL_BODY": "Cuerpo completo"
+      "FULL_BODY": "Cuerpo completo",
+      "ADDUCTORS": "Aductores"
     },
     "equipmentValues": {
       "BARBELL": "Barra",

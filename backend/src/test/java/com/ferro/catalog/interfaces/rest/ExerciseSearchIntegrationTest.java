@@ -67,6 +67,11 @@ class ExerciseSearchIntegrationTest extends AbstractPostgresIntegrationTest {
 
     @Test
     void filters_and_paginates() throws Exception {
+        mockMvc.perform(get("/api/v1/exercises").param("muscle", "ADDUCTORS").header("Authorization", bearer()))
+                .andExpect(status().isOk())
+                .andExpect(
+                        jsonPath("$.content[*].name", org.hamcrest.Matchers.hasItem("Aducción de cadera en máquina")));
+
         mockMvc.perform(get("/api/v1/exercises")
                         .param("muscle", "CHEST")
                         .param("equipment", "BARBELL")

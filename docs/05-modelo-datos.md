@@ -98,7 +98,7 @@ la anterior).
 | id | uuid | PK |
 | name_es | varchar(120) | NOT NULL |
 | name_en | varchar(120) | NOT NULL |
-| muscle_group | muscle_group | NOT NULL (`CHEST`,`BACK`,`SHOULDERS`,`BICEPS`,`TRICEPS`,`QUADS`,`HAMSTRINGS`,`GLUTES`,`CALVES`,`CORE`,`FOREARMS`,`NECK`,`FULL_BODY`) |
+| muscle_group | muscle_group | NOT NULL (`CHEST`,`BACK`,`SHOULDERS`,`BICEPS`,`TRICEPS`,`QUADS`,`HAMSTRINGS`,`GLUTES`,`ADDUCTORS`,`CALVES`,`CORE`,`FOREARMS`,`NECK`,`FULL_BODY`) |
 | secondary_muscles | muscle_group[] | NOT NULL default '{}' |
 | equipment | equipment | NOT NULL (`BARBELL`,`DUMBBELL`,`MACHINE`,`CABLE`,`BODYWEIGHT`,`KETTLEBELL`,`BAND`,`OTHER`) |
 | mechanics | mechanics | NOT NULL (`COMPOUND`,`ISOLATION`) |
@@ -267,10 +267,11 @@ de dominio para emails y derivados (outbox de facto — ver ADR-0002 §alternati
 | oauth_provider | `GOOGLE`, `GITHUB` |
 | unit_system | `KG`, `LB` |
 | theme | `DARK`, `LIGHT` |
-| muscle_group | 13 valores (§ `exercises`) |
+| muscle_group | 14 valores (§ `exercises`) |
 | equipment | 8 valores (§ `exercises`) |
 | mechanics | `COMPOUND`, `ISOLATION` |
 | set_type | `WARMUP`, `NORMAL`, `FAILURE`, `DROP` |
+| muscle_group | `CHEST`, `BACK`, `SHOULDERS`, `BICEPS`, `TRICEPS`, `QUADS`, `HAMSTRINGS`, `GLUTES`, `ADDUCTORS`, `CALVES`, `CORE`, `FOREARMS`, `NECK`, `FULL_BODY` |
 | session_status | `ACTIVE`, `FINISHED`, `AUTO_CLOSED`, `DISCARDED` |
 | pr_type | `MAX_WEIGHT`, `MAX_E1RM` |
 
@@ -286,6 +287,8 @@ de dominio para emails y derivados (outbox de facto — ver ADR-0002 §alternati
 | V6 | seed del catálogo (~200 ejercicios, `docs/seed-ejercicios.csv`) |
 | V7 | `session_target_sets`: series objetivo pendientes al iniciar desde rutina (RN-24) |
 | V8 | `users.email_weekly_summary`: opt-in del resumen semanal |
+| V9 | enum `muscle_group`: añade `ADDUCTORS` |
+| V10 | reclasifica la aducción de cadera como `ADDUCTORS` |
 | (runtime) | cuenta demo + 12 semanas sintéticas con `FERRO_DEMO_ENABLED=true` |
 
 ## 5 · Seed del catálogo (~200 ejercicios)

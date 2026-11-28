@@ -141,7 +141,8 @@
       "CORE": "Core",
       "FOREARMS": "Forearms",
       "NECK": "Neck",
-      "FULL_BODY": "Full body"
+      "FULL_BODY": "Full body",
+      "ADDUCTORS": "Adductors"
     },
     "equipmentValues": {
       "BARBELL": "Barbell",
