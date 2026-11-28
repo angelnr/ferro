@@ -58,6 +58,37 @@ def image_path(candidate: dict) -> str | None:
     return flat.get("main") or flat.get("start") or flat.get("peak")
 
 
+def placeholder(entry: dict, target: Path) -> None:
+    """Placeholder WebP con el mismo formato y paleta clara que la fuente."""
+    name = entry["name_es"]
+    words = name.split()
+    lines = []
+    while words:
+        line = words.pop(0)
+        while words and len(line) + len(words[0]) + 1 <= 24:
+            line += " " + words.pop(0)
+        lines.append(line)
+    text = "".join(
+        f'<text x="256" y="{210 + index * 44}" text-anchor="middle" fill="#0f172a" '
+        f'font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700">'
+        f'{html.escape(line)}</text>'
+        for index, line in enumerate(lines[:4])
+    )
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+<rect width="512" height="512" fill="#d7f0fe"/>
+<circle cx="256" cy="120" r="58" fill="#3baee0"/>
+<path d="M220 108h72v24h-72zM204 116h16v8h-16zM292 116h16v8h-16z" fill="#fff"/>
+<text x="256" y="198" text-anchor="middle" fill="#1d4ed8" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700">{html.escape(entry["muscle_group"])}</text>
+{text}
+<text x="256" y="470" text-anchor="middle" fill="#64748b" font-family="DejaVu Sans, sans-serif" font-size="18">Ferro · imagen pendiente</text>
+</svg>'''
+    svg_path = target.with_suffix(".svg")
+    svg_path.write_text(svg, encoding="utf-8")
+    subprocess.run(["convert", str(svg_path), "-resize", "512x512", str(target)], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    svg_path.unlink()
+
+
 def download(candidate: dict, target: Path) -> bool:
     path = image_path(candidate)
     if not path:
@@ -161,6 +192,10 @@ def main() -> int:
             candidate = by_id[entry["candidate_id"]]
             if download(candidate, IMAGES / entry["file"]):
                 applied += 1
+        applied_entries = {entry["file"] for entry in auto + review if entry["approved"].lower() in {"yes", "true", "1"}}
+        for entry in review:
+            if entry["file"] not in applied_entries:
+                placeholder(entry, IMAGES / entry["file"])
         print(f"Imágenes aplicadas: {applied}")
 
     print(f"Auto: {len(auto)} · revisión: {len(review)} · total: {len(rows)}")
