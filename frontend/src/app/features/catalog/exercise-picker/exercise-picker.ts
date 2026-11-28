@@ -10,10 +10,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
 import { CatalogApi } from '../catalog.api';
 import { Exercise } from '../catalog.models';
+import { CatalogLabelPipe } from '../catalog-label.pipe';
+import { EQUIPMENT, MUSCLES } from '../catalog.options';
 
 @Component({
   selector: 'app-exercise-picker',
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe, CatalogLabelPipe],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -43,6 +45,35 @@ import { Exercise } from '../catalog.models';
         />
       </label>
 
+      <div class="mt-2 grid grid-cols-2 gap-2">
+        <select
+          [value]="muscle()"
+          (change)="setMuscle($event)"
+          class="rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1 text-xs text-zinc-300"
+          [attr.aria-label]="'catalog.muscle' | translate"
+        >
+          <option value="">
+            {{ 'catalog.muscle' | translate }}: {{ 'catalog.all' | translate }}
+          </option>
+          @for (item of muscles; track item) {
+            <option [value]="item">{{ item | catalogLabel: 'muscle' }}</option>
+          }
+        </select>
+        <select
+          [value]="equipment()"
+          (change)="setEquipment($event)"
+          class="rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1 text-xs text-zinc-300"
+          [attr.aria-label]="'catalog.equipment' | translate"
+        >
+          <option value="">
+            {{ 'catalog.equipment' | translate }}: {{ 'catalog.all' | translate }}
+          </option>
+          @for (item of equipmentOptions; track item) {
+            <option [value]="item">{{ item | catalogLabel: 'equipment' }}</option>
+          }
+        </select>
+      </div>
+
       @if (open() && (results().length || query.value.trim())) {
         <ul
           id="exercisePickerList"
@@ -60,7 +91,8 @@ import { Exercise } from '../catalog.models';
             >
               <span class="font-medium">{{ exercise.name }}</span>
               <span class="ml-2 text-xs uppercase tracking-wider text-zinc-500">
-                {{ exercise.muscleGroup }} · {{ exercise.equipment }}
+                {{ exercise.muscleGroup | catalogLabel: 'muscle' }} ·
+                {{ exercise.equipment | catalogLabel: 'equipment' }}
               </span>
             </li>
           }
@@ -89,6 +121,10 @@ export class ExercisePicker implements ControlValueAccessor {
   protected readonly results = signal<Exercise[]>([]);
   protected readonly open = signal(false);
   protected readonly activeIndex = signal(0);
+  protected readonly muscle = signal('');
+  protected readonly equipment = signal('');
+  protected readonly muscles = MUSCLES;
+  protected readonly equipmentOptions = EQUIPMENT;
   readonly selectedExercise = output<Exercise>();
   readonly createRequested = output<string>();
 
@@ -135,8 +171,18 @@ export class ExercisePicker implements ControlValueAccessor {
     }
   }
 
+  protected setMuscle(event: Event): void {
+    this.muscle.set((event.target as HTMLSelectElement).value);
+    void this.search(this.query.value);
+  }
+
+  protected setEquipment(event: Event): void {
+    this.equipment.set((event.target as HTMLSelectElement).value);
+    void this.search(this.query.value);
+  }
+
   protected select(exercise: Exercise): void {
-    this.query.setValue(exercise.name, { emitEvent: false });
+    this.query.setValue('', { emitEvent: false });
     this.open.set(false);
     this.onChange(exercise);
     this.onTouched();
@@ -149,13 +195,13 @@ export class ExercisePicker implements ControlValueAccessor {
   }
 
   private async search(value: string): Promise<void> {
-    if (!value.trim()) {
+    if (!value.trim() && !this.muscle() && !this.equipment()) {
       this.results.set([]);
       this.open.set(false);
       return;
     }
     try {
-      const page = await firstValueFrom(this.api.search(value, '', ''));
+      const page = await firstValueFrom(this.api.search(value, this.muscle(), this.equipment()));
       this.results.set(page.content);
       this.activeIndex.set(0);
       this.open.set(true);

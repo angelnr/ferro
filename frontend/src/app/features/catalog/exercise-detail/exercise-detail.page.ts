@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { WeightPipe } from '../../../core/units/units.pipes';
+import { CatalogLabelPipe } from '../catalog-label.pipe';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -9,7 +10,7 @@ import { ExerciseDetail } from '../catalog.models';
 
 @Component({
   selector: 'app-exercise-detail-page',
-  imports: [DatePipe, RouterLink, TranslatePipe, WeightPipe],
+  imports: [DatePipe, RouterLink, TranslatePipe, WeightPipe, CatalogLabelPipe],
   template: `
     <section class="mx-auto mt-8 max-w-3xl space-y-6">
       <a routerLink="/catalog" class="text-sm text-emerald-400">{{ 'catalog.back' | translate }}</a>
@@ -22,8 +23,9 @@ import { ExerciseDetail } from '../catalog.models';
           <h1 class="mt-1 text-3xl font-black">{{ data.exercise.name }}</h1>
           <p class="text-zinc-400">{{ data.exercise.nameEn }}</p>
           <p class="mt-2 text-xs uppercase tracking-wider text-zinc-500">
-            {{ data.exercise.muscleGroup }} · {{ data.exercise.equipment }} ·
-            {{ data.exercise.mechanics }}
+            {{ data.exercise.muscleGroup | catalogLabel: 'muscle' }} ·
+            {{ data.exercise.equipment | catalogLabel: 'equipment' }} ·
+            {{ data.exercise.mechanics | catalogLabel: 'mechanics' }}
           </p>
         </div>
 

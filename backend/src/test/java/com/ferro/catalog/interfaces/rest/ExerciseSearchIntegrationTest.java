@@ -56,6 +56,13 @@ class ExerciseSearchIntegrationTest extends AbstractPostgresIntegrationTest {
         mockMvc.perform(get("/api/v1/exercises").param("q", "extension").header("Authorization", bearer()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[*].name", org.hamcrest.Matchers.hasItem("Extensión en polea")));
+
+        mockMvc.perform(get("/api/v1/exercises")
+                        .param("q", "curl de femoral en maquina")
+                        .header("Authorization", bearer()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(
+                        "$.content[*].name", org.hamcrest.Matchers.hasItem("Curl femoral tumbado en máquina")));
     }
 
     @Test

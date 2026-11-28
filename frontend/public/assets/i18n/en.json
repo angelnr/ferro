@@ -15,7 +15,8 @@
     "catalog": "Catalog",
     "routines": "Routines",
     "progress": "Progress",
-    "body": "Body"
+    "body": "Body",
+    "menu": "Menu"
   },
   "auth": {
     "loginTitle": "Sign in to Ferro",
@@ -79,7 +80,7 @@
     "session": "Session",
     "sessionHint": "The access token lives in memory only; reloading renews it with the httpOnly cookie.",
     "logoutAll": "Sign out everywhere",
-    "comingSoon": "Workout tracking arrives in M3. Identity is ready."
+    "comingSoon": "All set: create a routine, start training and review your progress."
   },
   "settings": {
     "title": "Settings",
@@ -126,7 +127,36 @@
     "prs": "Personal records",
     "e1rmSeries": "e1RM progress (52 weeks)",
     "noStats": "No workouts with this exercise yet.",
-    "detailError": "Could not load the exercise."
+    "detailError": "Could not load the exercise.",
+    "muscleValues": {
+      "CHEST": "Chest",
+      "BACK": "Back",
+      "SHOULDERS": "Shoulders",
+      "BICEPS": "Biceps",
+      "TRICEPS": "Triceps",
+      "QUADS": "Quads",
+      "HAMSTRINGS": "Hamstrings",
+      "GLUTES": "Glutes",
+      "CALVES": "Calves",
+      "CORE": "Core",
+      "FOREARMS": "Forearms",
+      "NECK": "Neck",
+      "FULL_BODY": "Full body"
+    },
+    "equipmentValues": {
+      "BARBELL": "Barbell",
+      "DUMBBELL": "Dumbbell",
+      "MACHINE": "Machine",
+      "CABLE": "Cable",
+      "BODYWEIGHT": "Bodyweight",
+      "KETTLEBELL": "Kettlebell",
+      "BAND": "Band",
+      "OTHER": "Other"
+    },
+    "mechanicsValues": {
+      "COMPOUND": "Compound",
+      "ISOLATION": "Isolation"
+    }
   },
   "training": {
     "start": "Start training",
@@ -192,7 +222,10 @@
     "back": "Back to routines",
     "name": "Routine name",
     "targetSets": "Target sets",
-    "addSet": "Add target set"
+    "addSet": "Add target set",
+    "series": "Sets",
+    "reps": "Reps",
+    "advancedSets": "Advanced per-set settings"
   },
   "progress": {
     "title": "Progress",

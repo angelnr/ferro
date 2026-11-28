@@ -64,7 +64,7 @@ describe('App', () => {
     const logout = vi.spyOn(auth, 'logout').mockResolvedValue(undefined);
     const router = TestBed.inject(Router);
     vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
-    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const button = fixture.nativeElement.querySelector('.logout-button') as HTMLButtonElement;
     button.click();
     await fixture.whenStable();
 

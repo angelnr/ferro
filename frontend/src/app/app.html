@@ -21,12 +21,23 @@
       </button>
     </div>
   }
-  <header class="border-b border-zinc-800 bg-zinc-950/90">
+  <header class="relative border-b border-zinc-800 bg-zinc-950/90">
     <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
       <a routerLink="/" class="text-xl font-black tracking-tight text-emerald-400">Ferro</a>
 
+      <button
+        type="button"
+        class="rounded-lg border border-zinc-700 px-3 py-1.5 text-lg md:hidden"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="mobile-menu"
+        [attr.aria-label]="'nav.menu' | translate"
+        (click)="menuOpen.set(!menuOpen())"
+      >
+        {{ menuOpen() ? '✕' : '☰' }}
+      </button>
+
       @if (session.isAuthenticated()) {
-        <nav class="flex flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm">
+        <nav class="hidden flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm md:flex">
           <a
             routerLink="/"
             routerLinkActive="text-emerald-400"
@@ -71,12 +82,16 @@
             {{ 'nav.settings' | translate }}
           </a>
           <span class="hidden text-zinc-500 sm:inline">{{ session.user()?.email }}</span>
-          <button type="button" (click)="logout()" class="text-zinc-400 hover:text-zinc-100">
+          <button
+            type="button"
+            (click)="logout()"
+            class="logout-button text-zinc-400 hover:text-zinc-100"
+          >
             {{ 'nav.logout' | translate }}
           </button>
         </nav>
       } @else {
-        <nav class="flex flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm">
+        <nav class="hidden flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm md:flex">
           <a routerLink="/login" class="text-zinc-400 hover:text-zinc-100">{{
             'nav.login' | translate
           }}</a>
@@ -86,6 +101,75 @@
           >
             {{ 'nav.register' | translate }}
           </a>
+        </nav>
+      }
+
+      @if (menuOpen()) {
+        <nav
+          id="mobile-menu"
+          class="absolute left-0 right-0 top-full z-40 border-b border-zinc-800 bg-zinc-950 px-4 py-3 md:hidden"
+        >
+          <div class="flex flex-col gap-2 text-sm">
+            @if (session.isAuthenticated()) {
+              <a
+                routerLink="/"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.home' | translate }}</a
+              >
+              <a
+                routerLink="/routines"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.routines' | translate }}</a
+              >
+              <a
+                routerLink="/catalog"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.catalog' | translate }}</a
+              >
+              <a
+                routerLink="/history"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.progress' | translate }}</a
+              >
+              <a
+                routerLink="/body"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.body' | translate }}</a
+              >
+              <a
+                routerLink="/settings"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.settings' | translate }}</a
+              >
+              <span class="px-2 py-1 text-zinc-500">{{ session.user()?.email }}</span>
+              <button
+                type="button"
+                (click)="logout()"
+                class="logout-button rounded px-2 py-2 text-left text-zinc-300"
+              >
+                {{ 'nav.logout' | translate }}
+              </button>
+            } @else {
+              <a
+                routerLink="/login"
+                (click)="menuOpen.set(false)"
+                class="rounded px-2 py-2 text-zinc-300"
+                >{{ 'nav.login' | translate }}</a
+              >
+              <a
+                routerLink="/register"
+                (click)="menuOpen.set(false)"
+                class="rounded bg-emerald-600 px-2 py-2 text-white"
+                >{{ 'nav.register' | translate }}</a
+              >
+            }
+          </div>
         </nav>
       }
     </div>

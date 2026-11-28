@@ -801,3 +801,14 @@ test('has no critical or serious accessibility violations on the main screens', 
     JSON.stringify(settings.violations.map((violation) => violation.id)),
   ).toEqual([]);
 });
+
+test('opens the mobile navigation menu', async ({ page }) => {
+  await authenticated(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Menú' }).click();
+  await expect(page.getByRole('link', { name: 'Rutinas' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Progreso' })).toBeVisible();
+  await page.getByRole('link', { name: 'Catálogo' }).click();
+  await expect(page).toHaveURL(/\/catalog$/);
+});

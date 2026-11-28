@@ -7,37 +7,13 @@ import { debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
 import { CatalogApi } from './catalog.api';
 import { Exercise } from './catalog.models';
 import { ExercisePicker } from './exercise-picker/exercise-picker';
-
-const MUSCLES = [
-  'CHEST',
-  'BACK',
-  'SHOULDERS',
-  'BICEPS',
-  'TRICEPS',
-  'QUADS',
-  'HAMSTRINGS',
-  'GLUTES',
-  'CALVES',
-  'CORE',
-  'FOREARMS',
-  'NECK',
-  'FULL_BODY',
-];
-
-const EQUIPMENT = [
-  'BARBELL',
-  'DUMBBELL',
-  'MACHINE',
-  'CABLE',
-  'BODYWEIGHT',
-  'KETTLEBELL',
-  'BAND',
-  'OTHER',
-];
+import { CatalogLabelPipe } from './catalog-label.pipe';
+import { CatalogFilterStateService } from './catalog-filter-state.service';
+import { EQUIPMENT, MUSCLES } from './catalog.options';
 
 @Component({
   selector: 'app-catalog-page',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, ExercisePicker],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, ExercisePicker, CatalogLabelPipe],
   template: `
     <section class="mt-8 space-y-6">
       <div class="flex flex-wrap items-end justify-between gap-4">
@@ -84,7 +60,7 @@ const EQUIPMENT = [
           >
             <option value="">{{ 'catalog.all' | translate }}</option>
             @for (muscle of muscles; track muscle) {
-              <option [value]="muscle">{{ muscle }}</option>
+              <option [value]="muscle">{{ muscle | catalogLabel: 'muscle' }}</option>
             }
           </select>
         </label>
@@ -97,7 +73,7 @@ const EQUIPMENT = [
           >
             <option value="">{{ 'catalog.all' | translate }}</option>
             @for (item of equipment; track item) {
-              <option [value]="item">{{ item }}</option>
+              <option [value]="item">{{ item | catalogLabel: 'equipment' }}</option>
             }
           </select>
         </label>
@@ -133,7 +109,7 @@ const EQUIPMENT = [
               class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2"
             >
               @for (muscle of muscles; track muscle) {
-                <option [value]="muscle">{{ muscle }}</option>
+                <option [value]="muscle">{{ muscle | catalogLabel: 'muscle' }}</option>
               }
             </select>
           </label>
@@ -145,7 +121,7 @@ const EQUIPMENT = [
               class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2"
             >
               @for (item of equipment; track item) {
-                <option [value]="item">{{ item }}</option>
+                <option [value]="item">{{ item | catalogLabel: 'equipment' }}</option>
               }
             </select>
           </label>
@@ -156,8 +132,8 @@ const EQUIPMENT = [
               formControlName="mechanics"
               class="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2"
             >
-              <option value="COMPOUND">COMPOUND</option>
-              <option value="ISOLATION">ISOLATION</option>
+              <option value="COMPOUND">{{ 'COMPOUND' | catalogLabel: 'mechanics' }}</option>
+              <option value="ISOLATION">{{ 'ISOLATION' | catalogLabel: 'mechanics' }}</option>
             </select>
           </label>
           <label class="flex items-center gap-2 text-sm text-zinc-300">
@@ -207,7 +183,9 @@ const EQUIPMENT = [
                 }
               </div>
               <p class="mt-3 text-xs uppercase tracking-wider text-zinc-500">
-                {{ exercise.muscleGroup }} · {{ exercise.equipment }} · {{ exercise.mechanics }}
+                {{ exercise.muscleGroup | catalogLabel: 'muscle' }} ·
+                {{ exercise.equipment | catalogLabel: 'equipment' }} ·
+                {{ exercise.mechanics | catalogLabel: 'mechanics' }}
               </p>
             </li>
           } @empty {
@@ -222,6 +200,7 @@ export class CatalogPage {
   private readonly api = inject(CatalogApi);
   private readonly formBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly filterState = inject(CatalogFilterStateService);
   protected readonly muscles = MUSCLES;
   protected readonly equipment = EQUIPMENT;
   protected readonly exercises = signal<Exercise[]>([]);
@@ -248,9 +227,16 @@ export class CatalogPage {
   });
 
   constructor() {
+    const saved = this.filterState.load();
+    if (saved) {
+      this.filters.setValue(saved, { emitEvent: false });
+    }
     this.filters.valueChanges
       .pipe(debounceTime(250), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe(() => void this.load());
+      .subscribe(() => {
+        this.filterState.save(this.filters.getRawValue());
+        void this.load();
+      });
     void this.load();
   }
 

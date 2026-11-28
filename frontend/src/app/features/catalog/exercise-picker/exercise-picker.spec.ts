@@ -48,7 +48,7 @@ describe('ExercisePicker', () => {
   it('searches with debounce and emits the selected exercise', async () => {
     const fixture = TestBed.createComponent(ExercisePicker);
     const picker = fixture.componentInstance as unknown as {
-      query: { setValue(value: string): void };
+      query: { setValue(value: string): void; value: string };
       selectedExercise: { subscribe(fn: (value: unknown) => void): void };
     };
     let selected: unknown = null;
@@ -64,12 +64,34 @@ describe('ExercisePicker', () => {
     option.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 
     expect(selected).toMatchObject({ id: 'exercise-1' });
+    expect(picker.query.value).toBe('');
+
+    const pickerWithFilters = fixture.componentInstance as unknown as {
+      setMuscle(event: Event): void;
+      setEquipment(event: Event): void;
+    };
+    pickerWithFilters.setMuscle({ target: { value: 'CHEST' } } as unknown as Event);
+    http
+      .expectOne(
+        (request) =>
+          request.url === `${environment.apiBaseUrl}/exercises` &&
+          request.params.get('muscle') === 'CHEST',
+      )
+      .flush(PAGE);
+    pickerWithFilters.setEquipment({ target: { value: 'BARBELL' } } as unknown as Event);
+    http
+      .expectOne(
+        (request) =>
+          request.url === `${environment.apiBaseUrl}/exercises` &&
+          request.params.get('equipment') === 'BARBELL',
+      )
+      .flush(PAGE);
   });
 
   it('emits a create request when there are no results', async () => {
     const fixture = TestBed.createComponent(ExercisePicker);
     const picker = fixture.componentInstance as unknown as {
-      query: { setValue(value: string): void };
+      query: { setValue(value: string): void; value: string };
       createRequested: { subscribe(fn: (value: string) => void): void };
     };
     let requested = '';

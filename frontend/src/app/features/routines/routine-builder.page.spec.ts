@@ -88,6 +88,8 @@ describe('RoutineBuilderPage', () => {
       exercises: () => Record<string, unknown>[];
       addExercise(exercise: Exercise): void;
       addSet(exercise: object): void;
+      setSeriesCount(exercise: object, event: Event): void;
+      setTargetReps(exercise: object, event: Event): void;
       removeSet(exercise: object, set: object): void;
       move(index: number, delta: number): void;
       startDrag(key: string): void;
@@ -108,6 +110,11 @@ describe('RoutineBuilderPage', () => {
     const exercises = page.exercises();
     expect(exercises.length).toBe(2);
 
+    page.setSeriesCount(exercises[0], { target: { value: '5' } } as unknown as Event);
+    expect((exercises[0]['sets'] as unknown[]).length).toBe(5);
+    page.setTargetReps(exercises[0], { target: { value: '12' } } as unknown as Event);
+    expect((exercises[0]['sets'] as { targetReps: number }[])[0].targetReps).toBe(12);
+    page.setSeriesCount(exercises[0], { target: { value: '1' } } as unknown as Event);
     page.addSet(exercises[0]);
     page.addSet(exercises[0]);
     page.removeSet(exercises[0], (exercises[0]['sets'] as object[])[0]);

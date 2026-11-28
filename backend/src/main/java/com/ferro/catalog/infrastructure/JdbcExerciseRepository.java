@@ -4,8 +4,11 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +27,8 @@ import com.ferro.catalog.domain.PageResult;
 public class JdbcExerciseRepository implements ExerciseRepository {
 
     private static final RowMapper<Exercise> ROW_MAPPER = JdbcExerciseRepository::map;
+    private static final Set<String> STOPWORDS =
+            Set.of("de", "del", "con", "en", "la", "el", "los", "las", "and", "with", "the", "of");
 
     private final NamedParameterJdbcTemplate jdbc;
 
@@ -42,7 +47,11 @@ public class JdbcExerciseRepository implements ExerciseRepository {
 
         if (query != null && !query.isBlank()) {
             params.addValue("q", query.trim());
-            String[] tokens = query.trim().split("\\s+");
+            String[] rawTokens = query.trim().split("\\s+");
+            String[] filtered = Arrays.stream(rawTokens)
+                    .filter(token -> !STOPWORDS.contains(token.toLowerCase(Locale.ROOT)))
+                    .toArray(String[]::new);
+            String[] tokens = filtered.length == 0 ? rawTokens : filtered;
             for (int i = 0; i < tokens.length; i++) {
                 String name = "q" + i;
                 where.append(" AND (unaccent(lower(name_es)) LIKE '%' || unaccent(lower(:")

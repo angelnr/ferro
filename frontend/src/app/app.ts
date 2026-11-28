@@ -13,6 +13,7 @@ import { OnboardingComponent } from './features/onboarding/onboarding.component'
 })
 export class App implements OnDestroy {
   protected readonly session = inject(SessionStore);
+  protected readonly menuOpen = signal(false);
   private readonly auth = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);

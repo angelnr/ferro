@@ -90,3 +90,9 @@ html[data-theme='dark'] .text-zinc-600 {
 html[data-theme='dark'] .bg-emerald-600 {
   background-color: #047857;
 }
+
+/* El header usa bg-zinc-950/90; sin esta regla conserva el fondo oscuro en claro. */
+html[data-theme='light'] .bg-zinc-950\/90,
+html[data-theme='light'] .bg-zinc-950\/80 {
+  background-color: rgba(250, 250, 250, 0.95);
+}

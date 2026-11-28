@@ -197,75 +197,100 @@ interface DraftExercise {
               <p class="text-xs uppercase tracking-wider text-sky-400">
                 {{ 'routines.targetSets' | translate }}
               </p>
-              <div class="mt-2 space-y-2">
-                @for (set of exercise.sets; track set.key; let setIndex = $index) {
-                  <div
-                    class="grid items-end gap-2 rounded border border-zinc-800 p-2 sm:grid-cols-7"
-                  >
-                    <label class="text-xs text-zinc-400" for="targetType">
-                      {{ 'training.setType' | translate }}
-                      <select
-                        id="targetType"
-                        [(ngModel)]="set.setType"
-                        class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
-                      >
-                        <option value="NORMAL">{{ 'training.normal' | translate }}</option>
-                        <option value="WARMUP">{{ 'training.warmup' | translate }}</option>
-                        <option value="FAILURE">{{ 'training.failure' | translate }}</option>
-                        <option value="DROP">{{ 'training.drop' | translate }}</option>
-                      </select>
-                    </label>
-                    <label class="text-xs text-zinc-400" for="targetReps">
-                      {{ 'training.reps' | translate }}
-                      <input
-                        id="targetReps"
-                        type="number"
-                        min="1"
-                        max="1000"
-                        [(ngModel)]="set.targetReps"
-                        class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
-                      />
-                    </label>
-                    <label class="text-xs text-zinc-400" for="targetWeight">
-                      {{ 'training.weight' | translate }}
-                      <input
-                        id="targetWeight"
-                        type="number"
-                        step="0.5"
-                        [(ngModel)]="set.targetWeight"
-                        class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
-                      />
-                    </label>
-                    <label class="text-xs text-zinc-400" for="targetRir">
-                      RIR
-                      <input
-                        id="targetRir"
-                        type="number"
-                        min="0"
-                        max="10"
-                        [(ngModel)]="set.targetRir"
-                        class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
-                      />
-                    </label>
-                    <span class="text-xs text-zinc-500">#{{ setIndex + 1 }}</span>
-                    <button
-                      type="button"
-                      (click)="removeSet(exercise, set)"
-                      class="rounded border border-red-900 px-2 py-1 text-xs text-red-300"
-                    >
-                      {{ 'training.delete' | translate }}
-                    </button>
-                  </div>
-                }
+              <div class="mt-2 grid gap-2 sm:grid-cols-3">
+                <label class="text-xs text-zinc-400" for="compactSeries">
+                  {{ 'routines.series' | translate }}
+                  <input
+                    id="compactSeries"
+                    type="number"
+                    min="0"
+                    max="15"
+                    [value]="exercise.sets.length"
+                    (change)="setSeriesCount(exercise, $event)"
+                    class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
+                  />
+                </label>
+                <label class="text-xs text-zinc-400" for="compactReps">
+                  {{ 'routines.reps' | translate }}
+                  <input
+                    id="compactReps"
+                    type="number"
+                    min="1"
+                    max="1000"
+                    [value]="exercise.sets[0]?.targetReps ?? 8"
+                    (change)="setTargetReps(exercise, $event)"
+                    class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
+                  />
+                </label>
+                <p class="self-end text-xs text-zinc-500">
+                  {{ exercise.sets.length }} × {{ exercise.sets[0]?.targetReps ?? 8 }}
+                </p>
               </div>
-              <button
-                type="button"
-                (click)="addSet(exercise)"
-                [disabled]="exercise.sets.length >= 15"
-                class="mt-2 rounded border border-zinc-700 px-3 py-1 text-xs disabled:opacity-40"
-              >
-                {{ 'routines.addSet' | translate }}
-              </button>
+
+              <details class="mt-2 text-xs text-zinc-400">
+                <summary class="cursor-pointer">{{ 'routines.advancedSets' | translate }}</summary>
+                <div class="mt-2 space-y-2">
+                  @for (set of exercise.sets; track set.key; let setIndex = $index) {
+                    <div
+                      class="grid items-end gap-2 rounded border border-zinc-800 p-2 sm:grid-cols-7"
+                    >
+                      <label class="text-xs text-zinc-400" for="targetType">
+                        {{ 'training.setType' | translate }}
+                        <select
+                          id="targetType"
+                          [(ngModel)]="set.setType"
+                          class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
+                        >
+                          <option value="NORMAL">{{ 'training.normal' | translate }}</option>
+                          <option value="WARMUP">{{ 'training.warmup' | translate }}</option>
+                          <option value="FAILURE">{{ 'training.failure' | translate }}</option>
+                          <option value="DROP">{{ 'training.drop' | translate }}</option>
+                        </select>
+                      </label>
+                      <label class="text-xs text-zinc-400" for="targetReps">
+                        {{ 'training.reps' | translate }}
+                        <input
+                          id="targetReps"
+                          type="number"
+                          min="1"
+                          max="1000"
+                          [(ngModel)]="set.targetReps"
+                          class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
+                        />
+                      </label>
+                      <label class="text-xs text-zinc-400" for="targetWeight">
+                        {{ 'training.weight' | translate }}
+                        <input
+                          id="targetWeight"
+                          type="number"
+                          step="0.5"
+                          [(ngModel)]="set.targetWeight"
+                          class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
+                        />
+                      </label>
+                      <label class="text-xs text-zinc-400" for="targetRir">
+                        RIR
+                        <input
+                          id="targetRir"
+                          type="number"
+                          min="0"
+                          max="10"
+                          [(ngModel)]="set.targetRir"
+                          class="mt-1 w-full rounded border border-zinc-700 bg-zinc-950 px-2 py-1"
+                        />
+                      </label>
+                      <span class="text-xs text-zinc-500">#{{ setIndex + 1 }}</span>
+                      <button
+                        type="button"
+                        (click)="removeSet(exercise, set)"
+                        class="rounded border border-red-900 px-2 py-1 text-xs text-red-300"
+                      >
+                        {{ 'training.delete' | translate }}
+                      </button>
+                    </div>
+                  }
+                </div>
+              </details>
             </div>
           </article>
         }
@@ -350,7 +375,7 @@ export class RoutineBuilderPage implements OnInit {
         restSeconds: 90,
         supersetGroup: null,
         notes: '',
-        sets: [this.newSet(8, null, null)],
+        sets: Array.from({ length: 3 }, () => this.newSet(8, null, null)),
       },
     ]);
   }
@@ -363,6 +388,27 @@ export class RoutineBuilderPage implements OnInit {
     exercise.sets.push(
       this.newSet(last?.targetReps ?? 8, last?.targetWeight ?? null, last?.targetRir ?? null),
     );
+    this.exercises.update((current) => [...current]);
+  }
+
+  protected setSeriesCount(exercise: DraftExercise, event: Event): void {
+    const count = Math.max(0, Math.min(15, Number((event.target as HTMLInputElement).value)));
+    const last = exercise.sets[exercise.sets.length - 1];
+    if (count > exercise.sets.length) {
+      for (let index = exercise.sets.length; index < count; index++) {
+        exercise.sets.push(
+          this.newSet(last?.targetReps ?? 8, last?.targetWeight ?? null, last?.targetRir ?? null),
+        );
+      }
+    } else {
+      exercise.sets = exercise.sets.slice(0, count);
+    }
+    this.exercises.update((current) => [...current]);
+  }
+
+  protected setTargetReps(exercise: DraftExercise, event: Event): void {
+    const reps = Math.max(1, Math.min(1000, Number((event.target as HTMLInputElement).value)));
+    exercise.sets.forEach((set) => (set.targetReps = reps));
     this.exercises.update((current) => [...current]);
   }
 

@@ -15,7 +15,8 @@
     "catalog": "Catálogo",
     "routines": "Rutinas",
     "progress": "Progreso",
-    "body": "Cuerpo"
+    "body": "Cuerpo",
+    "menu": "Menú"
   },
   "auth": {
     "loginTitle": "Entra en Ferro",
@@ -79,7 +80,7 @@
     "session": "Sesión",
     "sessionHint": "El access token vive solo en memoria; al recargar se renueva con la cookie httpOnly.",
     "logoutAll": "Cerrar todas las sesiones",
-    "comingSoon": "El tracking de entrenamientos llega en M3. La identidad ya está lista."
+    "comingSoon": "Todo listo: crea una rutina, empieza a entrenar y revisa tu progreso."
   },
   "settings": {
     "title": "Ajustes",
@@ -126,7 +127,36 @@
     "prs": "Récords personales",
     "e1rmSeries": "Progreso e1RM (52 semanas)",
     "noStats": "Aún no hay entrenamientos con este ejercicio.",
-    "detailError": "No se pudo cargar el ejercicio."
+    "detailError": "No se pudo cargar el ejercicio.",
+    "muscleValues": {
+      "CHEST": "Pecho",
+      "BACK": "Espalda",
+      "SHOULDERS": "Hombros",
+      "BICEPS": "Bíceps",
+      "TRICEPS": "Tríceps",
+      "QUADS": "Cuádriceps",
+      "HAMSTRINGS": "Isquios",
+      "GLUTES": "Glúteos",
+      "CALVES": "Gemelos",
+      "CORE": "Core",
+      "FOREARMS": "Antebrazo",
+      "NECK": "Cuello",
+      "FULL_BODY": "Cuerpo completo"
+    },
+    "equipmentValues": {
+      "BARBELL": "Barra",
+      "DUMBBELL": "Mancuerna",
+      "MACHINE": "Máquina",
+      "CABLE": "Polea",
+      "BODYWEIGHT": "Peso corporal",
+      "KETTLEBELL": "Kettlebell",
+      "BAND": "Banda",
+      "OTHER": "Otro"
+    },
+    "mechanicsValues": {
+      "COMPOUND": "Compuesto",
+      "ISOLATION": "Aislado"
+    }
   },
   "training": {
     "start": "Empezar a entrenar",
@@ -192,7 +222,10 @@
     "back": "Volver a rutinas",
     "name": "Nombre de la rutina",
     "targetSets": "Series objetivo",
-    "addSet": "Añadir serie objetivo"
+    "addSet": "Añadir serie objetivo",
+    "series": "Series",
+    "reps": "Repeticiones",
+    "advancedSets": "Ajustes avanzados por serie"
   },
   "progress": {
     "title": "Progreso",
