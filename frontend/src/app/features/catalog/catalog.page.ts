@@ -165,28 +165,38 @@ import { EQUIPMENT, MUSCLES } from './catalog.options';
         <p class="text-sm text-zinc-500">{{ 'catalog.results' | translate: { count: total() } }}</p>
         <ul class="grid gap-3 sm:grid-cols-2">
           @for (exercise of exercises(); track exercise.id) {
-            <li class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a
-                    [routerLink]="['/catalog', exercise.id]"
-                    class="font-semibold hover:text-emerald-400"
-                  >
-                    {{ exercise.name }}
-                  </a>
-                  <p class="text-sm text-zinc-500">{{ exercise.nameEn }}</p>
+            <li class="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/60">
+              @if (exercise.imageUrl) {
+                <img
+                  [src]="exercise.imageUrl"
+                  [alt]="exercise.name"
+                  loading="lazy"
+                  class="h-36 w-full object-cover"
+                />
+              }
+              <div class="p-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <a
+                      [routerLink]="['/catalog', exercise.id]"
+                      class="font-semibold hover:text-emerald-400"
+                    >
+                      {{ exercise.name }}
+                    </a>
+                    <p class="text-sm text-zinc-500">{{ exercise.nameEn }}</p>
+                  </div>
+                  @if (exercise.mine) {
+                    <span class="rounded bg-emerald-950 px-2 py-0.5 text-xs text-emerald-300">{{
+                      'catalog.mine' | translate
+                    }}</span>
+                  }
                 </div>
-                @if (exercise.mine) {
-                  <span class="rounded bg-emerald-950 px-2 py-0.5 text-xs text-emerald-300">{{
-                    'catalog.mine' | translate
-                  }}</span>
-                }
+                <p class="mt-3 text-xs uppercase tracking-wider text-zinc-500">
+                  {{ exercise.muscleGroup | catalogLabel: 'muscle' }} ·
+                  {{ exercise.equipment | catalogLabel: 'equipment' }} ·
+                  {{ exercise.mechanics | catalogLabel: 'mechanics' }}
+                </p>
               </div>
-              <p class="mt-3 text-xs uppercase tracking-wider text-zinc-500">
-                {{ exercise.muscleGroup | catalogLabel: 'muscle' }} ·
-                {{ exercise.equipment | catalogLabel: 'equipment' }} ·
-                {{ exercise.mechanics | catalogLabel: 'mechanics' }}
-              </p>
             </li>
           } @empty {
             <li class="text-sm text-zinc-500">{{ 'catalog.empty' | translate }}</li>

@@ -16,6 +16,13 @@ import { ExerciseDetail } from '../catalog.models';
       <a routerLink="/catalog" class="text-sm text-emerald-400">{{ 'catalog.back' | translate }}</a>
 
       @if (detail(); as data) {
+        @if (data.exercise.imageUrl) {
+          <img
+            [src]="data.exercise.imageUrl"
+            [alt]="data.exercise.name"
+            class="h-64 w-full rounded-2xl border border-zinc-800 object-cover"
+          />
+        }
         <div>
           <p class="text-sm uppercase tracking-wider text-emerald-400">
             {{ 'catalog.detail' | translate }}

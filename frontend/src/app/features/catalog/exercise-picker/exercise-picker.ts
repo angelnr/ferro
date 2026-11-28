@@ -89,6 +89,14 @@ import { EQUIPMENT, MUSCLES } from '../catalog.options';
               class="cursor-pointer px-3 py-2 text-sm hover:bg-zinc-800"
               [class.bg-zinc-800]="index === activeIndex()"
             >
+              @if (exercise.imageUrl) {
+                <img
+                  [src]="exercise.imageUrl"
+                  alt=""
+                  class="mr-2 inline-block h-8 w-8 rounded object-cover align-middle"
+                  loading="lazy"
+                />
+              }
               <span class="font-medium">{{ exercise.name }}</span>
               <span class="ml-2 text-xs uppercase tracking-wider text-zinc-500">
                 {{ exercise.muscleGroup | catalogLabel: 'muscle' }} ·

@@ -14,7 +14,8 @@ public record ExerciseResponse(
         String equipment,
         String mechanics,
         boolean bodyweight,
-        boolean mine) {
+        boolean mine,
+        String imageUrl) {
 
     public static ExerciseResponse from(Exercise exercise, UUID userId) {
         return new ExerciseResponse(
@@ -26,6 +27,7 @@ public record ExerciseResponse(
                 exercise.equipment().name(),
                 exercise.mechanics().name(),
                 exercise.bodyweight(),
-                exercise.ownerId() != null && exercise.ownerId().equals(userId));
+                exercise.ownerId() != null && exercise.ownerId().equals(userId),
+                exercise.imageUrl());
     }
 }

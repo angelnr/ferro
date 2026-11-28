@@ -15,4 +15,5 @@ public record Exercise(
         boolean bodyweight,
         boolean custom,
         UUID ownerId,
-        boolean archived) {}
+        boolean archived,
+        String imageUrl) {}

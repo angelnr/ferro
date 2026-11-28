@@ -97,7 +97,7 @@ GET /api/v1/exercises?q=press banca
     {
       "id": "…", "name": "Press de banca", "muscleGroup": "CHEST",
       "secondaryMuscles": ["TRICEPS","SHOULDERS"], "equipment": "BARBELL",
-      "mechanics": "COMPOUND", "bodyweight": false, "isCustom": false, "mine": false
+      "mechanics": "COMPOUND", "bodyweight": false, "isCustom": false, "mine": false, "imageUrl": "/exercises/ex-001.webp"
     }
   ], "page": 0, "size": 20, "totalElements": 1, "totalPages": 1
 }

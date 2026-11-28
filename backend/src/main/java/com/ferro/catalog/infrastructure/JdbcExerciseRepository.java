@@ -78,7 +78,7 @@ public class JdbcExerciseRepository implements ExerciseRepository {
                 ? " ORDER BY similarity(unaccent(lower(name_es)), unaccent(lower(:q))) DESC, name_es ASC"
                 : " ORDER BY name_es ASC";
         String sql = "SELECT id, name_es, name_en, muscle_group, secondary_muscles, equipment, mechanics,"
-                + " bodyweight, is_custom, owner_id, archived FROM exercises"
+                + " bodyweight, is_custom, owner_id, archived, image_url FROM exercises"
                 + where
                 + order
                 + " LIMIT :limit OFFSET :offset";
@@ -107,14 +107,15 @@ public class JdbcExerciseRepository implements ExerciseRepository {
                 rs.getBoolean("bodyweight"),
                 rs.getBoolean("is_custom"),
                 rs.getObject("owner_id", UUID.class),
-                rs.getBoolean("archived"));
+                rs.getBoolean("archived"),
+                rs.getString("image_url"));
     }
 
     @Override
     public Optional<Exercise> findById(UUID id) {
         List<Exercise> found = jdbc.query(
                 "SELECT id, name_es, name_en, muscle_group, secondary_muscles, equipment, mechanics,"
-                        + " bodyweight, is_custom, owner_id, archived FROM exercises WHERE id = :id",
+                        + " bodyweight, is_custom, owner_id, archived, image_url FROM exercises WHERE id = :id",
                 new MapSqlParameterSource("id", id),
                 ROW_MAPPER);
         return found.stream().findFirst();
@@ -124,9 +125,9 @@ public class JdbcExerciseRepository implements ExerciseRepository {
     public Exercise save(Exercise exercise) {
         jdbc.getJdbcTemplate().update("""
                 INSERT INTO exercises (id, name_es, name_en, muscle_group, secondary_muscles, equipment,
-                    mechanics, bodyweight, is_custom, owner_id, archived)
+                    mechanics, bodyweight, is_custom, owner_id, archived, image_url)
                 VALUES (?, ?, ?, CAST(? AS muscle_group),
-                    CAST(? AS muscle_group[]), CAST(? AS equipment), CAST(? AS mechanics), ?, ?, ?, ?)
+                    CAST(? AS muscle_group[]), CAST(? AS equipment), CAST(? AS mechanics), ?, ?, ?, ?, ?)
                 ON CONFLICT (id) DO UPDATE SET
                     name_es = excluded.name_es,
                     name_en = excluded.name_en,
@@ -136,6 +137,7 @@ public class JdbcExerciseRepository implements ExerciseRepository {
                     mechanics = excluded.mechanics,
                     bodyweight = excluded.bodyweight,
                     archived = excluded.archived,
+                    image_url = excluded.image_url,
                     updated_at = now()
                 """, ps -> {
             ps.setObject(1, exercise.id());
@@ -153,6 +155,7 @@ public class JdbcExerciseRepository implements ExerciseRepository {
             ps.setBoolean(9, exercise.custom());
             ps.setObject(10, exercise.ownerId());
             ps.setBoolean(11, exercise.archived());
+            ps.setString(12, exercise.imageUrl());
         });
         return exercise;
     }

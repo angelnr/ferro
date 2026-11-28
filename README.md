@@ -28,7 +28,7 @@ progreso y mediciones corporales. Sin red social: el foco es el dominio.
 |---|---|---|
 | ![Inicio](docs/screenshots/home.png) | ![Historial](docs/screenshots/history.png) | ![Estadísticas](docs/screenshots/stats.png) |
 
-Capturas generadas contra la cuenta demo local con datos sintéticos.
+Capturas generadas contra la cuenta demo local con datos sintéticos. Las imágenes de ejercicios usan RepDB (free tier) con atribución; los ejercicios sin coincidencia fiable tienen una ilustración WebP generada por Ferro.
 
 ## Stack (decisión cerrada — ver [ADRs](./docs/adr/))
 
@@ -74,6 +74,7 @@ Monolito modular con seis bounded contexts: `identity`, `catalog`, `training`,
 | [08 · Backlog v2](./docs/08-backlog-v2.md) | Funcionalidad deliberadamente fuera del MVP |
 | [09 · Glosario](./docs/09-glosario.md) | Lenguaje ubicuo ES↔EN del dominio |
 | [10 · TODO humano](./docs/10-todo-humano.md) | Checklist completo para cerrar producción, legal, Android y v1.0.0 |
+| [Atribuciones](./docs/ATRIBUCIONES.md) | Licencias de imágenes y datasets de ejercicios |
 | [AGENTS.md](./AGENTS.md) | Harness: reglas de trabajo, gates y protocolo de evidencia |
 | [infra/README.md](./infra/README.md) | Servicios locales, Compose de producción y operación |
 | [Lecciones del harness](./docs/harness/lessons.md) | Errores → artefactos que impiden repetirlos |

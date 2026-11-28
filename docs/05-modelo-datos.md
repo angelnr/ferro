@@ -289,6 +289,7 @@ de dominio para emails y derivados (outbox de facto — ver ADR-0002 §alternati
 | V8 | `users.email_weekly_summary`: opt-in del resumen semanal |
 | V9 | enum `muscle_group`: añade `ADDUCTORS` |
 | V10 | reclasifica la aducción de cadera como `ADDUCTORS` |
+| V11 | `exercises.image_url` + imágenes WebP del catálogo |
 | (runtime) | cuenta demo + 12 semanas sintéticas con `FERRO_DEMO_ENABLED=true` |
 
 ## 5 · Seed del catálogo (~200 ejercicios)

@@ -57,7 +57,8 @@ public class ExerciseCatalogService {
                 Boolean.TRUE.equals(command.bodyweight()),
                 true,
                 userId,
-                false);
+                false,
+                null);
         Exercise saved = exercises.save(exercise);
         cache.invalidate();
         return saved;
@@ -98,7 +99,8 @@ public class ExerciseCatalogService {
                 command.bodyweight() == null ? current.bodyweight() : command.bodyweight(),
                 current.custom(),
                 current.ownerId(),
-                command.archived() == null ? current.archived() : command.archived());
+                command.archived() == null ? current.archived() : command.archived(),
+                current.imageUrl());
         Exercise saved = exercises.save(updated);
         cache.invalidate();
         return saved;

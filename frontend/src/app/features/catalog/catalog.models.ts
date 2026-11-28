@@ -8,6 +8,7 @@ export interface Exercise {
   mechanics: string;
   bodyweight: boolean;
   mine: boolean;
+  imageUrl?: string | null;
 }
 
 export interface ExercisePage {

@@ -47,7 +47,8 @@ class ExerciseSearchIntegrationTest extends AbstractPostgresIntegrationTest {
     void search_is_case_and_accent_insensitive_in_both_languages() throws Exception {
         mockMvc.perform(get("/api/v1/exercises").param("q", "press banca").header("Authorization", bearer()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[*].name", org.hamcrest.Matchers.hasItem("Press de banca con barra")));
+                .andExpect(jsonPath("$.content[*].name", org.hamcrest.Matchers.hasItem("Press de banca con barra")))
+                .andExpect(jsonPath("$.content[0].imageUrl").isNotEmpty());
 
         mockMvc.perform(get("/api/v1/exercises").param("q", "BENCH").header("Authorization", bearer()))
                 .andExpect(status().isOk())
