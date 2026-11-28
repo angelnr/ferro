@@ -1,0 +1,208 @@
+index,name_es,name_en,muscle_group,equipment,candidate_id,candidate_name,candidate_en,score,equipment_match,muscle_match,status,approved,file
+1,Press de banca con barra,Barbell Bench Press,CHEST,BARBELL,bench-press,Press de Banca con Barra,Barbell Bench Press,0.900,1,0,auto,yes,ex-001.webp
+2,Press de banca con mancuernas,Dumbbell Bench Press,CHEST,DUMBBELL,db-bench-press,Press de Banca con Mancuernas,Dumbbell Bench Press,0.900,1,0,auto,yes,ex-002.webp
+9,Aperturas con mancuernas,Dumbbell Chest Fly,CHEST,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.760,1,0,auto,yes,ex-009.webp
+11,Aperturas en máquina,Machine Chest Fly,CHEST,MACHINE,machine-chest-fly,Aperturas en Máquina,Machine Chest Fly,0.900,1,0,auto,yes,ex-011.webp
+12,Fondos en paralelas,Chest Dips,CHEST,BODYWEIGHT,dips,Fondos para Pecho,Chest Dips,0.420,0,0,auto,yes,ex-012.webp
+13,Pullover,Dumbbell Pullover,CHEST,DUMBBELL,db-pullover,Pullover con Mancuerna,Dumbbell Pullover,0.667,1,0,auto,yes,ex-013.webp
+23,Remo invertido,Inverted Row,BACK,BODYWEIGHT,inverted-row,Remo invertido,Inverted Row,0.700,0,0,auto,yes,ex-023.webp
+24,Hiperextensiones,Back Extension,BACK,BODYWEIGHT,back-extension,Extensión de Espalda,Back Extension,0.350,0,0,auto,yes,ex-024.webp
+25,Hiperextensiones en máquina,Machine Back Extension,BACK,MACHINE,machine-back-extension,Extensión de Espalda en Máquina,Machine Back Extension,0.667,1,0,auto,yes,ex-025.webp
+27,Press militar con barra,Barbell Overhead Press,SHOULDERS,BARBELL,ohp,Press Militar con Barra,Barbell Overhead Press,0.900,1,0,auto,yes,ex-027.webp
+31,Elevaciones laterales con mancuernas,Dumbbell Lateral Raise,SHOULDERS,DUMBBELL,lateral-raise,Elevación Lateral con Mancuernas,Dumbbell Lateral Raise,0.600,1,0,auto,yes,ex-031.webp
+32,Elevaciones laterales en polea,Cable Lateral Raise,SHOULDERS,CABLE,cable-lateral-raise,Elevación Lateral en Polea,Cable Lateral Raise,0.600,1,0,auto,yes,ex-032.webp
+34,Elevaciones frontales con mancuernas,Dumbbell Front Raise,SHOULDERS,DUMBBELL,dumbbell-front-raise,Elevación Frontal con Mancuernas,Dumbbell Front Raise,0.550,1,0,auto,yes,ex-034.webp
+35,Elevaciones frontales en polea,Cable Front Raise,SHOULDERS,CABLE,cable-front-raise,Elevación Frontal con Cable,Cable Front Raise,0.462,1,0,auto,yes,ex-035.webp
+36,Pájaros con mancuernas,Dumbbell Reverse Fly,SHOULDERS,DUMBBELL,dumbbell-reverse-fly,Pájaro Invertido con Mancuernas,Dumbbell Reverse Fly,0.600,1,0,auto,yes,ex-036.webp
+37,Pájaros en polea,Cable Reverse Fly,SHOULDERS,CABLE,cable-reverse-fly,Apertura Inversa con Cable,Cable Reverse Fly,0.500,1,0,auto,yes,ex-037.webp
+38,Pájaros en máquina,Machine Reverse Fly,SHOULDERS,MACHINE,machine-reverse-fly,Apertura Inversa en Máquina,Machine Reverse Fly,0.600,1,0,auto,yes,ex-038.webp
+39,Face pull en polea,Cable Face Pull,SHOULDERS,CABLE,face-pull,Face Pull en Polea,Cable Face Pull,0.900,1,0,auto,yes,ex-039.webp
+41,Curl con barra,Barbell Curl,BICEPS,BARBELL,barbell-curl,Curl con Barra,Barbell Curl,1.000,1,1,auto,yes,ex-041.webp
+43,Curl martillo con mancuernas,Dumbbell Hammer Curl,BICEPS,DUMBBELL,hammer-curl,Curl de Martillo con Mancuernas,Dumbbell Hammer Curl,1.000,1,1,auto,yes,ex-043.webp
+44,Curl martillo en polea,Cable Hammer Curl,BICEPS,CABLE,cable-hammer-curl,Curl de Martillo en Cable,Cable Hammer Curl,0.860,1,1,auto,yes,ex-044.webp
+45,Curl predicador con barra,Barbell Preacher Curl,BICEPS,BARBELL,barbell-preacher-curl,Curl Predicador con Barra,Barbell Preacher Curl,1.000,1,1,auto,yes,ex-045.webp
+46,Curl predicador en máquina,Machine Preacher Curl,BICEPS,MACHINE,machine-preacher-curl,Curl en Máquina de Predicador,Machine Preacher Curl,1.000,1,1,auto,yes,ex-046.webp
+47,Curl en polea,Cable Curl,BICEPS,CABLE,cable-curl,Curl con Cable,Cable Curl,0.767,1,1,auto,yes,ex-047.webp
+57,Fondos en banco,Bench Dips,TRICEPS,BODYWEIGHT,bench-dips,Fondos en Banco,Bench Dips,0.800,0,1,auto,yes,ex-057.webp
+58,Sentadilla trasera con barra,Barbell Back Squat,QUADS,BARBELL,squat,Sentadilla Trasera con Barra,Barbell Back Squat,0.900,1,0,auto,yes,ex-058.webp
+61,Sentadilla búlgara con barra,Barbell Bulgarian Split Squat,QUADS,BARBELL,barbell-bulgarian-split-squat,Sentadilla Búlgara con Barra,Barbell Bulgarian Split Squat,0.900,1,0,auto,yes,ex-061.webp
+62,Sentadilla búlgara,Bulgarian Split Squat,QUADS,BODYWEIGHT,bulgarian-split-squat,Sentadilla Búlgara,Bulgarian Split Squat,0.700,0,0,auto,yes,ex-062.webp
+63,Sentadilla goblet con mancuernas,Dumbbell Goblet Squat,QUADS,DUMBBELL,db-goblet-squat,Sentadilla Goblet con Mancuerna,Dumbbell Goblet Squat,0.760,1,0,auto,yes,ex-063.webp
+74,Peso muerto rumano con mancuernas,Dumbbell Romanian Deadlift,HAMSTRINGS,DUMBBELL,dumbbell-romanian-deadlift,Peso Muerto Rumano con Mancuernas,Dumbbell Romanian Deadlift,1.000,1,1,auto,yes,ex-074.webp
+80,Hip thrust con barra,Barbell Hip Thrust,GLUTES,BARBELL,hip-thrust,Hip thrust con barra,Barbell Hip Thrust,0.900,1,0,auto,yes,ex-080.webp
+82,Puente de glúteo,Glute Bridge,GLUTES,BODYWEIGHT,glute-bridge,Puente de Glúteos,Glute Bridge,0.420,0,0,auto,yes,ex-082.webp
+83,Puente de glúteo con barra,Barbell Glute Bridge,GLUTES,BARBELL,barbell-glute-bridge,Puente de Glúteos con Barra,Barbell Glute Bridge,0.700,1,0,auto,yes,ex-083.webp
+84,Patada de glúteo en polea,Cable Glute Kickback,GLUTES,CABLE,cable-kickback,Patada Trasera de Glúteos en Cable,Cable Glute Kickback,0.550,1,0,auto,yes,ex-084.webp
+86,Abducción de cadera en máquina,Machine Hip Abduction,GLUTES,MACHINE,hip-abduction,Abducción de Cadera en Máquina,Machine Hip Abduction,0.900,1,0,auto,yes,ex-086.webp
+94,Plancha,Plank,CORE,BODYWEIGHT,plank,Plancha,Plank,0.700,0,0,auto,yes,ex-094.webp
+95,Plancha lateral,Side Plank,CORE,BODYWEIGHT,side-plank,Plancha Lateral,Side Plank,0.700,0,0,auto,yes,ex-095.webp
+97,Crunch en polea,Cable Crunch,CORE,CABLE,cable-crunch,Crunch con Cable,Cable Crunch,0.667,1,0,auto,yes,ex-097.webp
+99,Rueda abdominal,Ab Wheel Rollout,CORE,BODYWEIGHT,ab-wheel-rollout,Rueda Abdominal,Ab Wheel Rollout,0.700,0,0,auto,yes,ex-099.webp
+100,Pallof press en polea,Cable Pallof Press,CORE,CABLE,cable-pallof-press,Press Pallof en Polea,Cable Pallof Press,0.900,1,0,auto,yes,ex-100.webp
+101,Giro ruso,Russian Twist,CORE,BODYWEIGHT,russian-twist,Giro Ruso,Russian Twist,0.700,0,0,auto,yes,ex-101.webp
+103,Curl de muñeca con mancuernas,Dumbbell Wrist Curl,FOREARMS,DUMBBELL,dumbbell-wrist-curl,Curl de Muñeca con Mancuerna,Dumbbell Wrist Curl,0.783,1,0,auto,yes,ex-103.webp
+104,Curl de muñeca con barra,Barbell Wrist Curl,FOREARMS,BARBELL,barbell-wrist-curl,Curl de Muñeca con Barra,Barbell Wrist Curl,0.900,1,0,auto,yes,ex-104.webp
+106,Curl inverso con mancuernas,Dumbbell Reverse Curl,FOREARMS,DUMBBELL,db-reverse-curl,Curl Inverso con Mancuernas,Dumbbell Reverse Curl,0.900,1,0,auto,yes,ex-106.webp
+107,Paseo del granjero con mancuernas,Dumbbell Farmer's Walk,FOREARMS,DUMBBELL,dumbbell-farmers-walk,Caminata del Granjero con Mancuernas,Dumbbell Farmer's Walk,0.725,1,0,auto,yes,ex-107.webp
+108,Paseo del granjero con kettlebell,Kettlebell Farmer's Walk,FOREARMS,KETTLEBELL,kettlebell-farmers-walk,Paseo del Granjero con Pesa Rusa,Kettlebell Farmer's Walk,0.725,1,0,auto,yes,ex-108.webp
+116,Swing con kettlebell,Kettlebell Swing,FULL_BODY,KETTLEBELL,kettlebell-swing,Swing con pesa rusa,Kettlebell Swing,0.550,1,0,auto,yes,ex-116.webp
+122,Flexiones diamante,Diamond Push-Ups,CHEST,BODYWEIGHT,diamond-push-ups,Flexiones en Diamante,Diamond Push Ups,0.700,0,0,auto,yes,ex-122.webp
+127,Press suelo con mancuernas,Dumbbell Floor Press,CHEST,DUMBBELL,dumbbell-floor-press,Press de Suelo con Mancuernas,Dumbbell Floor Press,0.900,1,0,auto,yes,ex-127.webp
+158,Sentadilla con banda,Band Squat,QUADS,BAND,banded-squat,Sentadilla con Banda,Banded Squat,0.620,1,0,auto,yes,ex-158.webp
+162,Zancada inversa,Reverse Lunge,QUADS,BODYWEIGHT,reverse-lunge,Zancada Inversa,Reverse Lunge,0.700,0,0,auto,yes,ex-162.webp
+165,Sentadilla sissy,Sissy Squat,QUADS,BODYWEIGHT,sissy-squat,Sissy Squat,Sissy Squat,0.467,0,0,auto,yes,ex-165.webp
+166,Sentadilla Smith,Smith Machine Squat,QUADS,MACHINE,smith-machine-squat,Sentadilla en Máquina Smith,Smith Machine Squat,0.760,1,0,auto,yes,ex-166.webp
+173,Peso muerto rumano con banda,Band Romanian Deadlift,HAMSTRINGS,BAND,banded-romanian-deadlift,Peso Muerto Rumano con Banda,Banded Romanian Deadlift,0.825,1,1,auto,yes,ex-173.webp
+174,Hip thrust unilateral,Single-Leg Hip Thrust,GLUTES,BODYWEIGHT,single-leg-hip-thrust,Empuje de Cadera a Una Pierna,Single-Leg Hip Thrust,0.311,0,0,auto,yes,ex-174.webp
+179,Puente de glúteo a una pierna,Single-Leg Glute Bridge,GLUTES,BODYWEIGHT,single-leg-glute-bridge,Puente de Glúteo a Una Pierna,Single Leg Glute Bridge,0.700,0,0,auto,yes,ex-179.webp
+187,Dead bug,Dead Bug,CORE,BODYWEIGHT,dead-bug,Dead Bug,Dead Bug,0.700,0,0,auto,yes,ex-187.webp
+188,Mountain climbers,Mountain Climbers,CORE,BODYWEIGHT,mountain-climbers,Mountain Climbers,Mountain Climbers,0.700,0,0,auto,yes,ex-188.webp
+191,Elevación de rodillas colgado,Hanging Knee Raise,CORE,BODYWEIGHT,hanging-knee-raise,Elevación de Rodillas Colgado,Hanging Knee Raise,0.700,0,0,auto,yes,ex-191.webp
+192,Dragon flag,Dragon Flag,CORE,BODYWEIGHT,dragon-flag,Dragon Flag,Dragon Flag,0.700,0,0,auto,yes,ex-192.webp
+195,Curl de muñeca inverso con mancuernas,Dumbbell Reverse Wrist Curl,FOREARMS,DUMBBELL,db-reverse-wrist-curl,Curl de Muñeca Inverso con Mancuerna,Dumbbell Reverse Wrist Curl,0.725,1,0,auto,yes,ex-195.webp
+197,Pinza con discos,Plate Pinch,FOREARMS,OTHER,plate-pinch,Agarre de Discos,Plate Pinch,0.420,0,0,auto,yes,ex-197.webp
+204,Bear crawl,Bear Crawl,FULL_BODY,BODYWEIGHT,bear-crawl,Caminata del Oso,Bear Crawl,0.350,0,0,auto,yes,ex-204.webp
+205,Sled push,Sled Push,FULL_BODY,OTHER,sled-push,Empuje de Trineo,Sled Push,0.350,0,0,auto,yes,ex-205.webp
+206,Wall ball,Wall Ball,FULL_BODY,OTHER,wall-ball,Wall Ball,Wall Ball,0.700,0,0,auto,yes,ex-206.webp
+3,Press de banca en máquina,Machine Bench Press,CHEST,MACHINE,smith-machine-bench-press,Press de Banca en Máquina Smith,Smith Machine Bench Press,0.783,1,0,review,,ex-003.webp
+4,Press inclinado con barra,Barbell Incline Press,CHEST,BARBELL,incline-bench-press,Press en banco inclinado con barra,Incline Barbell Bench Press,0.700,1,0,review,,ex-004.webp
+5,Press inclinado con mancuernas,Dumbbell Incline Press,CHEST,DUMBBELL,incline-db-press,Press con mancuernas en banco inclinado,Incline Dumbbell Press,0.783,1,0,review,,ex-005.webp
+6,Press inclinado en máquina,Machine Incline Press,CHEST,MACHINE,smith-machine-incline-bench-press,Press Inclinado en Máquina Smith,Smith Machine Incline Bench Press,0.700,1,0,review,,ex-006.webp
+7,Press declinado con barra,Barbell Decline Press,CHEST,BARBELL,decline-bench-press-barbell,Press de Banca Declinado con Barra,Decline Barbell Bench Press,0.700,1,0,review,,ex-007.webp
+8,Press declinado con mancuernas,Dumbbell Decline Press,CHEST,DUMBBELL,db-svend-press,Press Svend con Mancuernas,Dumbbell Svend Press,0.550,1,0,review,,ex-008.webp
+10,Aperturas en polea,Cable Chest Fly,CHEST,CABLE,cable-fly,Aperturas con Cable,Cable Fly,0.620,1,0,review,,ex-010.webp
+14,Press cerrado con barra,Barbell Close-Grip Bench Press,TRICEPS,BARBELL,close-grip-bench-press,Press de Banca con Agarre Cerrado,Close-Grip Bench Press,0.689,1,1,review,,ex-014.webp
+15,Dominadas,Pull-Ups,BACK,BODYWEIGHT,archer-pull-ups,Dominadas Arquero,Archer Pull Ups,0.420,0,0,review,,ex-015.webp
+16,Jalón al pecho en polea,Cable Lat Pulldown,BACK,CABLE,lat-pulldown,Jalón al Pecho,Lat Pulldown,0.700,1,0,review,,ex-016.webp
+17,Jalón al pecho en máquina,Machine Lat Pulldown,BACK,MACHINE,v-bar-lat-pulldown,Jalón al Pecho con Barra en V,V-Bar Lat Pulldown,0.550,1,0,review,,ex-017.webp
+18,Remo con barra,Barbell Row,BACK,BARBELL,barbell-row,Remo con Barra Inclinado,Bent-Over Barbell Row,0.600,1,0,review,,ex-018.webp
+19,Remo con mancuerna,Dumbbell Row,BACK,DUMBBELL,single-arm-db-row,Remo con Mancuerna a Un Brazo,Single-Arm Dumbbell Row,0.550,1,0,review,,ex-019.webp
+20,Remo en polea,Cable Row,BACK,CABLE,kneeling-cable-row,Remo en Polea Arrodillado,Kneeling Cable Row,0.667,1,0,review,,ex-020.webp
+21,Remo en T con barra,Barbell T-Bar Row,BACK,BARBELL,t-bar-row,Remo en T,T-Bar Row,0.667,1,0,review,,ex-021.webp
+22,Remo en T en máquina,Machine T-Bar Row,BACK,MACHINE,chest-supported-machine-row,Remo en Máquina con Apoyo en el Pecho,Chest-Supported Machine Row,0.480,1,0,review,,ex-022.webp
+26,Pullover en polea,Cable Pullover,BACK,CABLE,cable-pallof-press,Press Pallof en Polea,Cable Pallof Press,0.480,1,0,review,,ex-026.webp
+28,Press militar con mancuernas,Dumbbell Overhead Press,SHOULDERS,DUMBBELL,db-svend-press,Press Svend con Mancuernas,Dumbbell Svend Press,0.550,1,0,review,,ex-028.webp
+29,Press militar en máquina,Machine Overhead Press,SHOULDERS,MACHINE,chest-press-machine,Press de Pecho en Máquina,Machine Chest Press,0.500,1,0,review,,ex-029.webp
+30,Press Arnold con mancuernas,Dumbbell Arnold Press,SHOULDERS,DUMBBELL,db-svend-press,Press Svend con Mancuernas,Dumbbell Svend Press,0.620,1,0,review,,ex-030.webp
+33,Elevaciones laterales en máquina,Machine Lateral Raise,SHOULDERS,MACHINE,machine-calf-raise,Elevación de Pantorrillas en Máquina,Machine Calf Raise,0.433,1,0,review,,ex-033.webp
+40,Press tras nuca con barra,Barbell Behind-the-Neck Press,SHOULDERS,BARBELL,behind-the-neck-press,Press Detrás del Cuello,Behind the Neck Press,0.433,1,0,review,,ex-040.webp
+42,Curl con mancuernas,Dumbbell Curl,BICEPS,DUMBBELL,bicep-curl,Curl de Bíceps con Mancuernas,Dumbbell Bicep Curl,0.720,1,1,review,,ex-042.webp
+48,Curl inclinado con mancuernas,Dumbbell Incline Curl,BICEPS,DUMBBELL,incline-db-curl,Curl con mancuernas en banco inclinado,Incline Dumbbell Curl,0.883,1,1,review,,ex-048.webp
+49,Curl concentrado con mancuernas,Dumbbell Concentration Curl,BICEPS,DUMBBELL,bicep-curl,Curl de Bíceps con Mancuernas,Dumbbell Bicep Curl,0.600,1,1,review,,ex-049.webp
+50,Press francés con barra,Barbell French Press,TRICEPS,BARBELL,bench-press,Press de Banca con Barra,Barbell Bench Press,0.500,1,0,review,,ex-050.webp
+51,Press francés con mancuernas,Dumbbell French Press,TRICEPS,DUMBBELL,dumbbell-push-press,Press de Empuje con Mancuernas,Dumbbell Push Press,0.600,1,1,review,,ex-051.webp
+52,Extensión en polea,Cable Pushdown,TRICEPS,CABLE,v-bar-tricep-pushdown,Extensión de Tríceps en Polea con Barra en V,V-Bar Tricep Pushdown,0.533,1,1,review,,ex-052.webp
+53,Extensión sobre cabeza con mancuernas,Dumbbell Overhead Extension,TRICEPS,DUMBBELL,single-arm-dumbbell-overhead-tricep-extension,Extensión de Tríceps sobre la Cabeza con Mancuerna a Un Brazo,Single-Arm Dumbbell Overhead Tricep Extension,0.569,1,1,review,,ex-053.webp
+54,Extensión sobre cabeza en polea,Cable Overhead Extension,TRICEPS,CABLE,cable-overhead-tricep-extension,Extensión de Tríceps por Encima de la Cabeza con Cable,Cable Overhead Tricep Extension,0.580,1,1,review,,ex-054.webp
+55,Patada de tríceps con mancuernas,Dumbbell Triceps Kickback,TRICEPS,DUMBBELL,tricep-kickback,Patada de Tríceps con Mancuerna,Dumbbell Tricep Kickback,0.700,1,1,review,,ex-055.webp
+56,Patada de tríceps en polea,Cable Triceps Kickback,TRICEPS,CABLE,cable-tricep-kickback,Patada de Tríceps con Cable,Cable Tricep Kickback,0.767,1,1,review,,ex-056.webp
+59,Sentadilla frontal con barra,Barbell Front Squat,QUADS,BARBELL,front-squat,Sentadilla Frontal,Front Squat,0.667,1,0,review,,ex-059.webp
+60,Sentadilla búlgara con mancuernas,Dumbbell Bulgarian Split Squat,QUADS,DUMBBELL,bulgarian-split-squat,Sentadilla Búlgara,Bulgarian Split Squat,0.700,1,0,review,,ex-060.webp
+64,Sentadilla goblet con kettlebell,Kettlebell Goblet Squat,QUADS,KETTLEBELL,goblet-squat,Sentadilla Goblet,Goblet Squat,0.725,1,0,review,,ex-064.webp
+65,Prensa de piernas en máquina,Machine Leg Press,QUADS,MACHINE,leg-press,Prensa de Piernas,Leg Press,0.467,0,0,review,,ex-065.webp
+66,Hack squat en máquina,Machine Hack Squat,QUADS,MACHINE,smith-machine-squat,Sentadilla en Máquina Smith,Smith Machine Squat,0.550,1,0,review,,ex-066.webp
+67,Extensión de cuádriceps en máquina,Machine Leg Extension,QUADS,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.550,1,0,review,,ex-067.webp
+68,Zancadas con mancuernas,Dumbbell Lunges,QUADS,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.433,1,0,review,,ex-068.webp
+69,Zancadas con barra,Barbell Lunges,QUADS,BARBELL,barbell-curl,Curl con Barra,Barbell Curl,0.480,1,0,review,,ex-069.webp
+70,Zancadas,Lunges,QUADS,BODYWEIGHT,90-90-hold,Estiramiento 90/90,90/90 Hold,0.000,0,0,review,,ex-070.webp
+71,Step up con mancuernas,Dumbbell Step-Up,QUADS,DUMBBELL,db-step-up-to-balance,Step-Up con Equilibrio y Mancuernas,Dumbbell Step-Up to Balance,0.550,1,0,review,,ex-071.webp
+72,Step up,Step-Up,QUADS,BODYWEIGHT,step-up-to-balance,Step-Up con Equilibrio,Step-Up to Balance,0.280,0,0,review,,ex-072.webp
+73,Peso muerto rumano con barra,Barbell Romanian Deadlift,HAMSTRINGS,BARBELL,deadlift,Peso Muerto con Barra,Barbell Deadlift,0.800,1,1,review,,ex-073.webp
+75,Curl femoral tumbado en máquina,Machine Lying Leg Curl,HAMSTRINGS,MACHINE,leg-curl,Curl de Piernas Tumbado,Lying Leg Curl,0.450,0,1,review,,ex-075.webp
+76,Curl femoral sentado en máquina,Machine Seated Leg Curl,HAMSTRINGS,MACHINE,machine-seated-crunch,Abdominales en Máquina Sentado,Machine Seated Crunch,0.511,1,0,review,,ex-076.webp
+77,Buenos días con barra,Barbell Good Morning,HAMSTRINGS,BARBELL,good-morning,Buenos Días,Good Morning,0.767,1,1,review,,ex-077.webp
+78,Peso muerto piernas rígidas con barra,Barbell Stiff-Leg Deadlift,HAMSTRINGS,BARBELL,stiff-leg-deadlift,Peso Muerto con Piernas Rígidas,Stiff Leg Deadlift,0.844,1,1,review,,ex-078.webp
+79,Peso muerto piernas rígidas con mancuernas,Dumbbell Stiff-Leg Deadlift,HAMSTRINGS,DUMBBELL,dumbbell-deadlift,Peso Muerto con Mancuernas,Dumbbell Deadlift,0.689,1,1,review,,ex-079.webp
+81,Hip thrust en máquina,Machine Hip Thrust,GLUTES,MACHINE,smith-machine-hip-thrust,Hip Thrust en Máquina Smith,Smith Machine Hip Thrust,0.760,1,0,review,,ex-081.webp
+85,Patada de glúteo en máquina,Machine Glute Kickback,GLUTES,MACHINE,glute-kickback,Patada de Glúteo,Glute Kickback,0.467,0,0,review,,ex-085.webp
+87,Abducción de cadera con banda,Band Hip Abduction,GLUTES,BAND,banded-seated-hip-abduction,Abducción de Cadera Sentado con Banda,Banded Seated Hip Abduction,0.589,1,0,review,,ex-087.webp
+88,Aducción de cadera en máquina,Machine Hip Adduction,ADDUCTORS,MACHINE,hip-adduction,Aducción de cadera,Hip Adduction,0.767,1,1,review,,ex-088.webp
+89,Elevación de talones de pie en máquina,Machine Standing Calf Raise,CALVES,MACHINE,standing-calf-raise,Elevación de Talones de Pie,Standing Calf Raise,0.725,1,0,review,,ex-089.webp
+90,Elevación de talones de pie con barra,Barbell Standing Calf Raise,CALVES,BARBELL,barbell-calf-raise,Elevación de Talones con Barra,Barbell Calf Raise,0.725,1,0,review,,ex-090.webp
+91,Elevación de talones de pie con mancuernas,Dumbbell Standing Calf Raise,CALVES,DUMBBELL,dumbbell-calf-raise,Elevación de Talones con Mancuernas,Dumbbell Calf Raise,0.725,1,0,review,,ex-091.webp
+92,Elevación de talones sentado en máquina,Machine Seated Calf Raise,CALVES,MACHINE,seated-calf-raise,Elevación de Talones Sentado,Seated Calf Raise,0.725,1,0,review,,ex-092.webp
+93,Gemelo en prensa en máquina,Machine Calf Press,CALVES,MACHINE,chest-press-machine,Press de Pecho en Máquina,Machine Chest Press,0.462,1,0,review,,ex-093.webp
+96,Crunch,Crunch,CORE,BODYWEIGHT,cable-crunch,Crunch con Cable,Cable Crunch,0.350,0,0,review,,ex-096.webp
+98,Elevación de piernas,Leg Raise,CORE,BODYWEIGHT,hanging-leg-raise,Elevación de Piernas Colgado,Hanging Leg Raise,0.467,0,0,review,,ex-098.webp
+102,Giro ruso con mancuernas,Dumbbell Russian Twist,CORE,DUMBBELL,russian-twist,Giro Ruso,Russian Twist,0.467,0,0,review,,ex-102.webp
+105,Curl inverso con barra,Barbell Reverse Curl,FOREARMS,BARBELL,barbell-curl,Curl con Barra,Barbell Curl,0.620,1,0,review,,ex-105.webp
+109,Flexión de cuello,Neck Flexion,NECK,BODYWEIGHT,isometric-neck-side,Flexión Lateral Isométrica de Cuello,Isometric Neck Lateral Flexion,0.350,0,0,review,,ex-109.webp
+110,Flexión de cuello en máquina,Machine Neck Flexion,NECK,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.400,1,0,review,,ex-110.webp
+111,Extensión de cuello,Neck Extension,NECK,BODYWEIGHT,behind-the-neck-press,Press Detrás del Cuello,Behind the Neck Press,0.233,0,0,review,,ex-111.webp
+112,Extensión de cuello en máquina,Machine Neck Extension,NECK,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.550,1,0,review,,ex-112.webp
+113,Thruster con barra,Barbell Thruster,FULL_BODY,BARBELL,barbell-curl,Curl con Barra,Barbell Curl,0.550,1,0,review,,ex-113.webp
+114,Thruster con mancuernas,Dumbbell Thruster,FULL_BODY,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.480,1,0,review,,ex-114.webp
+115,Clean and press con barra,Barbell Clean and Press,FULL_BODY,BARBELL,bench-press,Press de Banca con Barra,Barbell Bench Press,0.550,1,0,review,,ex-115.webp
+117,Burpee,Burpee,FULL_BODY,BODYWEIGHT,90-90-hold,Estiramiento 90/90,90/90 Hold,0.000,0,0,review,,ex-117.webp
+118,Snatch con kettlebell,Kettlebell Snatch,FULL_BODY,KETTLEBELL,double-kettlebell-swing-snatch,Swing Snatch con Dos Pesas Rusas,Double Kettlebell Swing Snatch,0.400,1,0,review,,ex-118.webp
+119,Clean con kettlebell,Kettlebell Clean,FULL_BODY,KETTLEBELL,double-kettlebell-clean-and-press,Clean and press con doble kettlebell,Double Kettlebell Clean and Press,0.480,1,0,review,,ex-119.webp
+120,Flexiones,Push-Ups,CHEST,BODYWEIGHT,deficit-push-ups,Flexiones en Déficit,Deficit Push Ups,0.525,0,0,review,,ex-120.webp
+121,Flexiones declinadas,Decline Push-Ups,CHEST,BODYWEIGHT,deficit-push-ups,Flexiones en Déficit,Deficit Push Ups,0.350,0,0,review,,ex-121.webp
+123,Aperturas inclinadas con mancuernas,Dumbbell Incline Fly,CHEST,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.667,1,0,review,,ex-123.webp
+124,Aperturas inclinadas en polea,Cable Incline Fly,CHEST,CABLE,cable-fly,Aperturas con Cable,Cable Fly,0.550,1,0,review,,ex-124.webp
+125,Press banca con banda,Band Bench Press,CHEST,BAND,banded-pallof-press,Press Pallof con Banda,Banded Pallof Press,0.400,1,0,review,,ex-125.webp
+126,Pullover en máquina,Machine Pullover,CHEST,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.480,1,0,review,,ex-126.webp
+128,Press suelo con barra,Barbell Floor Press,CHEST,BARBELL,floor-press,Press en Suelo,Floor Press,0.620,1,0,review,,ex-128.webp
+129,Pec deck en máquina,Machine Pec Deck,CHEST,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.433,1,0,review,,ex-129.webp
+130,Remo Pendlay con barra,Barbell Pendlay Row,BACK,BARBELL,pendlay-row,Remo Pendlay,Pendlay Row,0.620,1,0,review,,ex-130.webp
+131,Jalón agarre cerrado en polea,Cable Close-Grip Pulldown,BACK,CABLE,close-grip-lat-pulldown,Jalón al Pecho con Agarre Cerrado,Close Grip Lat Pulldown,0.582,1,0,review,,ex-131.webp
+132,Remo unilateral en polea,Single-Arm Cable Row,BACK,CABLE,one-arm-seated-cable-row,Remo Unilateral Sentado en Polea,One-Arm Seated Cable Row,0.620,1,0,review,,ex-132.webp
+133,Dominadas lastradas,Weighted Pull-Ups,BACK,BODYWEIGHT,archer-pull-ups,Dominadas Arquero,Archer Pull Ups,0.300,0,0,review,,ex-133.webp
+134,Remo con banda,Band Row,BACK,BAND,banded-standing-row,Remo de Pie con Banda,Banded Standing Row,0.500,1,0,review,,ex-134.webp
+135,Encogimientos de trapecio con mancuernas,Dumbbell Shrugs,BACK,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.400,1,0,review,,ex-135.webp
+136,Encogimientos de trapecio con barra,Barbell Shrugs,BACK,BARBELL,barbell-curl,Curl con Barra,Barbell Curl,0.433,1,0,review,,ex-136.webp
+137,Encogimientos de trapecio en máquina,Machine Shrugs,BACK,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.400,1,0,review,,ex-137.webp
+138,Face pull alto en polea,Cable High Face Pull,SHOULDERS,CABLE,face-pull,Face Pull en Polea,Cable Face Pull,0.667,1,0,review,,ex-138.webp
+139,Press con banda,Band Overhead Press,SHOULDERS,BAND,banded-overhead-press,Press por Encima de la Cabeza con Banda,Banded Overhead Press,0.462,1,0,review,,ex-139.webp
+140,Elevación lateral inclinada con mancuernas,Dumbbell Incline Lateral Raise,SHOULDERS,DUMBBELL,lateral-raise,Elevación Lateral con Mancuernas,Dumbbell Lateral Raise,0.700,1,0,review,,ex-140.webp
+141,Handstand push-up,Handstand Push-Up,SHOULDERS,BODYWEIGHT,push-up,Push-Up,Push-Up,0.467,0,0,review,,ex-141.webp
+142,Press militar sentado con barra,Barbell Seated Overhead Press,SHOULDERS,BARBELL,ohp,Press Militar con Barra,Barbell Overhead Press,0.700,1,0,review,,ex-142.webp
+143,Press militar sentado con mancuernas,Dumbbell Seated Overhead Press,SHOULDERS,DUMBBELL,seated-db-press,Press de Hombro con Mancuernas Sentado,Seated Dumbbell Shoulder Press,0.589,1,0,review,,ex-143.webp
+144,Press cubano con mancuernas,Dumbbell Cuban Press,SHOULDERS,DUMBBELL,db-svend-press,Press Svend con Mancuernas,Dumbbell Svend Press,0.550,1,0,review,,ex-144.webp
+145,Curl 21 con barra,Barbell 21s Curl,BICEPS,BARBELL,barbell-curl,Curl con Barra,Barbell Curl,0.720,1,1,review,,ex-145.webp
+146,Curl araña con mancuernas,Dumbbell Spider Curl,BICEPS,DUMBBELL,spider-curl,Curl Araña,Spider Curl,0.720,1,1,review,,ex-146.webp
+147,Curl Bayesian en polea,Cable Bayesian Curl,BICEPS,CABLE,cable-curl,Curl con Cable,Cable Curl,0.650,1,1,review,,ex-147.webp
+148,Curl inverso en polea,Cable Reverse Curl,BICEPS,CABLE,cable-curl,Curl con Cable,Cable Curl,0.580,1,1,review,,ex-148.webp
+149,Curl con banda,Band Curl,BICEPS,BAND,band-pull-apart,Separación de Banda Elástica,Band Pull Apart,0.400,1,0,review,,ex-149.webp
+150,Curl en máquina,Machine Curl,BICEPS,MACHINE,machine-bicep-curl,Curl de Bíceps en Máquina,Machine Bicep Curl,0.720,1,1,review,,ex-150.webp
+151,Press JM con barra,Barbell JM Press,TRICEPS,BARBELL,bench-press,Press de Banca con Barra,Barbell Bench Press,0.550,1,0,review,,ex-151.webp
+152,Extensión con banda,Band Triceps Extension,TRICEPS,BAND,banded-triceps-stretch,Estiramiento de Tríceps con Banda,Banded Triceps Stretch,0.500,1,1,review,,ex-152.webp
+153,Fondos en máquina,Machine Dips,TRICEPS,MACHINE,assisted-dips,Fondos en Máquina Asistida,Machine Assisted Dips,0.767,1,1,review,,ex-153.webp
+154,Extensión unilateral en polea,Single-Arm Pushdown,TRICEPS,CABLE,single-arm-tricep-pushdown,Extensión de Tríceps a Un Brazo en Polea,Single Arm Tricep Pushdown,0.650,1,1,review,,ex-154.webp
+155,Press cerrado con mancuernas,Dumbbell Close-Grip Press,TRICEPS,DUMBBELL,close-grip-db-bench-press,Press de Banca con Mancuernas y Agarre Cerrado,Close-Grip Dumbbell Bench Press,0.720,1,1,review,,ex-155.webp
+156,Patada en polea,Cable Kickback,TRICEPS,CABLE,cable-tricep-kickback,Patada de Tríceps con Cable,Cable Tricep Kickback,0.650,1,1,review,,ex-156.webp
+157,Sentadilla Zercher con barra,Barbell Zercher Squat,QUADS,BARBELL,zercher-squat,Sentadilla Zercher,Zercher Squat,0.620,1,0,review,,ex-157.webp
+159,Prensa unilateral en máquina,Machine Single-Leg Press,QUADS,MACHINE,single-arm-machine-shoulder-press,Press de hombros unilateral en máquina,Single-Arm Machine Shoulder Press,0.550,1,0,review,,ex-159.webp
+160,Extensión unilateral en máquina,Machine Single-Leg Extension,QUADS,MACHINE,machine-triceps-extension,Extensión de Tríceps en Máquina,Machine Triceps Extension,0.500,1,0,review,,ex-160.webp
+161,Zancada inversa con mancuernas,Dumbbell Reverse Lunge,QUADS,DUMBBELL,db-lunge,Zancada con Mancuernas,Dumbbell Lunge,0.667,1,0,review,,ex-161.webp
+163,Step down con mancuernas,Dumbbell Step-Down,QUADS,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.433,1,0,review,,ex-163.webp
+164,Step down,Step-Down,QUADS,BODYWEIGHT,step-ups,Step Ups,Step Ups,0.233,0,0,review,,ex-164.webp
+167,Curl nórdico,Nordic Curl,HAMSTRINGS,BODYWEIGHT,nordic-hamstring-curl,Curl Nórdico de Isquiotibiales,Nordic Hamstring Curl,0.520,0,1,review,,ex-167.webp
+168,Peso muerto a una pierna con mancuernas,Dumbbell Single-Leg Deadlift,HAMSTRINGS,DUMBBELL,single-leg-romanian-deadlift,Peso Muerto Rumano a Una Pierna,Single Leg Romanian Deadlift,0.745,1,1,review,,ex-168.webp
+169,Peso muerto a una pierna con barra,Barbell Single-Leg Deadlift,HAMSTRINGS,BARBELL,deadlift,Peso Muerto con Barra,Barbell Deadlift,0.689,1,1,review,,ex-169.webp
+170,Curl femoral con banda,Band Leg Curl,HAMSTRINGS,BAND,banded-standing-curl,Curl de Pierna de Pie con Banda,Banded Standing Leg Curl,0.533,1,1,review,,ex-170.webp
+171,Good morning sentado con barra,Barbell Seated Good Morning,HAMSTRINGS,BARBELL,seated-barbell-overhead-press,Press de Barra sobre la Cabeza Sentado,Seated Barbell Overhead Press,0.480,1,0,review,,ex-171.webp
+172,Curl femoral de pie en máquina,Machine Standing Leg Curl,HAMSTRINGS,MACHINE,machine-bicep-curl,Curl de Bíceps en Máquina,Machine Bicep Curl,0.433,1,0,review,,ex-172.webp
+175,Hip thrust unilateral con barra,Barbell Single-Leg Hip Thrust,GLUTES,BARBELL,hip-thrust,Hip thrust con barra,Barbell Hip Thrust,0.600,1,0,review,,ex-175.webp
+176,Patada de glúteo en cuadrupedia,Quadruped Glute Kickback,GLUTES,BODYWEIGHT,glute-kickback,Patada de Glúteo,Glute Kickback,0.467,0,0,review,,ex-176.webp
+177,Patada de glúteo en cuadrupedia con banda,Band Quadruped Glute Kickback,GLUTES,BAND,glute-kickback,Patada de Glúteo,Glute Kickback,0.350,0,0,review,,ex-177.webp
+178,Abducción en polea,Cable Hip Abduction,GLUTES,CABLE,cable-pallof-press,Press Pallof en Polea,Cable Pallof Press,0.400,1,0,review,,ex-178.webp
+180,Frog pump,Frog Pump,GLUTES,BODYWEIGHT,frog-stretch,Estiramiento de la Rana,Frog Stretch,0.140,0,0,review,,ex-180.webp
+181,Step up lateral con mancuernas,Dumbbell Lateral Step-Up,GLUTES,DUMBBELL,db-step-up-to-balance,Step-Up con Equilibrio y Mancuernas,Dumbbell Step-Up to Balance,0.511,1,0,review,,ex-181.webp
+182,Step up lateral,Lateral Step-Up,GLUTES,BODYWEIGHT,step-up-to-balance,Step-Up con Equilibrio,Step-Up to Balance,0.233,0,0,review,,ex-182.webp
+183,Elevación de talones en prensa unilateral en máquina,Machine Single-Leg Calf Press,CALVES,MACHINE,single-arm-machine-shoulder-press,Press de hombros unilateral en máquina,Single-Arm Machine Shoulder Press,0.469,1,0,review,,ex-183.webp
+184,Gemelo con banda,Band Calf Raise,CALVES,BAND,band-pull-apart,Separación de Banda Elástica,Band Pull Apart,0.356,1,0,review,,ex-184.webp
+185,Donkey calf raise en máquina,Machine Donkey Calf Raise,CALVES,MACHINE,machine-calf-raise,Elevación de Pantorrillas en Máquina,Machine Calf Raise,0.600,1,0,review,,ex-185.webp
+186,Hollow hold,Hollow Hold,CORE,BODYWEIGHT,hollow-body-hold,Mantenimiento del Cuerpo Hueco,Hollow Body Hold,0.233,0,0,review,,ex-186.webp
+189,Leñador en polea,Cable Woodchopper,CORE,CABLE,cable-pallof-press,Press Pallof en Polea,Cable Pallof Press,0.433,1,0,review,,ex-189.webp
+190,Rueda abdominal de rodillas,Kneeling Ab Wheel,CORE,BODYWEIGHT,ab-wheel-rollout,Rueda Abdominal,Ab Wheel Rollout,0.400,0,0,review,,ex-190.webp
+193,Paseo del maletín con mancuernas,Dumbbell Suitcase Carry,CORE,DUMBBELL,suitcase-carry,Paseo del Maletín,Suitcase Carry,0.467,0,0,review,,ex-193.webp
+194,Paseo del maletín con kettlebell,Kettlebell Suitcase Carry,CORE,KETTLEBELL,suitcase-carry,Paseo del Maletín,Suitcase Carry,0.760,1,0,review,,ex-194.webp
+196,Curl de muñeca inverso con barra,Barbell Reverse Wrist Curl,FOREARMS,BARBELL,barbell-wrist-curl,Curl de Muñeca con Barra,Barbell Wrist Curl,0.700,1,0,review,,ex-196.webp
+198,Extensión de dedos con banda,Band Finger Extension,FOREARMS,BAND,band-pull-apart,Separación de Banda Elástica,Band Pull Apart,0.356,1,0,review,,ex-198.webp
+199,Isométrico de cuello,Neck Isometric,NECK,BODYWEIGHT,isometric-neck-side,Flexión Lateral Isométrica de Cuello,Isometric Neck Lateral Flexion,0.300,0,0,review,,ex-199.webp
+200,Encogimiento de cuello con banda,Band Neck Curl,NECK,BAND,band-pull-apart,Separación de Banda Elástica,Band Pull Apart,0.340,1,0,review,,ex-200.webp
+201,Man maker con mancuernas,Dumbbell Man Maker,FULL_BODY,DUMBBELL,db-fly,Aperturas con Mancuernas,Dumbbell Fly,0.433,1,0,review,,ex-201.webp
+202,Devil press con mancuernas,Dumbbell Devil Press,FULL_BODY,DUMBBELL,db-svend-press,Press Svend con Mancuernas,Dumbbell Svend Press,0.620,1,0,review,,ex-202.webp
+203,Turkish get-up con kettlebell,Kettlebell Turkish Get-Up,FULL_BODY,KETTLEBELL,kettlebell-turkish-get-ups,Levantamiento Turco con Kettlebell,Kettlebell Turkish Get Ups,0.500,1,0,review,,ex-203.webp
+207,Burpee con flexión,Burpee Push-Up,FULL_BODY,BODYWEIGHT,spiderman-push-up,Flexión Spiderman,Spiderman Push-Up,0.420,0,0,review,,ex-207.webp

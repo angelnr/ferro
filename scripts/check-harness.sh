@@ -84,6 +84,7 @@ for f in \
   docs/seed-ejercicios.csv \
   scripts/validate-seed.py \
   scripts/check-i18n.py \
+  scripts/exercise-images.py \
   scripts/check-bundle-size.sh \
   backend/src/main/resources/messages_es.properties \
   backend/src/main/resources/messages_en.properties \

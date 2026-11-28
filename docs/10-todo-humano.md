@@ -140,6 +140,14 @@ La matriz Chromium/Firefox/WebKit está automatizada. Aun así:
 
 ---
 
+## D.1 · Imágenes de ejercicios
+
+- [ ] Revisar `docs/exercise-image-review.html` y aprobar candidatos dudosos en
+      `docs/exercise-image-review.csv`.
+- [ ] Ejecutar `python3 scripts/exercise-images.py --apply`.
+- [ ] Revisar visualmente el catálogo completo y sustituir placeholders por imágenes
+      reales cuando haya una coincidencia segura.
+
 ## E · Cierre del MVP
 
 - [ ] Añadir URL pública y credenciales demo al README.
